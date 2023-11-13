@@ -3,6 +3,8 @@
     <style name="Base.Theme.Ligera" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimaryContainer">@color/emerald_light_variant</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
     </style>
 
     <style name="Theme.Ligera" parent="Base.Theme.Ligera" />

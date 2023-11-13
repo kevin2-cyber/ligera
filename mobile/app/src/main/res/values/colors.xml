@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <!--Primary Colors-Emerald Green-->
+    <color name="emerald">#50c878</color>
+    <color name="emerald_light_variant">#8CFEB2</color>
+    <color name="emerald_dark_variant">#29A653</color>
+    <color name="emerald_variant">#4BE67F</color>
+    <!-- Secondary Colors-Charcoal Gray-->
+    <color name="charcoal_gray">#333333</color>
+    <color name="charcoal_gray_light">#ADADAD</color>
+    <color name="charcoal_gray_dark">#434343</color>
+    <color name="charcoal_gray_variant">#525353</color>
+
+    <!--Tertiary Colors-Pearl-->
     <color name="white">#FFFFFFFF</color>
+    <color name="pearl_light_variant">#F4F7FA</color>
+    <color name="pearl_dark_variant">#CDD5E1</color>
+    <color name="pearl_variant">#DEE6EE</color>
+
 </resources>
