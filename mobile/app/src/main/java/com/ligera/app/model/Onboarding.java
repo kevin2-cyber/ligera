@@ -3,9 +3,7 @@ package com.ligera.app.model;
 public class Onboarding {
     int image;
 
-    public Onboarding(int image) {
-        this.image = image;
-    }
+    public Onboarding() {}
 
     public int getImage() {
         return image;
