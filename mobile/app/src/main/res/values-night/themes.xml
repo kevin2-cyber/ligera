@@ -5,5 +5,9 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorOnPrimaryContainer">@color/white</item>
         <item name="colorPrimaryContainer">@color/emerald_dark_variant</item>
+        <item name="colorPrimary">@color/emerald</item>
+        <item name="colorTertiaryContainer">@color/emerald</item>
     </style>
+
+    <style name="Theme.Ligera" parent="Base.Theme.Ligera" />
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="splash_bg">#24251D</color>
     <!--Primary Colors-Emerald Green-->
     <color name="emerald">#50c878</color>
     <color name="emerald_light_variant">#8CFEB2</color>
