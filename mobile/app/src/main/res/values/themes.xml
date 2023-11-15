@@ -8,5 +8,7 @@
         <item name="colorPrimary">@color/emerald</item>
     </style>
 
-    <style name="Theme.Ligera" parent="Base.Theme.Ligera" />
+    <style name="Theme.Ligera" parent="Base.Theme.Ligera" >
+        <item name="android:fontFamily">@font/work_sans</item>
+    </style>
 </resources>
