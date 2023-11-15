@@ -22,7 +22,7 @@ import com.ligera.app.databinding.ActivityMainBinding;
 import com.ligera.app.model.Onboarding;
 import com.ligera.app.view.RegisterActivity;
 import com.ligera.app.view.adapter.OnboardingAdapter;
-import com.ligera.app.view.anim.ZoomOutPageTransformer;
+import com.ligera.app.view.anim.DepthPageTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         // initializing the ViewPager2 object
         onboardingViewPager = binding.viewPager;
         onboardingViewPager.setAdapter(onboardingAdapter);
-        onboardingViewPager.setPageTransformer(new ZoomOutPageTransformer());
+        onboardingViewPager.setPageTransformer(new DepthPageTransformer());
 
         setupOnboardingIndicator();
         setCurrentOnboardingIndicator(0);
@@ -95,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        shopNowBtn.setVisibility(onboardingViewPager.getCurrentItem() + 1 == onboardingAdapter.getItemCount() ? View.INVISIBLE : View.VISIBLE );
-//
+
         shopNowBtn.setOnClickListener(view -> {
 
             if (onboardingViewPager.getCurrentItem() + 1 < onboardingAdapter.getItemCount()) {
