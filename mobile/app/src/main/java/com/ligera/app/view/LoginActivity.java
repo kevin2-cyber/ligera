@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityLoginBinding;
@@ -36,9 +39,27 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        binding.etEmail.setFocusable(false);
-        inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        binding.etEmail.setOnClickListener(this::editTextClickMethod);
+        // shift the LinearLayout up when any of the EditText is selected
+        binding.etEmail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                binding.lowerSection.setTranslationY(-620f);
+                return false;
+            }
+        });
+
+        binding.etEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(binding.etEmail.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                // when it is done put the LinearLayout back
+                binding.lowerSection.setTranslationY(0f);
+                return false;
+            }
+        });
 
         binding.registerBtn.setOnClickListener(view -> {
             validateData();
@@ -68,7 +89,4 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {}
-    private void editTextClickMethod(View view) {
-        inputMethodManager.hideSoftInputFromWindow(view.getRootView().getWindowToken(), 0);
-    }
 }
