@@ -1,9 +1,12 @@
 package com.ligera.app.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -13,6 +16,8 @@ import com.ligera.app.databinding.ActivityLoginBinding;
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
+    String email = "";
+    String password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,5 +32,33 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RegisterActivity.class);
             startActivity(intent);
         });
+
+        binding.registerBtn.setOnClickListener(view -> {
+            validateData();
+        });
     }
+
+    private void validateData() {
+        // get data
+        email = binding.etEmail.getText().toString().trim();
+        password = binding.etPassword.getText().toString().trim();
+
+        // validate user
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            // invalid email format
+            binding.etEmail.setError("Invalid Email Address",
+                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+        } else if (TextUtils.isEmpty(password)) {
+            // no password entered
+            binding.etPassword.setError("no password entered",
+                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+        } else if (password.length() < 6) {
+            binding.etPassword.setError("Password must be more than six characters",
+                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+        } else {
+            login();
+        }
+    }
+
+    private void login() {}
 }
