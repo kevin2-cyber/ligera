@@ -40,25 +40,19 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // shift the LinearLayout up when any of the EditText is selected
-        binding.etEmail.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                binding.lowerSection.setTranslationY(-620f);
-                return false;
-            }
+        binding.etEmail.setOnTouchListener((v, event) -> {
+            binding.lowerSection.setTranslationY(-620f);
+            return false;
         });
 
-        binding.etEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(binding.etEmail.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-                // when it is done put the LinearLayout back
-                binding.lowerSection.setTranslationY(0f);
-                return false;
+        binding.etEmail.setOnEditorActionListener((v, actionId, event) -> {
+            if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(binding.etEmail.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
+            // when it is done put the LinearLayout back
+            binding.lowerSection.setTranslationY(0f);
+            return false;
         });
 
         binding.registerBtn.setOnClickListener(view -> {
