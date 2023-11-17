@@ -6,6 +6,8 @@
         <item name="colorPrimaryContainer">@color/emerald_light_variant</item>
         <item name="colorOnPrimaryContainer">@color/white</item>
         <item name="colorPrimary">@color/emerald</item>
+        <item name="colorError">@color/emerald</item>
+        <item name="colorErrorContainer">@color/emerald</item>
     </style>
 
     <style name="Theme.Ligera" parent="Base.Theme.Ligera" >

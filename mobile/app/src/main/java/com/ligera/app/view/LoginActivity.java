@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityLoginBinding;
@@ -40,9 +39,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // shift the LinearLayout up when any of the EditText is selected
-        binding.etEmail.setOnTouchListener((v, event) -> {
-            binding.lowerSection.setTranslationY(-620f);
-            return false;
+        binding.etEmail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                binding.lowerSection.setTranslationY(-620f);
+                return false;
+            }
         });
 
         binding.etEmail.setOnEditorActionListener((v, actionId, event) -> {
