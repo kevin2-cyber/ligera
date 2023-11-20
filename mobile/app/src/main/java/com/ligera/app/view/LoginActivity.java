@@ -6,6 +6,8 @@ import androidx.appcompat.content.res.AppCompatResources;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityLoginBinding;
@@ -85,4 +88,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {}
+
+    private void togglePassword(View view) {
+        if (view.getTag() == binding.etPassword.getCompoundDrawables()) {
+            if(binding.etPassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
+                ((ImageView) (view)).setImageResource(R.drawable.lock);
+                // show password
+                binding.etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            } else {
+                ((ImageView) (view)).setImageResource(R.drawable.lock);
+                // Hide password
+                binding.etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            }
+        }
+    }
 }
