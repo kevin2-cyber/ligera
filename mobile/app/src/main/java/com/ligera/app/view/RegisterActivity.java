@@ -9,9 +9,12 @@ import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import com.ligera.app.R;
@@ -23,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     String name = "";
     String email = "";
     String password = "";
+    private InputMethodManager inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,24 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         super.onCreate(savedInstanceState);
         setContentView(binding.getRoot());
+
+        binding.etEmail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                binding.lowerSection.setTranslationY(-620f);
+                return false;
+            }
+        });
+
+        binding.etEmail.setOnEditorActionListener((v, actionId, event) -> {
+            if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(binding.etEmail.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+            // when it is done put the LinearLayout back
+            binding.lowerSection.setTranslationY(0f);
+            return false;
+        });
 
         binding.registerBtn.setOnClickListener(view -> {
             validateData();
