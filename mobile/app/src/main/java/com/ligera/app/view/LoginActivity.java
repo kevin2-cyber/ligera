@@ -2,6 +2,7 @@ package com.ligera.app.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityLoginBinding;
@@ -74,20 +76,36 @@ public class LoginActivity extends AppCompatActivity {
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             // invalid email format
             binding.etEmail.setError("Invalid Email Address",
-                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+            );
         } else if (TextUtils.isEmpty(password)) {
             // no password entered
             binding.etPassword.setError("no password entered",
-                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+            );
         } else if (password.length() < 6) {
             binding.etPassword.setError("Password must be more than six characters",
-                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+            );
         } else {
             login();
         }
     }
 
-    private void login() {}
+    private void login() {
+        email = binding.etEmail.getText().toString().trim();
+        password = binding.etPassword.getText().toString().trim();
+
+        if (email.equals("kimikevin@zoho.com") && password.equals("asdfzxcvbnm")) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Wrong credentials", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void togglePassword(View view) {
         if (view.getTag() == binding.etPassword.getCompoundDrawables()) {

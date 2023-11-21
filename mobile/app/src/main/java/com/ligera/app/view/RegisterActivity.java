@@ -2,6 +2,7 @@ package com.ligera.app.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityRegisterBinding;
@@ -74,21 +76,40 @@ public class RegisterActivity extends AppCompatActivity {
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             // invalid email format
             binding.etEmail.setError("Invalid Email format",
-                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+            );
         } else if (TextUtils.isEmpty(password)) {
             // password isn't entered
             binding.etPassword.setError("Please enter your password",
-                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+            );
         } else if (password.length() < 6) {
             binding.etPassword.setError("Please enter at least 6 characters long",
-                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+            );
         } else if (name.isEmpty()) {
             binding.etName.setError("Please enter your name",
-                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24));
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+            );
         } else register();
     }
 
-    private void register() {}
+    private void register() {
+        name = binding.etName.getText().toString();
+        email = binding.etEmail.getText().toString();
+        password = binding.etPassword.getText().toString();
+
+        if (name.equals("Kelvin Eduful") && email.equals("kimikevin@zoho.com") && password.equals("asdfzxcvbnm")) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Invalid credentails", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void togglePassword(View view) {
         if (view.getTag() == binding.etPassword.getCompoundDrawables()) {
