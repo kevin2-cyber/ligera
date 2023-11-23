@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.databinding.ActivityMainBinding;
 import com.ligera.app.model.Onboarding;
-import com.ligera.app.view.HomeActivity;
 import com.ligera.app.view.RegisterActivity;
 import com.ligera.app.view.adapter.OnboardingAdapter;
 import com.ligera.app.view.anim.DepthPageTransformer;
