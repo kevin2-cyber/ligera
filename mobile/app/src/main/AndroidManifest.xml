@@ -12,10 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ligera" >
         <activity
-            android:name=".view.HomeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_home" />
-        <activity
             android:name=".view.LoginActivity"
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize|adjustPan" />
