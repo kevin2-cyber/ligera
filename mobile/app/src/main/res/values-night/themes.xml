@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Ligera" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorPrimaryContainer">@color/emerald_dark_variant</item>
+        <item name="colorPrimary">@color/emerald</item>
+        <item name="colorTertiaryContainer">@color/emerald</item>
+        <item name="colorError">@color/emerald</item>
+        <item name="colorErrorContainer">@color/emerald</item>
+        <item name="colorOnError">@color/emerald</item>
+        <item name="colorOnErrorContainer">@color/emerald</item>
+    </style>
+
+    <style name="Theme.Ligera" parent="Base.Theme.Ligera">
+        <item name="android:fontFamily">@font/work_sans</item>
+    </style>
+</resources>
