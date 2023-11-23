@@ -18,8 +18,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.databinding.ActivityMainBinding;
 import com.ligera.app.model.Onboarding;
+import com.ligera.app.view.HomeActivity;
 import com.ligera.app.view.RegisterActivity;
 import com.ligera.app.view.adapter.OnboardingAdapter;
 import com.ligera.app.view.anim.DepthPageTransformer;
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout onboardingIndicators;
 
     List<Onboarding> onboardings;
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
             slideUp.start();
         });
         setContentView(binding.getRoot());
+
+        // init auth
+        auth = FirebaseAuth.getInstance();
+        checkUser();
 
 
         shopNowBtn = binding.shopNowBtn;
@@ -173,5 +181,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    private void checkUser() {
+        // if user is already logged in go to profile activity
+        // get current user
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            // user is already logged in
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+        }
+    }
 }

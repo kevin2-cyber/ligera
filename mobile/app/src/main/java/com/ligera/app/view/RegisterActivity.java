@@ -17,14 +17,19 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityRegisterBinding;
 
 public class RegisterActivity extends AppCompatActivity {
 
     ActivityRegisterBinding binding;
+    private ProgressBar bar;
+    private FirebaseAuth auth;
     String name = "";
     String email = "";
     String password = "";
@@ -61,10 +66,16 @@ public class RegisterActivity extends AppCompatActivity {
             validateData();
         });
 
+        // configure progress dialog
+        bar = new ProgressBar(this);
+        bar.setVisibility(View.GONE);
+
         binding.tvLogin.setOnClickListener(view -> {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         });
+
+        auth = FirebaseAuth.getInstance();
     }
 
     private void validateData() {
@@ -99,16 +110,28 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register() {
-        name = binding.etName.getText().toString();
-        email = binding.etEmail.getText().toString();
-        password = binding.etPassword.getText().toString();
+        //show progress
+        bar.setVisibility(View.VISIBLE);
 
-        if (name.equals("Kelvin Eduful") && email.equals("kimikevin@zoho.com") && password.equals("asdfzxcvbnm")) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Invalid credentails", Toast.LENGTH_SHORT).show();
-        }
+        // create account
+        auth.createUserWithEmailAndPassword(email,password)
+                .addOnSuccessListener(task -> {
+
+                    // dismiss progress
+                    bar.setVisibility(View.GONE);
+                    FirebaseUser user = auth.getCurrentUser();
+                    assert user != null;
+                    String email = user.getEmail();
+                    Toast.makeText(this, "Account created with " + email, Toast.LENGTH_LONG).show();
+
+                    startActivity(new Intent(this, HomeActivity.class));
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    //signup failed
+                    bar.setVisibility(View.GONE);
+                    Toast.makeText(this,"Sign up failed due to " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
     private void togglePassword(View view) {
@@ -123,6 +146,13 @@ public class RegisterActivity extends AppCompatActivity {
                 binding.etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        // go back to previous activity, when back button of actionbar clicked
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 
     public class RegisterActivityClickHandler {
