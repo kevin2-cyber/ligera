@@ -1,9 +1,9 @@
 package com.ligera.app.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -119,5 +119,15 @@ public class LoginActivity extends AppCompatActivity {
                 binding.etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         }
+    }
+
+    public class LoginActivityClickHandler {
+        Context context;
+
+        public LoginActivityClickHandler(Context context) {
+            this.context = context;
+        }
+
+
     }
 }

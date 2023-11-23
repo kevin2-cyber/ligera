@@ -1,4 +1,4 @@
-package com.ligera.app.model;
+package com.ligera.app.model.entity;
 
 public class Category {
     private int categoryId;

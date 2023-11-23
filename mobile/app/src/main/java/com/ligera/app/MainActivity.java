@@ -172,4 +172,6 @@ public class MainActivity extends AppCompatActivity {
             shopNowBtn.setVisibility(View.GONE);
         }
     }
+
+
 }
