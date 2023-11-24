@@ -11,6 +11,8 @@
         <item name="colorErrorContainer">@color/emerald</item>
         <item name="colorOnError">@color/emerald</item>
         <item name="colorOnErrorContainer">@color/emerald</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.Ligera" parent="Base.Theme.Ligera">
