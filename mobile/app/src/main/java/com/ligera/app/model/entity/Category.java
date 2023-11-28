@@ -1,6 +1,11 @@
 package com.ligera.app.model.entity;
 
-public class Category {
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+
+import com.ligera.app.BR;
+
+public class Category extends BaseObservable {
     private int categoryId;
     private String name;
 
@@ -11,19 +16,23 @@ public class Category {
         this.name = name;
     }
 
+    @Bindable
     public int getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+        notifyPropertyChanged(BR.categoryId);
     }
 
+    @Bindable
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+        notifyPropertyChanged(BR.name);
     }
 }
