@@ -7,6 +7,7 @@ import com.ligera.app.BR;
 
 public class Product extends BaseObservable {
     private int productId;
+    private int image;
     private String name;
     private String description;
     private String price;
@@ -17,9 +18,10 @@ public class Product extends BaseObservable {
 
     public Product() {}
 
-    public Product(String name, String description, String price, int quantity, int categoryId, String brand, String size) {
+    public Product(String name, int image, String description, String price, int quantity, int categoryId, String brand, String size) {
         productId = 0;
         this.name = name;
+        this.image = image;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
@@ -46,6 +48,16 @@ public class Product extends BaseObservable {
     public void setName(String name) {
         this.name = name;
         notifyPropertyChanged(BR.name);
+    }
+
+    @Bindable
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
+        notifyPropertyChanged(BR.image);
     }
 
     @Bindable

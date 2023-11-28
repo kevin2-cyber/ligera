@@ -181,6 +181,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/button_shape"
                 android:text="register"
+                android:onClick="@{registerClickHandler::validateData}"
                 android:textColor="@color/white"
                 android:textAllCaps="true"
                 android:layout_marginStart="50dp"

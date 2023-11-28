@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.ligera.app.MainActivity;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityRegisterBinding;
 
@@ -34,6 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
     String email = "";
     String password = "";
     private InputMethodManager inputMethodManager;
+
+    RegisterActivityClickHandler clickHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         });
 
-        binding.registerBtn.setOnClickListener(view -> {
-            validateData();
-        });
+        clickHandler = new RegisterActivityClickHandler(this);
+        binding.setRegisterClickHandler(clickHandler);
 
         // configure progress dialog
         bar = new ProgressBar(this);
@@ -76,62 +78,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         auth = FirebaseAuth.getInstance();
-    }
-
-    private void validateData() {
-        name = binding.etName.getText().toString();
-        email = binding.etEmail.getText().toString();
-        password = binding.etPassword.getText().toString();
-
-        // validate the data
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            // invalid email format
-            binding.etEmail.setError("Invalid Email format",
-//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
-                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
-            );
-        } else if (TextUtils.isEmpty(password)) {
-            // password isn't entered
-            binding.etPassword.setError("Please enter your password",
-//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
-                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
-            );
-        } else if (password.length() < 6) {
-            binding.etPassword.setError("Please enter at least 6 characters long",
-//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
-                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
-            );
-        } else if (name.isEmpty()) {
-            binding.etName.setError("Please enter your name",
-//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
-                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
-            );
-        } else register();
-    }
-
-    private void register() {
-        //show progress
-        bar.setVisibility(View.VISIBLE);
-
-        // create account
-        auth.createUserWithEmailAndPassword(email,password)
-                .addOnSuccessListener(task -> {
-
-                    // dismiss progress
-                    bar.setVisibility(View.GONE);
-                    FirebaseUser user = auth.getCurrentUser();
-                    assert user != null;
-                    String email = user.getEmail();
-                    Toast.makeText(this, "Account created with " + email, Toast.LENGTH_LONG).show();
-
-                    startActivity(new Intent(this, HomeActivity.class));
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    //signup failed
-                    bar.setVisibility(View.GONE);
-                    Toast.makeText(this,"Sign up failed due to " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
     }
 
     private void togglePassword(View view) {
@@ -160,6 +106,62 @@ public class RegisterActivity extends AppCompatActivity {
 
         public RegisterActivityClickHandler(Context context) {
             this.context = context;
+        }
+
+        public void validateData(View view) {
+            name = binding.etName.getText().toString();
+            email = binding.etEmail.getText().toString();
+            password = binding.etPassword.getText().toString();
+
+            // validate the data
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                // invalid email format
+                binding.etEmail.setError("Invalid Email format",
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                        ContextCompat.getDrawable(RegisterActivity.this, R.drawable.baseline_error_24)
+                );
+            } else if (TextUtils.isEmpty(password)) {
+                // password isn't entered
+                binding.etPassword.setError("Please enter your password",
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                        ContextCompat.getDrawable(RegisterActivity.this, R.drawable.baseline_error_24)
+                );
+            } else if (password.length() < 6) {
+                binding.etPassword.setError("Please enter at least 6 characters long",
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                        ContextCompat.getDrawable(RegisterActivity.this, R.drawable.baseline_error_24)
+                );
+            } else if (name.isEmpty()) {
+                binding.etName.setError("Please enter your name",
+//                    AppCompatResources.getDrawable(this, R.drawable.baseline_error_24)
+                        ContextCompat.getDrawable(RegisterActivity.this, R.drawable.baseline_error_24)
+                );
+            } else register();
+        }
+
+        private void register() {
+            //show progress
+            bar.setVisibility(View.VISIBLE);
+
+            // create account
+            auth.createUserWithEmailAndPassword(email, password)
+                    .addOnSuccessListener(task -> {
+
+                        // dismiss progress
+                        bar.setVisibility(View.GONE);
+                        FirebaseUser user = auth.getCurrentUser();
+                        assert user != null;
+                        String email = user.getEmail();
+                        Toast.makeText(RegisterActivity.this, "Account created with " + email, Toast.LENGTH_LONG).show();
+
+                        startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        //signup failed
+                        bar.setVisibility(View.GONE);
+                        Toast.makeText(RegisterActivity.this, "Sign up failed due to " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
         }
     }
 }

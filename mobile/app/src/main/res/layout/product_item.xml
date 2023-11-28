@@ -20,7 +20,7 @@
             android:background="#B7E7C7"
             android:scaleType="fitXY"
             android:contentDescription="@string/login_welcome_content"
-            android:src="@drawable/orange_shirt"
+            android:src="@{product.image}"
             app:layout_constraintBottom_toTopOf="@+id/tv_product_price"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +60,7 @@
             android:layout_marginTop="14dp"
             android:layout_marginEnd="15dp"
             android:src="@drawable/shape"
+            android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="@+id/imageView"
             android:contentDescription="@string/app_name" />
