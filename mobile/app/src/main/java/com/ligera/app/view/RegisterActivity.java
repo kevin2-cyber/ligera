@@ -2,6 +2,7 @@ package com.ligera.app.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.content.Intent;
@@ -43,9 +44,13 @@ public class RegisterActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         super.onCreate(savedInstanceState);
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_register);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
+
+        clickHandler = new RegisterActivityClickHandler(this);
+        binding.setRegisterClickHandler(clickHandler);
 
         binding.etEmail.setOnTouchListener(new View.OnTouchListener() {
             @Override

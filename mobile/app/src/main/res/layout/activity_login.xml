@@ -4,7 +4,7 @@
     <data>
         <variable
             name="loginClickHandler"
-            type="com.ligera.app.view.LoginActivity.LoginActivityClickHandler" />
+            type="com.ligera.app.view.LoginActivity.LoginClickHandler" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -145,6 +145,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_shape"
                 android:text="register"
+                android:onClick="@{loginClickHandler::validateDate}"
                 android:textColor="@color/white"
                 android:textAllCaps="true"
                 android:layout_marginStart="50dp"

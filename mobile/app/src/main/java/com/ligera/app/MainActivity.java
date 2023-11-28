@@ -2,6 +2,7 @@ package com.ligera.app;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.animation.Animator;
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_Ligera);
         getSplashScreen().setOnExitAnimationListener(splashScreenView -> {
@@ -69,7 +69,11 @@ public class MainActivity extends AppCompatActivity {
             // Run your animation.
             slideUp.start();
         });
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_main);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        Onboarding onboarding = new Onboarding();
+        binding.setOnboarding(onboarding);
 
         // init auth
         auth = FirebaseAuth.getInstance();
