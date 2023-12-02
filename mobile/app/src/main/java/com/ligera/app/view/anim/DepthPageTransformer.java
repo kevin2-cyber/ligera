@@ -43,3 +43,8 @@ public class DepthPageTransformer implements ViewPager2.PageTransformer {
         }
     }
 }
+
+/**
+  * The device may not have sufficient computing power for
+  * encoding display contents. See the error log
+ */
