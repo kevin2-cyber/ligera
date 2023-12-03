@@ -29,7 +29,7 @@ To contribute to the Clothing Marketplace project, follow these steps:
 1. **Clone the Repository:**
    ```bash
    git clone https://github.com/GROUP-19-LIGERA/ligera.git
-   cd clothing-marketplace
+   cd mobile
    ```
 
 2. **Contribute:**
