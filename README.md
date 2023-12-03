@@ -1,3 +1,5 @@
+![Ligera Mockup](https://github.com/GROUP-19-LIGERA/ligera/assets/100850288/5173a7f2-370f-4cd6-87f2-430b60d993f6)
+
 # Item Flipper Group 19 – Ligera
 
 Welcome to the Clothing Marketplace project! This platform aims to provide users with a seamless and secure experience for buying and selling clothes. Below is a comprehensive backlog of features and functionalities planned for development. If you're interested in contributing or exploring the project, follow the instructions below to get started.
