@@ -2,7 +2,7 @@
 
 # Item Flipper Group 19 – Ligera
 
-Welcome to the Clothing Marketplace project! This platform aims to provide users with a seamless and secure experience for buying and selling clothes. Below is a comprehensive backlog of features and functionalities planned for development. If you're interested in contributing or exploring the project, follow the instructions below to get started.
+Welcome to the Ligera(Clothing Marketplace) project! This platform aims to provide users with a seamless and secure experience for buying and selling clothes. Below is a comprehensive backlog of features and functionalities planned for development. If you're interested in contributing or exploring the project, follow the instructions below to get started.
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ Welcome to the Clothing Marketplace project! This platform aims to provide users
 
 ## Getting Started
 
-To contribute to the Clothing Marketplace project, follow these steps:
+To contribute to the Ligera(Clothing Marketplace) project, follow these steps:
 
 1. **Clone the Repository:**
    ```bash
