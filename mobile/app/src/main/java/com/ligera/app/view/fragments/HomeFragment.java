@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,10 +40,11 @@ public class HomeFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_home, container, false);
+        binding.setProduct(new Product());
         return binding.getRoot();
     }
 
@@ -69,6 +71,16 @@ public class HomeFragment extends Fragment {
         searchBar = binding.searchBar;
         appTitle = binding.appTitle;
         notification = binding.ivNotification;
+
+        searchBar.setVisibility(View.GONE);
+
+//        searchView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                appTitle.setVisibility(View.GONE);
+//                notification.setVisibility(View.GONE);
+//            }
+//        });
 
 //        searchView = view.findViewById(R.id.searchView);
 //        appTitle = view.findViewById(R.id.app_title);

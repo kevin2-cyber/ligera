@@ -23,7 +23,7 @@
             android:scaleType="fitXY"
             android:background="#B7E7C7"
             android:contentDescription="@string/login_welcome_content"
-            android:src="@{product.image}" />
+            android:src="@drawable/attire" />
 
         <TextView
             android:id="@+id/tv_product_name"
