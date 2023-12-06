@@ -106,7 +106,7 @@
                 android:layout_gravity="center"
                 android:autofillHints="name"
                 android:background="@drawable/et_background"
-                android:drawableStart="@drawable/person"
+                android:drawableStart="@drawable/user_outline"
                 android:drawablePadding="10dp"
                 android:hint="Your full name here"
                 android:inputType="textPersonName"

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,22 +13,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.android.material.search.SearchBar;
 import com.ligera.app.R;
+import com.ligera.app.databinding.FragmentHomeBinding;
 import com.ligera.app.model.entity.Product;
 import com.ligera.app.view.adapter.HomeRecyclerVA;
 import com.ligera.app.view.util.Constants;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class HomeFragment extends Fragment {
-//    private FragmentHomeBinding binding;
+    private FragmentHomeBinding binding;
 
     SearchView searchView;
+    SearchBar searchBar;
     TextView appTitle;
     ImageButton notification;
 
@@ -40,7 +42,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -58,9 +61,14 @@ public class HomeFragment extends Fragment {
         ArrayList<Product> products = Constants.getProductData();
         // assign list of products to adapter
         HomeRecyclerVA adapter = new HomeRecyclerVA(getContext(), products);
-        RecyclerView recyclerView = view.findViewById(R.id.rv_items);
+        RecyclerView recyclerView = binding.rvItems;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
+
+        searchView = binding.searchView;
+        searchBar = binding.searchBar;
+        appTitle = binding.appTitle;
+        notification = binding.ivNotification;
 
 //        searchView = view.findViewById(R.id.searchView);
 //        appTitle = view.findViewById(R.id.app_title);
