@@ -9,17 +9,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/product_card"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="190dp"
         android:layout_gravity="center"
         app:cardCornerRadius="15dp"
-        android:background="?android:attr/windowBackground">
+        android:background="#B7E7C7">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="#B7E7C7"
             android:layout_gravity="center_horizontal"
             android:scaleType="fitXY"
             android:contentDescription="@string/login_welcome_content"
@@ -32,7 +31,6 @@
             android:layout_marginTop="150dp"
             android:text="Hoodie"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
 

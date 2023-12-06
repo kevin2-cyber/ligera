@@ -19,11 +19,12 @@ import java.util.List;
 
 public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecyclerVH> {
     private OnProductItemClickListener listener;
-    private ArrayList<Product> productList = new ArrayList<>();
+    private ArrayList<Product> productList;
     private Context context;
 
-    public HomeRecyclerVA(Context context) {
+    public HomeRecyclerVA(Context context, ArrayList<Product> productList) {
         this.context = context;
+        this.productList = productList;
     }
 
     public void setFilterList(List<Product> products) {
@@ -42,7 +43,8 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
 
     @Override
     public void onBindViewHolder(@NonNull HomeRecyclerVH holder, int position) {
-        Product product = productList.get(position);
+        Product currentProduct = productList.get(position);
+        holder.binding.setProduct(currentProduct);
     }
 
 
