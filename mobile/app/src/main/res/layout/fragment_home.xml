@@ -18,14 +18,11 @@
             android:id="@+id/ll_icons"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:layout_marginBottom="100dp"
-            app:layout_constraintBottom_toTopOf="@+id/rv_items"
+            android:layout_marginTop="72dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.099">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/app_title"
@@ -37,14 +34,28 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/iv_notification"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+<!--            <ImageButton-->
+<!--                android:id="@+id/iv_notification"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="36dp"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:contentDescription="@string/app_name"-->
+<!--                android:src="@drawable/sl_notification" />-->
+
+            <Button
+                style="?attr/materialIconButtonStyle"
+                android:id="@+id/iconNotification"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
                 android:layout_marginEnd="16dp"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/baseline_notifications_24" />
+                app:icon="@drawable/sl_notification"
+                android:layout_gravity="center"
+                app:iconTint="@color/black"
+                android:paddingEnd="10dp"
+                android:paddingStart="5dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="@string/app_name"/>
 
         </LinearLayout>
 
@@ -52,29 +63,30 @@
             android:id="@+id/searchView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="104dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="204dp"
             android:background="@drawable/search_bg"
             app:layout_anchor="@id/search_bar"
             app:layout_constraintBottom_toTopOf="@+id/rv_items"
             app:layout_constraintEnd_toEndOf="@+id/search_bar"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25" />
+            app:layout_constraintVertical_bias="0.008" />
 
         <com.google.android.material.search.SearchBar
             android:id="@+id/search_bar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="51dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="101dp"
             android:hint="@string/searchbar_hint"
-            app:layout_constraintBottom_toTopOf="@+id/rv_items"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/searchView"
+            android:visibility="invisible"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_items"
@@ -82,9 +94,11 @@
             android:layout_height="0dp"
             android:paddingStart="30dp"
             android:paddingEnd="0dp"
+            android:layout_marginTop="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_bar"
             tools:listitem="@layout/product_item" />
 
 

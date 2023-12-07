@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.search.SearchBar;
 import com.ligera.app.R;
@@ -24,15 +26,18 @@ import com.ligera.app.view.adapter.HomeRecyclerVA;
 import com.ligera.app.view.util.Constants;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment {
-    private FragmentHomeBinding binding;
+//    private FragmentHomeBinding binding;
 
     SearchView searchView;
     SearchBar searchBar;
     TextView appTitle;
-    ImageButton notification;
+    Button notification;
+    ArrayList<Product> products;
+    HomeRecyclerVA adapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -43,9 +48,10 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_home, container, false);
-        binding.setProduct(new Product());
-        return binding.getRoot();
+        View v = inflater.inflate(R.layout.fragment_home, container, false);
+//        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_home, container, false);
+//        binding.setProduct(new Product());
+        return v;
     }
 
     @Override
@@ -60,19 +66,32 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // get the list of products
-        ArrayList<Product> products = Constants.getProductData();
+        products = Constants.getProductData();
         // assign list of products to adapter
-        HomeRecyclerVA adapter = new HomeRecyclerVA(getContext(), products);
-        RecyclerView recyclerView = binding.rvItems;
+        adapter = new HomeRecyclerVA(getContext(), products);
+        RecyclerView recyclerView = view.findViewById(R.id.rv_items);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
 
-        searchView = binding.searchView;
-        searchBar = binding.searchBar;
-        appTitle = binding.appTitle;
-        notification = binding.ivNotification;
+        searchView = view.findViewById(R.id.searchView);
+        appTitle = view.findViewById(R.id.app_title);
+        notification = view.findViewById(R.id.iconNotification);
+        searchBar = view.findViewById(R.id.search_bar);
 
-        searchBar.setVisibility(View.GONE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return false;
+            }
+        });
+
+//        searchBar.setVisibility(View.GONE);
 
 //        searchView.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -88,10 +107,26 @@ public class HomeFragment extends Fragment {
 
     }
 
+    private void filterList(String newText) {
+        List<Product> filteredProducts = new ArrayList<>();
+        newText = (String) searchBar.getText();
+        for (Product product : products) {
+            if (product.getName().toLowerCase().contains(newText.toLowerCase())) {
+                filteredProducts.add(product);
+            }
+        }
+
+        if (filteredProducts.isEmpty()) {
+            Toast.makeText(getActivity(), "No products", Toast.LENGTH_SHORT).show();
+        } else {
+            adapter.setFilterList(filteredProducts);
+        }
+    }
+
     private void disableViews() {
         searchView = requireActivity().findViewById(R.id.searchView);
         appTitle = requireActivity().findViewById(R.id.app_title);
-        notification = requireActivity().findViewById(R.id.iv_notification);
+        notification = requireActivity().findViewById(R.id.iconNotification);
 
 
         searchView.clearFocus();
