@@ -4,7 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -82,29 +85,43 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
 
-        ImageView imageView = view.findViewById(R.id.imageView);
+        searchView = binding.searchView;
 
-        String image = String.valueOf(products.get(index).getImage());
-
-        Glide.with(view.getContext()).load(image).apply(new RequestOptions().fitCenter()).into(imageView);
+//        ImageView imageView = view.findViewById(R.id.imageView);
+//
+//        String image = String.valueOf(products.get(index).getImage());
+//
+//        Glide.with(view.getContext()).load(image).apply(new RequestOptions().fitCenter()).into(imageView);
 
 //        searchView = view.findViewById(R.id.searchView);
 //        appTitle = view.findViewById(R.id.app_title);
 //        notification = view.findViewById(R.id.iconNotification);
 //        searchBar = view.findViewById(R.id.search_bar);
 
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                filterList(newText);
-//                return false;
-//            }
-//        });
+        searchView.clearFocus();
+
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.appTitle.setTranslationX(250);
+                binding.appTitle.setText(R.string.favourites);
+                searchView.setBackground(AppCompatResources.getDrawable(v.getContext(), R.drawable.search_bg));
+                binding.iconNotification.setVisibility(View.GONE);
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return false;
+            }
+        });
 
 //        searchBar.setVisibility(View.GONE);
 
@@ -124,7 +141,6 @@ public class HomeFragment extends Fragment {
 
     private void filterList(String newText) {
         List<Product> filteredProducts = new ArrayList<>();
-        newText = (String) searchBar.getText();
         for (Product product : products) {
             if (product.getName().toLowerCase().contains(newText.toLowerCase())) {
                 filteredProducts.add(product);
