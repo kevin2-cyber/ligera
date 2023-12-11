@@ -1,8 +1,13 @@
 package com.ligera.app.model.entity;
 
+import android.widget.ImageView;
+
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.BindingAdapter;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.ligera.app.BR;
 
 public class Product extends BaseObservable {
@@ -58,6 +63,14 @@ public class Product extends BaseObservable {
     public void setImage(int image) {
         this.image = image;
         notifyPropertyChanged(BR.image);
+    }
+
+    @BindingAdapter("image")
+    public static void loadImage(ImageView view, String url) {
+        Glide.with(view.getContext())
+                .load(url)
+                .apply(new RequestOptions().fitCenter())
+                .into(view);
     }
 
     @Bindable
