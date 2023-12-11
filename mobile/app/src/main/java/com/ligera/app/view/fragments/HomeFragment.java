@@ -82,10 +82,11 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
 
+        ImageView imageView = view.findViewById(R.id.imageView);
+
         String image = String.valueOf(products.get(index).getImage());
 
-                Glide.with(view.getContext())
-                        .load(image).apply(new RequestOptions().fitCenter()).into(new ImageView(getContext()));
+        Glide.with(view.getContext()).load(image).apply(new RequestOptions().fitCenter()).into(imageView);
 
 //        searchView = view.findViewById(R.id.searchView);
 //        appTitle = view.findViewById(R.id.app_title);
