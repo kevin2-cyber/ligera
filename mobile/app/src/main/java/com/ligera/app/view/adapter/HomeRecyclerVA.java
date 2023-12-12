@@ -3,6 +3,7 @@ package com.ligera.app.view.adapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -45,6 +46,7 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
     public void onBindViewHolder(@NonNull HomeRecyclerVH holder, int position) {
         Product currentProduct = productList.get(position);
         holder.binding.setProduct(currentProduct);
+        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_three));
     }
 
 

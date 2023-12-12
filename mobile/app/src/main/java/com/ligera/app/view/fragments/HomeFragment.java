@@ -56,15 +56,12 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
             binding = DataBindingUtil.inflate(inflater,R.layout.fragment_home, container, false);
             binding.setProduct(new Product());
-//        return inflater.inflate(R.layout.fragment_home, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        disableViews();
     }
 
     @Nullable
@@ -103,8 +100,8 @@ public class HomeFragment extends Fragment {
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.appTitle.setTranslationX(250);
-                binding.appTitle.setText(R.string.favourites);
+                binding.appTitle.setTranslationX(180);
+                binding.appTitle.setText(R.string.find_products);
                 searchView.setBackground(AppCompatResources.getDrawable(v.getContext(), R.drawable.search_bg));
                 binding.iconNotification.setVisibility(View.GONE);
             }
