@@ -14,50 +14,36 @@
         tools:context=".view.fragments.HomeFragment">
 
 
-        <LinearLayout
-            android:id="@+id/ll_icons"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="72dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="66dp"
+            android:text="@string/app_name"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/app_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="246dp"
-                android:text="@string/app_name"
-                android:textSize="24sp"
-                android:textStyle="bold" />
 
-<!--            <ImageButton-->
-<!--                android:id="@+id/iv_notification"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="36dp"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:background="@android:color/transparent"-->
-<!--                android:contentDescription="@string/app_name"-->
-<!--                android:src="@drawable/sl_notification" />-->
-
-            <Button
-                style="?attr/materialIconButtonStyle"
-                android:id="@+id/iconNotification"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_marginEnd="16dp"
-                app:icon="@drawable/sl_notification"
-                android:layout_gravity="center"
-                app:iconTint="@color/black"
-                android:paddingEnd="10dp"
-                android:paddingStart="5dp"
-                android:backgroundTint="@android:color/transparent"
-                android:contentDescription="@string/app_name"/>
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/iconNotification"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="61dp"
+            android:layout_marginBottom="55dp"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:paddingStart="5dp"
+            android:paddingEnd="10dp"
+            app:icon="@drawable/sl_notification"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/searchView"
+            app:layout_constraintEnd_toEndOf="@+id/searchView"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
@@ -72,27 +58,27 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.008" />
 
-<!--        <com.google.android.material.search.SearchBar-->
-<!--            android:id="@+id/search_bar"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginTop="4dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:hint="@string/searchbar_hint"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.0"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/searchView"-->
-<!--            android:visibility="invisible"/>-->
+        <!--        <com.google.android.material.search.SearchBar-->
+        <!--            android:id="@+id/search_bar"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:layout_marginTop="4dp"-->
+        <!--            android:layout_marginEnd="16dp"-->
+        <!--            android:hint="@string/searchbar_hint"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="0.0"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="@+id/searchView"-->
+        <!--            android:visibility="invisible"/>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_items"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="50dp"
             android:paddingStart="30dp"
             android:paddingEnd="0dp"
-            android:layout_marginTop="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

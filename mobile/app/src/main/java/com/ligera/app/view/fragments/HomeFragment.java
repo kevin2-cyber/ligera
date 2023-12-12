@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -80,7 +81,11 @@ public class HomeFragment extends Fragment {
         adapter = new HomeRecyclerVA(getContext(), products);
         RecyclerView recyclerView = binding.rvItems;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
+
+        adapter.setProductList(products);
 
         searchView = binding.searchView;
 
