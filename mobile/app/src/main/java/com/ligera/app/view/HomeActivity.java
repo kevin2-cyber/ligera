@@ -33,7 +33,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
     FavoritesFragment favoritesFragment = new FavoritesFragment();
     ProfileFragment profileFragment = new ProfileFragment();
     BadgeDrawable badgeDrawable;
-    SearchView searchView;
 
 
     @Override
@@ -83,20 +82,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
     public void displayMenuInHomeFragment() {
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        searchView = findViewById(R.id.search);
-
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                homeFragment.filterList(newText);
-//                return false;
-//            }
-//        });
     }
 
 }

@@ -13,11 +13,10 @@
         android:theme="@style/Theme.Ligera">
         <activity
             android:name=".view.HomeActivity"
-            android:exported="false"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
+            android:exported="false">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.SEARCH" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".view.LoginActivity"
