@@ -1,13 +1,15 @@
 package com.ligera.app.view.fragments;
 
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.ComponentName;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -15,16 +17,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.search.SearchBar;
 import com.ligera.app.R;
 import com.ligera.app.databinding.FragmentHomeBinding;
 import com.ligera.app.model.entity.Product;
@@ -39,12 +38,10 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     SearchView searchView;
-    SearchBar searchBar;
-    TextView appTitle;
-    Button notification;
+//    Toolbar mToolbar;
     ArrayList<Product> products;
     HomeRecyclerVA adapter;
-    int index;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -63,6 +60,46 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.app_bar_menu, menu);
+
+        SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        ComponentName component = new ComponentName(requireContext(), HomeFragment.class);
+        SearchableInfo searchableInfo = searchManager.getSearchableInfo(component);
+        assert searchView != null;
+        searchView.setSearchableInfo(searchableInfo);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    private boolean enableSearch(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.search) {
+            searchView = new SearchView(requireContext());
+            searchView.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.search_bg));
+            searchView.clearFocus();
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    filterList(newText);
+                    return false;
+                }
+            });
+            return true;
+        }
+        return false;
     }
 
     @Nullable
@@ -87,29 +124,15 @@ public class HomeFragment extends Fragment {
 
         adapter.setProductList(products);
 
-        searchView = binding.searchView;
-
-//        ImageView imageView = view.findViewById(R.id.imageView);
-//
-//        String image = String.valueOf(products.get(index).getImage());
-//
-//        Glide.with(view.getContext()).load(image).apply(new RequestOptions().fitCenter()).into(imageView);
-
-//        searchView = view.findViewById(R.id.searchView);
-//        appTitle = view.findViewById(R.id.app_title);
-//        notification = view.findViewById(R.id.iconNotification);
-//        searchBar = view.findViewById(R.id.search_bar);
+        searchView = new SearchView(view.getContext());
+        searchView.findViewById(R.id.search);
+        searchView.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.search_bg));
 
         searchView.clearFocus();
 
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                binding.appTitle.setTranslationX(180);
-                binding.appTitle.setText(R.string.find_products);
-                searchView.setBackground(AppCompatResources.getDrawable(v.getContext(), R.drawable.search_bg));
-                binding.iconNotification.setVisibility(View.GONE);
-            }
+            public void onClick(View v) {}
         });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -125,23 +148,9 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        searchBar.setVisibility(View.GONE);
-
-//        searchView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                appTitle.setVisibility(View.GONE);
-//                notification.setVisibility(View.GONE);
-//            }
-//        });
-
-//        searchView = view.findViewById(R.id.searchView);
-//        appTitle = view.findViewById(R.id.app_title);
-//        notification = view.findViewById(R.id.iv_notification);
-
     }
 
-    private void filterList(String newText) {
+    public void filterList(String newText) {
         List<Product> filteredProducts = new ArrayList<>();
         for (Product product : products) {
             if (product.getName().toLowerCase().contains(newText.toLowerCase())) {
@@ -156,18 +165,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void disableViews() {
-        searchView = requireActivity().findViewById(R.id.searchView);
-        appTitle = requireActivity().findViewById(R.id.app_title);
-        notification = requireActivity().findViewById(R.id.iconNotification);
-
-
-        searchView.clearFocus();
-        searchView.setOnClickListener(v -> {
-            appTitle.setVisibility(View.GONE);
-            notification.setVisibility(View.GONE);
-        });
-    }
 
 
 }

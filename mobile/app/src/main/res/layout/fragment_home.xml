@@ -14,11 +14,20 @@
         tools:context=".view.fragments.HomeFragment">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:id="@+id/appBarLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="98dp"
+            android:layout_marginTop="50dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toTopOf="@+id/rv_items"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:menu="@menu/app_bar_menu"
@@ -26,21 +35,16 @@
 
             </androidx.appcompat.widget.Toolbar>
 
+<!--            <androidx.appcompat.widget.SearchView-->
+<!--                android:id="@+id/searchView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="end"-->
+<!--                app:layout_anchor="@id/toolbar"-->
+<!--                android:layout_marginEnd="24dp"/>-->
+
         </com.google.android.material.appbar.AppBarLayout>
 
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="104dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/search_bg"
-            app:layout_constraintBottom_toTopOf="@+id/rv_items"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.008" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -53,7 +57,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchView" />
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

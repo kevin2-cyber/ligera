@@ -6,7 +6,7 @@
         android:id="@+id/notification_icon"
         android:title="Notification"
         android:icon="@drawable/sl_notification"
-        app:showAsAction="always"/>
+        app:showAsAction="collapseActionView|ifRoom"/>
 
     <item android:id="@+id/search"
         android:title="@string/searchbar_hint"

@@ -69,17 +69,26 @@
 
         <LinearLayout
             android:id="@+id/ll_orders"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="41dp"
             android:orientation="horizontal"
-            tools:layout_editor_absoluteX="-16dp"
-            tools:layout_editor_absoluteY="188dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/bag_outline"
-                android:text="Orders" />
+                android:text="Orders"
+                app:icon="@drawable/bag_outline" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="200dp"
+                android:src="@drawable/baseline_arrow_back_24" />
 
         </LinearLayout>
 
