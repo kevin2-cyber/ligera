@@ -20,9 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
-            android:scaleType="fitXY"
             android:background="#B7E7C7"
             android:contentDescription="@string/login_welcome_content"
+            android:scaleType="fitXY"
             android:src="@{product.image}" />
 
         <TextView
@@ -55,17 +55,6 @@
             android:button="@drawable/sl_favourite"
             android:layout_gravity="end"
             android:background="@android:color/transparent"/>
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/ib_favourite"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="14dp"-->
-<!--            android:layout_marginEnd="11dp"-->
-<!--            android:src="@drawable/shape"-->
-<!--            android:layout_gravity="end"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:contentDescription="@string/app_name" />-->
 
     </androidx.cardview.widget.CardView>
 </layout>

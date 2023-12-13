@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.ligera.app.R;
@@ -27,6 +28,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
     CartFragment cartFragment = new CartFragment();
     FavoritesFragment favoritesFragment = new FavoritesFragment();
     ProfileFragment profileFragment = new ProfileFragment();
+    BadgeDrawable badgeDrawable;
 
 
     @Override
@@ -43,8 +45,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(this);
-//        bottomNavigationView.setOnItemReselectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+
+        badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.navigation_cart);
+        boolean visible = badgeDrawable.isVisible();
+        badgeDrawable.setVisible(visible);
+        badgeDrawable.setNumber(3);
     }
 
     // switch between fragments when view is selected
@@ -66,21 +72,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
         return false;
     }
 
-//    /**
-//     * Called when the currently selected item in the navigation menu is selected again.
-//     *
-//     * @param item The selected item
-//     */
-//    @Override
-//    public void onNavigationItemReselected(@NonNull MenuItem item) {
-//        if (item.getItemId() == R.id.navigation_home) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,homeFragment).commit();
-//        } else if (item.getItemId() == R.id.navigation_cart) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,cartFragment).commit();
-//        } else if (item.getItemId() == R.id.navigation_liked) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,favoritesFragment).commit();
-//        } else if (item.getItemId() == R.id.navigation_profile) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,profileFragment).commit();
-//        }
-//    }
 }

@@ -27,23 +27,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <Button
+        <ImageButton
             android:id="@+id/iconNotification"
-            style="?attr/materialIconButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="61dp"
-            android:layout_marginBottom="55dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="@string/app_name"
-            android:paddingStart="5dp"
-            android:paddingEnd="10dp"
-            app:icon="@drawable/sl_notification"
-            app:iconTint="@color/black"
+            android:scaleType="fitXY"
+            android:src="@drawable/sl_notification"
+            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="@+id/searchView"
             app:layout_constraintEnd_toEndOf="@+id/searchView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name" />
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
@@ -58,19 +52,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.008" />
 
-        <!--        <com.google.android.material.search.SearchBar-->
-        <!--            android:id="@+id/search_bar"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="16dp"-->
-        <!--            android:layout_marginTop="4dp"-->
-        <!--            android:layout_marginEnd="16dp"-->
-        <!--            android:hint="@string/searchbar_hint"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintHorizontal_bias="0.0"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="@+id/searchView"-->
-        <!--            android:visibility="invisible"/>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_items"
@@ -82,31 +63,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchView"
-            tools:listitem="@layout/product_item" />
+            app:layout_constraintTop_toBottomOf="@id/searchView" />
 
-
-        <!--    <com.google.android.material.tabs.TabLayout-->
-        <!--        android:id="@+id/tab_layout"-->
-        <!--        android:layout_width="0dp"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:layout_marginTop="132dp"-->
-        <!--        android:background="@android:color/transparent"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintHorizontal_bias="0.0"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-        <!--    <androidx.viewpager2.widget.ViewPager2-->
-        <!--        android:id="@+id/view_pager_2"-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="0dp"-->
-        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintHorizontal_bias="0.0"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toBottomOf="@id/tab_layout"-->
-        <!--        app:layout_constraintVertical_bias="0.0" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
