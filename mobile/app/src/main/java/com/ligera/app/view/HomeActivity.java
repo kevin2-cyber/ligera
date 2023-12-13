@@ -48,9 +48,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
 
         badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.navigation_cart);
-        boolean visible = badgeDrawable.isVisible();
-        badgeDrawable.setVisible(visible);
-        badgeDrawable.setNumber(3);
+        badgeDrawable.setVisible(badgeDrawable.isVisible());
+        badgeDrawable.setState(badgeDrawable.getState());
+        badgeDrawable.setNumber(99);
+
     }
 
     // switch between fragments when view is selected
