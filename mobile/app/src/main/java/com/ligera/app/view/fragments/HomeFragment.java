@@ -77,12 +77,13 @@ public class HomeFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (enableSearch(item)) return true;
         return super.onOptionsItemSelected(item);
     }
 
     private boolean enableSearch(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.search) {
-            searchView = new SearchView(requireContext());
+            searchView = new SearchView(requireActivity().getApplicationContext());
             searchView.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.search_bg));
             searchView.clearFocus();
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
