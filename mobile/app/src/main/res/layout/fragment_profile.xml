@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="39dp"
             android:layout_marginTop="55dp"
-            android:src="@drawable/women"
+            android:contentDescription="@string/app_name"
+            android:src="@{user.photoUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:text="MzMimi Gh"
+            android:text="@{user.displayName}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/photoUrl"
@@ -40,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text="mzmimi23@gmail.com"
+            android:text="@{user.email}"
             app:layout_constraintStart_toStartOf="@+id/tv_account_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_account_name" />
 
@@ -60,11 +61,10 @@
             android:id="@+id/tv_seller"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="49dp"
+            android:layout_marginTop="24dp"
             android:text="Become a seller"
             android:textColor="?attr/colorPrimary"
-            app:layout_constraintEnd_toEndOf="@+id/tv_account_email"
+            app:layout_constraintStart_toStartOf="@+id/tv_account_email"
             app:layout_constraintTop_toBottomOf="@+id/tv_account_email" />
 
         <LinearLayout
@@ -78,17 +78,221 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_seller">
 
             <Button
+                style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Orders"
-                app:icon="@drawable/bag_outline" />
+                android:textColor="?attr/colorOnSecondaryContainer"
+                app:icon="@drawable/bag_outline"
+                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                android:layout_marginStart="10dp"/>
 
             <ImageButton
+                android:id="@+id/orders_arrow"
+                style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="200dp"
+                android:layout_marginStart="220dp"
+                android:rotation="180"
                 android:src="@drawable/baseline_arrow_back_24" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_wish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="91dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
+
+            <Button
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WishList"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                app:icon="@drawable/sl_favourite"
+                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <ImageButton
+                android:id="@+id/wish_arrow"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="205dp"
+                android:rotation="180"
+                android:src="@drawable/baseline_arrow_back_24" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_delivery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="141dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
+
+            <Button
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delivery Address"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                app:icon="@drawable/location"
+                app:iconGravity="textStart"
+                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:iconPadding="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <ImageButton
+                android:id="@+id/delivery_arrow"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="145dp"
+                android:rotation="180"
+                android:src="@drawable/baseline_arrow_back_24" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_payment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="191dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
+
+            <Button
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Payment Methods"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                app:icon="@drawable/card"
+                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <ImageButton
+                android:id="@+id/payment_arrow"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="135dp"
+                android:rotation="180"
+                android:src="@drawable/baseline_arrow_back_24" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_help"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="241dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
+
+            <Button
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Help"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                app:icon="@drawable/help"
+                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <ImageButton
+                android:id="@+id/help_arrow"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="230dp"
+                android:rotation="180"
+                android:src="@drawable/baseline_arrow_back_24" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="291dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
+
+            <Button
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="About"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                app:icon="@drawable/info"
+                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <ImageButton
+                android:id="@+id/info_arrow"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="220dp"
+                android:rotation="180"
+                android:src="@drawable/baseline_arrow_back_24" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_logout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="341dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
+
+            <Button
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                app:icon="@drawable/logout"
+                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                android:layout_marginStart="10dp"/>
 
         </LinearLayout>
 
