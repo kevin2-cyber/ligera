@@ -6,8 +6,8 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+//import com.bumptech.glide.Glide;
+//import com.bumptech.glide.request.RequestOptions;
 import com.ligera.app.BR;
 
 public class Product extends BaseObservable {
@@ -65,13 +65,13 @@ public class Product extends BaseObservable {
         notifyPropertyChanged(BR.image);
     }
 
-    @BindingAdapter("image")
-    public static void loadImage(ImageView view, String url) {
-        Glide.with(view.getContext())
-                .load(url)
-                .apply(new RequestOptions().fitCenter())
-                .into(view);
-    }
+//    @BindingAdapter("image")
+//    public static void loadImage(ImageView view, String url) {
+//        Glide.with(view.getContext())
+//                .load(url)
+//                .apply(new RequestOptions().fitCenter())
+//                .into(view);
+//    }
 
     @Bindable
     public String getDescription() {
