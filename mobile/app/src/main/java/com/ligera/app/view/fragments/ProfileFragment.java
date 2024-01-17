@@ -39,7 +39,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
-        binding.setUser(binding.getUser());
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
