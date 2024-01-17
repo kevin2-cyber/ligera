@@ -46,7 +46,7 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
     public void onBindViewHolder(@NonNull HomeRecyclerVH holder, int position) {
         Product currentProduct = productList.get(position);
         holder.binding.setProduct(currentProduct);
-        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_three));
+        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_four));
     }
 
 
