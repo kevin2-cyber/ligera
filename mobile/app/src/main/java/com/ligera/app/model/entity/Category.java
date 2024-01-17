@@ -1,14 +1,22 @@
 package com.ligera.app.model.entity;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import com.ligera.app.BR;
-
+@Entity(tableName = "categories_table")
 public class Category extends BaseObservable {
+    @PrimaryKey(autoGenerate = true)
     private int categoryId;
+    @ColumnInfo(name = "category_name")
     private String name;
 
+    @Ignore
     public Category() {}
 
     public Category(int categoryId, String name) {
@@ -34,5 +42,11 @@ public class Category extends BaseObservable {
     public void setName(String name) {
         this.name = name;
         notifyPropertyChanged(BR.name);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.name;
     }
 }
