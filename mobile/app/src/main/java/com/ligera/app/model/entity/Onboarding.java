@@ -3,7 +3,9 @@ package com.ligera.app.model.entity;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import com.ligera.app.BR;
+import androidx.databinding.library.baseAdapters.BR;
+
+//import com.ligera.app.BR;
 
 public class Onboarding extends BaseObservable {
     int image;

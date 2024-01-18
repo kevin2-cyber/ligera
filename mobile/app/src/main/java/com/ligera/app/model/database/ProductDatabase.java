@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Category.class, Product.class}, version = 1)
+@Database(entities = {Category.class, Product.class}, version = 1, exportSchema = false)
 public abstract class ProductDatabase extends RoomDatabase {
 
     public abstract CategoryDao categoryDao();

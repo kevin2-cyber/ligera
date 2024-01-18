@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/iv_product"
             android:layout_width="142dp"
-            android:layout_height="202dp"
+            android:layout_height="210dp"
             android:layout_marginTop="16dp"
             android:contentDescription="@string/image"
             android:scaleType="fitXY"
@@ -29,25 +29,62 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/include"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/cl_shape"
-            app:layout_constraintBottom_toBottomOf="@id/iv_product">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_product">
 
             <TextView
                 android:id="@+id/tv_product_brand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:text="Ligera Mens"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_product_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="37dp"
                 android:text="Purple Hoodie"
                 android:textSize="24sp"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="37dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_product_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="$48.00"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <RatingBar
+                android:id="@+id/rt_product"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rating="4.5"
+                app:layout_constraintTop_toBottomOf="@id/tv_product_name"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <TextView
+                android:id="@+id/tv_product_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(4.5)"
+                tools:layout_editor_absoluteX="103dp"
+                tools:layout_editor_absoluteY="66dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
