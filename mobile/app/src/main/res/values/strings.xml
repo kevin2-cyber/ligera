@@ -12,4 +12,5 @@
     <string name="searchbar_hint">Search here\n</string>
     <string name="find_products">Find Products</string>
     <string name="notification">Notification</string>
+    <string name="image">image</string>
 </resources>
