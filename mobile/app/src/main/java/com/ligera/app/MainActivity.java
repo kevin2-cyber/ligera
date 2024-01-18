@@ -25,7 +25,7 @@ import com.ligera.app.model.entity.Onboarding;
 import com.ligera.app.view.HomeActivity;
 import com.ligera.app.view.RegisterActivity;
 import com.ligera.app.view.adapter.OnboardingAdapter;
-import com.ligera.app.view.anim.DepthPageTransformer;
+import com.ligera.app.view.util.DepthPageTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
