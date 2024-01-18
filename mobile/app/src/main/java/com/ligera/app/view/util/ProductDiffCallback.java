@@ -7,11 +7,11 @@ import com.ligera.app.model.entity.Product;
 
 import java.util.ArrayList;
 
-public class ProductDiffUtil extends DiffUtil.Callback {
+public class ProductDiffCallback extends DiffUtil.Callback {
     ArrayList<Product> oldProducts;
     ArrayList<Product> newProducts;
 
-    public ProductDiffUtil(ArrayList<Product> oldProducts, ArrayList<Product> newProducts) {
+    public ProductDiffCallback(ArrayList<Product> oldProducts, ArrayList<Product> newProducts) {
         this.oldProducts = oldProducts;
         this.newProducts = newProducts;
     }

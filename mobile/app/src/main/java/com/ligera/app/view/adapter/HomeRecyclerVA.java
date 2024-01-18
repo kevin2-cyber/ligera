@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ProductItemBinding;
 import com.ligera.app.model.entity.Product;
-import com.ligera.app.view.util.ProductDiffUtil;
+import com.ligera.app.view.util.ProductDiffCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
 
     public void setProductList(ArrayList<Product> newProductList) {
         final DiffUtil.DiffResult result =
-                DiffUtil.calculateDiff(new ProductDiffUtil(productList, newProductList),false);
+                DiffUtil.calculateDiff(new ProductDiffCallback(productList, newProductList),false);
         productList = newProductList;
         result.dispatchUpdatesTo(HomeRecyclerVA.this);
     }
