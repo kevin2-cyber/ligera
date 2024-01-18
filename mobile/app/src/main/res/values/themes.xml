@@ -8,9 +8,27 @@
         <item name="colorPrimary">@color/emerald</item>
         <item name="colorError">@color/emerald</item>
         <item name="colorErrorContainer">@color/emerald</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
+        <item name="android:colorBackground">@color/white</item>
     </style>
 
     <style name="Theme.Ligera" parent="Base.Theme.Ligera" >
         <item name="android:fontFamily">@font/work_sans</item>
+    </style>
+
+    <style name="Widget.App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+        <!--Container-->
+        <item name="colorSurface">@android:color/transparent</item>
+        <!--Inactive icon-->
+        <item name="colorOnSurfaceVariant">@color/charcoal_gray</item>
+        <!--Active icon-->
+        <item name="colorOnSecondaryContainer">@color/black</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.NavigationBarView.ActiveIndicator</item>
     </style>
 </resources>

@@ -1,4 +1,4 @@
-package com.ligera.app.model;
+package com.ligera.app.model.entity;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;

@@ -7,38 +7,33 @@
             type="com.ligera.app.model.entity.Product" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/product_card"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="15dp"
+        android:layout_marginBottom="10dp">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
             android:background="#B7E7C7"
-            android:scaleType="fitXY"
             android:contentDescription="@string/login_welcome_content"
-            android:src="@drawable/orange_shirt"
-            app:layout_constraintBottom_toTopOf="@+id/tv_product_price"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:scaleType="fitXY"
+            android:src="@{product.image}" />
 
         <TextView
             android:id="@+id/tv_product_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginTop="150dp"
             android:text="@{product.name}"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            android:layout_gravity="center_horizontal"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -46,23 +41,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{product.price}"
+            android:layout_gravity="center_horizontal"
             android:textColor="#A1A1A1"
+            android:layout_marginTop="175dp"
             android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_product_name"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/ib_favourite"
+
+        <CheckBox
+            android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/shape"
-            app:layout_constraintEnd_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="@+id/imageView"
-            android:contentDescription="@string/app_name" />
+            android:button="@drawable/sl_favourite"
+            android:layout_gravity="end"
+            android:background="@android:color/transparent"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
