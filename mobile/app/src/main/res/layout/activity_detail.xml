@@ -6,6 +6,10 @@
         <variable
             name="product"
             type="com.ligera.app.model.entity.Product" />
+        
+        <variable
+            name="handler"
+            type="com.ligera.app.view.DetailActivity.DetailHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -209,23 +213,33 @@
 
                 <Button
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/sl_size"/>
 
                 <Button
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/sl_size"/>
 
                 <Button
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/sl_size"/>
 
                 <Button
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/sl_size"/>
 
                 <Button
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/sl_size"/>
             </LinearLayout>
 
             <Button
@@ -233,9 +247,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="16dp"
                 android:text="ADD TO CART"
+                android:onClick="@{handler::addToCart"
                 app:icon="@drawable/bag_outline"
                 app:iconGravity="textStart"
                 app:layout_constraintEnd_toEndOf="parent"
