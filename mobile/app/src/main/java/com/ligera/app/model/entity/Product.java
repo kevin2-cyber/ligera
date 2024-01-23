@@ -16,15 +16,14 @@ import androidx.room.PrimaryKey;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.ligera.app.BR;
+import androidx.databinding.library.baseAdapters.BR;
 
 import java.util.Objects;
 
 @Entity(tableName = "product_table", foreignKeys = @ForeignKey(entity = Category.class,
-        parentColumns = "id", childColumns = "category_id", onDelete = CASCADE))
+        parentColumns = "categoryId", childColumns = "category_id", onDelete = CASCADE))
 public class Product extends BaseObservable {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "product_id")
     private int productId;
     @ColumnInfo(name = "category_id")
     private int categoryId;
@@ -177,3 +176,4 @@ public class Product extends BaseObservable {
         return Objects.hash(productId, categoryId, name, image, description, price, size, quantity, brand);
     }
 }
+

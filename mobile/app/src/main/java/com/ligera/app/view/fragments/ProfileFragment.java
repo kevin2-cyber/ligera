@@ -2,16 +2,15 @@ package com.ligera.app.view.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -68,7 +67,7 @@ public class ProfileFragment extends Fragment {
             // user is not null, user is logged in, get user info
             String email = user.getEmail();
 
-            var profilePic = user.getPhotoUrl();
+
             Toast.makeText(requireActivity(), "You're logged in as " + email, Toast.LENGTH_SHORT).show();
         } else {
             //user is null, user not logged in go to login activity

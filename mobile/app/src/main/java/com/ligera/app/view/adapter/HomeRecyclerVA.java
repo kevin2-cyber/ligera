@@ -37,7 +37,9 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
     @Override
     public HomeRecyclerVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ProductItemBinding itemBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.getContext()),R.layout.product_item, parent, false
+
+                LayoutInflater.from(parent.getContext()), R.layout.product_item, parent, false
+
         );
         return new HomeRecyclerVH(itemBinding);
     }

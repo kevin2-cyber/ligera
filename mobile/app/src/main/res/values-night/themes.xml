@@ -30,12 +30,23 @@
     </style>
 
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
-            <!--Container-->
+
+        <!--Container-->
         <item name="colorSurface">@android:color/transparent</item>
-            <!--Inactive icon-->
+        <!--Inactive icon-->
         <item name="colorOnSurfaceVariant">@color/charcoal_gray</item>
-            <!--Active icon-->
+        <!--Active icon-->
         <item name="colorOnSecondaryContainer">@color/white</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.NavigationBarView.ActiveIndicator</item>
+    </style>
+
+    <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
     </style>
 </resources>
