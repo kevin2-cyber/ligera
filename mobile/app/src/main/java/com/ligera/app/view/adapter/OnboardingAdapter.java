@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ligera.app.R;
-import com.ligera.app.model.Onboarding;
+import com.ligera.app.model.entity.Onboarding;
 
 import java.util.List;
 

@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.ligera.app"
-        minSdk 31
+        minSdk 30
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -24,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     buildFeatures {
@@ -41,13 +41,23 @@ android {
 }
 
 dependencies {
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    // firebase
     implementation platform('com.google.firebase:firebase-bom:32.6.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-storage:20.3.0'
     implementation 'com.google.firebase:firebase-auth:22.3.0'
+    // Room
+    def room_version = "2.6.1"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // material and appcompat
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    // splash screen dependency for Android 11 and below
     implementation 'androidx.core:core-splashscreen:1.0.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

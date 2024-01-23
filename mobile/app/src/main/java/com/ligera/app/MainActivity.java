@@ -2,12 +2,14 @@ package com.ligera.app;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +19,16 @@ import android.view.animation.AnticipateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.window.SplashScreen;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.databinding.ActivityMainBinding;
-import com.ligera.app.model.Onboarding;
+import com.ligera.app.model.entity.Onboarding;
 import com.ligera.app.view.HomeActivity;
 import com.ligera.app.view.RegisterActivity;
 import com.ligera.app.view.adapter.OnboardingAdapter;
-import com.ligera.app.view.anim.DepthPageTransformer;
+import com.ligera.app.view.util.DepthPageTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,36 +43,46 @@ public class MainActivity extends AppCompatActivity {
     List<Onboarding> onboardings;
     FirebaseAuth auth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_Ligera);
-        getSplashScreen().setOnExitAnimationListener(splashScreenView -> {
-            final ObjectAnimator slideUp = ObjectAnimator.ofFloat(
-                    splashScreenView,
-                    View.TRANSLATION_Y,
-                    0f,
-                    -splashScreenView.getHeight()
-            );
-            slideUp.setInterpolator(new AnticipateInterpolator());
-            slideUp.setDuration(500L);
+        SplashScreen splashScreen = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen = getSplashScreen();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen.setOnExitAnimationListener(splashScreenView -> {
+                final ObjectAnimator slideUp = ObjectAnimator.ofFloat(
+                        splashScreenView,
+                        View.TRANSLATION_Y,
+                        0f,
+                        -splashScreenView.getHeight()
+                );
+                slideUp.setInterpolator(new AnticipateInterpolator());
+                slideUp.setDuration(500L);
 
-            // Call SplashScreenView.remove at the end of your custom animation.
-            slideUp.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    splashScreenView.remove();
-                }
+                // Call SplashScreenView.remove at the end of your custom animation.
+                slideUp.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        splashScreenView.remove();
+                    }
+                });
+
+                // Run your animation.
+                slideUp.start();
             });
+        }
+        setContentView(R.layout.activity_main);
 
-            // Run your animation.
-            slideUp.start();
-        });
-        setContentView(binding.getRoot());
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        Onboarding onboarding = new Onboarding();
+        binding.setOnboarding(onboarding);
 
         // init auth
         auth = FirebaseAuth.getInstance();

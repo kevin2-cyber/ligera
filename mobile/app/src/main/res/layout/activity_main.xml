@@ -4,7 +4,7 @@
     <data>
         <variable
             name="onboarding"
-            type="com.ligera.app.model.Onboarding" />
+            type="com.ligera.app.model.entity.Onboarding" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
