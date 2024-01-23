@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Category.class, Product.class}, version = 1)
+
+@Database(entities = {Category.class, Product.class}, version = 1, exportSchema = false)
 public abstract class ProductDatabase extends RoomDatabase {
 
     public abstract CategoryDao categoryDao();
@@ -40,7 +41,8 @@ public abstract class ProductDatabase extends RoomDatabase {
     }
 
     // callback
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+    private static Callback roomCallback = new Callback() {
+
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);

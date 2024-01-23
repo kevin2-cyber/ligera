@@ -51,12 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_Ligera);
-        SplashScreen splashScreen = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            splashScreen = getSplashScreen();
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            splashScreen.setOnExitAnimationListener(splashScreenView -> {
+            getSplashScreen().setOnExitAnimationListener(splashScreenView -> {
                 final ObjectAnimator slideUp = ObjectAnimator.ofFloat(
                         splashScreenView,
                         View.TRANSLATION_Y,
@@ -77,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 // Run your animation.
                 slideUp.start();
             });
-        }
+
         setContentView(R.layout.activity_main);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         Onboarding onboarding = new Onboarding();
         binding.setOnboarding(onboarding);
+
 
         // init auth
         auth = FirebaseAuth.getInstance();

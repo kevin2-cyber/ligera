@@ -6,7 +6,7 @@ plugins {
 android {
     namespace 'com.ligera.app'
     compileSdk 34
-
+    //android.buildFeatures.dataBinding = true
     defaultConfig {
         applicationId "com.ligera.app"
         minSdk 30
@@ -32,12 +32,12 @@ android {
         dataBinding true
     }
 
-    configurations {
-        configureEach {
-            resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.10'
-            resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib:1.6.21'
-        }
-    }
+//    configurations {
+//        configureEach {
+//            resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.10'
+//            resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib:1.6.21'
+//        }
+//    }
 }
 
 dependencies {
