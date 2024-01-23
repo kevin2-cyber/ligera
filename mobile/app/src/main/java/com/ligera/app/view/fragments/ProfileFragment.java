@@ -67,6 +67,7 @@ public class ProfileFragment extends Fragment {
             // user is not null, user is logged in, get user info
             String email = user.getEmail();
 
+
             Toast.makeText(requireActivity(), "You're logged in as " + email, Toast.LENGTH_SHORT).show();
         } else {
             //user is null, user not logged in go to login activity

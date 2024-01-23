@@ -6,10 +6,12 @@
         <variable
             name="product"
             type="com.ligera.app.model.entity.Product" />
+
         
         <variable
             name="handler"
             type="com.ligera.app.view.DetailActivity.DetailHandler" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +19,7 @@
         android:layout_height="match_parent"
         android:background="#E0F4E7"
         tools:context=".view.DetailActivity">
+
 
         <Button
             android:id="@+id/save_btn"
@@ -47,6 +50,7 @@
             android:id="@+id/iv_product"
             android:layout_width="142dp"
             android:layout_height="210dp"
+
             android:layout_marginTop="16dp"
             android:contentDescription="@string/image"
             android:scaleType="fitXY"

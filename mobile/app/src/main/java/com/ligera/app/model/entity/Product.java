@@ -176,3 +176,4 @@ public class Product extends BaseObservable {
         return Objects.hash(productId, categoryId, name, image, description, price, size, quantity, brand);
     }
 }
+

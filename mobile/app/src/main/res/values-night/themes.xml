@@ -30,6 +30,7 @@
     </style>
 
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+
         <!--Container-->
         <item name="colorSurface">@android:color/transparent</item>
         <!--Inactive icon-->
