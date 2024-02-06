@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="user"
-            type="com.google.firebase.auth.FirebaseUser" />
+            name="handler"
+            type="com.ligera.app.view.fragments.ProfileFragment.ProfileClickHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
             android:layout_marginStart="39dp"
             android:layout_marginTop="55dp"
             android:contentDescription="@string/app_name"
-            android:src="@{user.photoUrl}"
+            android:src="@drawable/women"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:text="@{user.displayName}"
+            android:text="MzMimi Gh"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/photoUrl"
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text="@{user.email}"
+            android:text="mzmimi23@gmail.com"
             app:layout_constraintStart_toStartOf="@+id/tv_account_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_account_name" />
 
@@ -278,6 +278,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="341dp"
             android:orientation="horizontal"
+            android:onClick="@{handler::logout}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_seller">

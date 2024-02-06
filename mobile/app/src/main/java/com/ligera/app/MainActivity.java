@@ -19,7 +19,6 @@ import android.view.animation.AnticipateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.window.SplashScreen;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_Ligera);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             getSplashScreen().setOnExitAnimationListener(splashScreenView -> {
                 final ObjectAnimator slideUp = ObjectAnimator.ofFloat(
                         splashScreenView,
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 // Run your animation.
                 slideUp.start();
             });
+        }
 
         setContentView(R.layout.activity_main);
 

@@ -10,6 +10,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ProductItemBinding;
 import com.ligera.app.model.entity.Product;
@@ -48,7 +51,8 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
     public void onBindViewHolder(@NonNull HomeRecyclerVH holder, int position) {
         Product currentProduct = productList.get(position);
         holder.binding.setProduct(currentProduct);
-        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_four));
+        holder.setItemImage(currentProduct.getImage());
+        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_two));
     }
 
 
@@ -77,6 +81,15 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
                     listener.onProductItemClick(productList.get(clickedPosition));
                 }
             });
+        }
+
+        public void setItemImage(int image) {
+            Glide.with(binding.imageView.getContext())
+                    .load(image)
+                    .apply(new RequestOptions().fitCenter())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .skipMemoryCache(false)
+                    .into(binding.imageView);
         }
     }
 
