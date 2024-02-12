@@ -97,7 +97,8 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="220dp"
                 android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24" />
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="@string/app_name" />
 
         </LinearLayout>
 
@@ -131,7 +132,8 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="205dp"
                 android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24" />
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="@string/app_name" />
 
         </LinearLayout>
 
@@ -165,7 +167,8 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="145dp"
                 android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24" />
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="@string/app_name" />
 
         </LinearLayout>
 
@@ -200,7 +203,8 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="135dp"
                 android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24" />
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="@string/app_name" />
 
         </LinearLayout>
 
@@ -234,7 +238,8 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="230dp"
                 android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24" />
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="@string/app_name" />
 
         </LinearLayout>
 
@@ -268,7 +273,8 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="220dp"
                 android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24" />
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="@string/app_name" />
 
         </LinearLayout>
 
@@ -278,7 +284,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="341dp"
             android:orientation="horizontal"
-            android:onClick="@{handler::logout}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_seller">
@@ -288,6 +293,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Logout"
+                android:onClick="@{handler::logout}"
                 android:textColor="?attr/colorOnSecondaryContainer"
                 app:icon="@drawable/logout"
                 app:iconTint="?attr/colorOnSecondaryContainer"

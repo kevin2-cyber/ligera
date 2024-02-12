@@ -50,20 +50,11 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        auth = FirebaseAuth.getInstance();
-//
-//        binding.llLogout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                auth.signOut();
-//                checkUser();
-//            }
-//        });
     }
 
 
 
-    private void checkUser() {
+    public void checkUser() {
 
         auth = FirebaseAuth.getInstance();
         // check if user is logged in or not
