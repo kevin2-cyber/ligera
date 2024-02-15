@@ -55,7 +55,8 @@ public class RegisterActivity extends AppCompatActivity {
         binding.etEmail.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                binding.lowerSection.setTranslationY(-620f);
+                binding.upperSection.setVisibility(View.INVISIBLE);
+                binding.lowerSection.setTranslationY(-530f);
                 return false;
             }
         });

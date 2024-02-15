@@ -141,7 +141,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_shape"
-                android:text="register"
+                android:text="login"
                 android:onClick="@{loginClickHandler::validateDate}"
                 android:textColor="@color/white"
                 android:textAllCaps="true"
