@@ -1,5 +1,6 @@
 package com.ligera.app.view.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,8 +21,9 @@ import com.ligera.app.view.LoginActivity;
 
 
 public class ProfileFragment extends Fragment {
-    private FragmentProfileBinding binding;
+    FragmentProfileBinding binding;
     private FirebaseAuth auth;
+    private ProfileClickHandler handler;
 
 
     public ProfileFragment() {
@@ -37,7 +39,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
+        handler = new ProfileClickHandler(getContext());
+        binding.setHandler(handler);
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
@@ -46,20 +50,13 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        auth = FirebaseAuth.getInstance();
-
-        binding.llLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auth.signOut();
-                checkUser();
-            }
-        });
     }
 
 
 
-    private void checkUser() {
+    public void checkUser() {
+
+        auth = FirebaseAuth.getInstance();
         // check if user is logged in or not
         FirebaseUser user = auth.getCurrentUser();
 
@@ -73,6 +70,19 @@ public class ProfileFragment extends Fragment {
             //user is null, user not logged in go to login activity
             startActivity(new Intent(requireActivity(), LoginActivity.class));
             requireActivity().finish();
+        }
+    }
+
+    public class ProfileClickHandler {
+        Context context;
+
+        public ProfileClickHandler(Context context) {
+            this.context = context;
+        }
+
+        public void logout(View view) {
+            checkUser();
+            auth.signOut();
         }
     }
 }

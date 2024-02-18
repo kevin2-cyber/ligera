@@ -107,7 +107,7 @@ public class Product extends BaseObservable {
 
     @Bindable
     public String getPrice() {
-        return price;
+        return "$" + price + ".00";
     }
 
     public void setPrice(String price) {

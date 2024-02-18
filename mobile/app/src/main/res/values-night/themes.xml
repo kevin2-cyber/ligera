@@ -19,6 +19,8 @@
         <item name="android:colorBackground">@color/splash_bg</item>
 
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
+
+        <item name="buttonStyle">@style/Widget.App.Button.OutlinedButton.IconOnly</item>
     </style>
 
     <style name="Theme.Ligera" parent="Base.Theme.Ligera">
