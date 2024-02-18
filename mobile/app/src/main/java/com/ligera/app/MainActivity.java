@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         // init auth
-//        auth = FirebaseAuth.getInstance();
-//        checkUser();
+        auth = FirebaseAuth.getInstance();
+        checkUser();
 
 
         shopNowBtn = binding.shopNowBtn;
