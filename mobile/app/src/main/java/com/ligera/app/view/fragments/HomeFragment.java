@@ -1,13 +1,7 @@
 package com.ligera.app.view.fragments;
 
-import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.ComponentName;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -61,46 +55,39 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.app_bar_menu, menu);
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//        inflater.inflate(R.menu.app_bar_menu, menu);
+//
 
-        SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        ComponentName component = new ComponentName(requireContext(), HomeFragment.class);
-        SearchableInfo searchableInfo = searchManager.getSearchableInfo(component);
-        assert searchView != null;
-        searchView.setSearchableInfo(searchableInfo);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (enableSearch(item)) return true;
-        return super.onOptionsItemSelected(item);
-    }
-
-    private boolean enableSearch(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.search) {
-            searchView = new SearchView(requireActivity().getApplicationContext());
-            searchView.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.search_bg));
-            searchView.clearFocus();
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    filterList(newText);
-                    return false;
-                }
-            });
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == R.id.search) {
+//            searchView = new SearchView(requireContext());
+//            searchView.clearFocus();
+//            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//                @Override
+//                public boolean onQueryTextSubmit(String query) {
+//                    return false;
+//                }
+//
+//                @Override
+//                public boolean onQueryTextChange(String newText) {
+//                    filterList(newText);
+//                    return false;
+//                }
+//            });
+////            return true;
+//        } else if (item.getItemId() == R.id.notification_icon) {
+//            Toast.makeText(requireActivity(), "Notification", Toast.LENGTH_LONG).show();
+////            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Nullable
     @Override
@@ -124,31 +111,41 @@ public class HomeFragment extends Fragment {
 
         adapter.setProductList(products);
 
-        searchView = new SearchView(view.getContext());
-        searchView.findViewById(R.id.search);
-        searchView.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.search_bg));
+        binding.toolbar.inflateMenu(R.menu.app_bar_menu);
 
-        searchView.clearFocus();
-
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
+        binding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public void onClick(View v) {}
-        });
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.search) {
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
+                } if (item.getItemId() == R.id.notification_icon) {
+                    Toast.makeText(requireActivity(), "Notification", Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterList(newText);
-                return false;
-            }
         });
 
     }
+
+//    public void searchListener() {
+//        searchView = new SearchView(requireActivity());
+//        searchView.clearFocus();
+//
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                filterList(newText);
+//                return false;
+//            }
+//        });
+//    }
 
     public void filterList(String newText) {
         List<Product> filteredProducts = new ArrayList<>();
