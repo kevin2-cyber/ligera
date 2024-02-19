@@ -111,41 +111,11 @@ public class HomeFragment extends Fragment {
 
         adapter.setProductList(products);
 
-        binding.toolbar.inflateMenu(R.menu.app_bar_menu);
 
-        binding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.search) {
-
-                } if (item.getItemId() == R.id.notification_icon) {
-                    Toast.makeText(requireActivity(), "Notification", Toast.LENGTH_SHORT).show();
-                }
-                return false;
-            }
-
-        });
 
     }
 
-//    public void searchListener() {
-//        searchView = new SearchView(requireActivity());
-//        searchView.clearFocus();
-//
-//
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                filterList(newText);
-//                return false;
-//            }
-//        });
-//    }
+
 
     public void filterList(String newText) {
         List<Product> filteredProducts = new ArrayList<>();
