@@ -4,6 +4,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.SystemBarStyle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -33,6 +34,7 @@ import com.ligera.app.view.util.DepthPageTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 //        EdgeToEdge.enable(this);
+//        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_Ligera);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
