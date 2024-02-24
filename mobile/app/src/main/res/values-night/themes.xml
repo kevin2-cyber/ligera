@@ -24,6 +24,7 @@
         <item name="buttonStyle">@style/Widget.App.Button.OutlinedButton.IconOnly</item>
 <!--        <item name="android:windowLayoutInDisplayCutoutMode">never</item>-->
         <item name="android:windowTranslucentStatus">true</item>
+
     </style>
 
     <style name="Theme.Ligera" parent="Base.Theme.Ligera">
