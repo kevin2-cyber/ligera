@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     SearchView searchView;
-//    Toolbar mToolbar;
+    Toolbar mToolbar;
     ArrayList<Product> products;
     HomeRecyclerVA adapter;
 
@@ -57,37 +57,36 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        setHasOptionsMenu(true);
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.app_bar_menu, menu);
-
-        MenuItem itemSearch = menu.findItem(R.id.search);
-        // get the searchView and searchable configuration
-        requireContext();
-        SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) itemSearch.getActionView();
-        assert searchView != null;
-        searchView.setQueryHint("Type Here");
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().getComponentName()));
-        searchView.setIconified(false); // do not iconify the widgets: expand it by default
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterList(newText);
-                return true;
-            }
-        });
-
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//        inflater.inflate(R.menu.app_bar_menu, menu);
+//
+//        MenuItem itemSearch = menu.findItem(R.id.search);
+//        // get the searchView and searchable configuration
+//        SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
+//        searchView = (SearchView) itemSearch.getActionView();
+//        searchView.setQueryHint("Type Here");
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().getComponentName()));
+//        searchView.setIconified(false); // do not iconify the widgets: expand it by default
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                filterList(newText);
+//                return true;
+//            }
+//        });
+//
+//
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
 //    @Override
 //    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -124,6 +123,14 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+//        mToolbar = view.findViewById(R.id.toolbar);
+//        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                return false;
+//            }
+//        });
 
         // get the list of products
         products = Constants.getProductData();
