@@ -1,7 +1,11 @@
 package com.ligera.app.view.fragments;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,13 +59,35 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//        inflater.inflate(R.menu.app_bar_menu, menu);
-//
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.app_bar_menu, menu);
 
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
+        MenuItem itemSearch = menu.findItem(R.id.search);
+        // get the searchView and searchable configuration
+        requireContext();
+        SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) itemSearch.getActionView();
+        assert searchView != null;
+        searchView.setQueryHint("Type Here");
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().getComponentName()));
+        searchView.setIconified(false); // do not iconify the widgets: expand it by default
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+        });
+
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
 //    @Override
 //    public boolean onOptionsItemSelected(@NonNull MenuItem item) {

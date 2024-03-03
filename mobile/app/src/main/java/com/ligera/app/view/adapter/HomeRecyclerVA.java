@@ -33,6 +33,7 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
 
     public void setFilterList(List<Product> products) {
         productList = (ArrayList<Product>) products;
+        productList.addAll(products);
         notifyDataSetChanged();
     }
 
