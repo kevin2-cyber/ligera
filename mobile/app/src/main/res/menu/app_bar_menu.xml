@@ -6,12 +6,12 @@
         android:id="@+id/notification_icon"
         android:title="@string/notification"
         android:icon="@drawable/sl_notification"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom|collapseActionView"/>
 
     <item android:id="@+id/search"
         android:title="@string/searchbar_hint"
         android:icon="@drawable/ic_search"
-        app:showAsAction="ifRoom"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
 </menu>
