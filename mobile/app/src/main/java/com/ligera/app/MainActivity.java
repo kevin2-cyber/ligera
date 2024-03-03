@@ -1,5 +1,6 @@
 package com.ligera.app;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -13,8 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnticipateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,7 +21,7 @@ import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.ligera.app.databinding.ActivityMainBinding;
+//import com.ligera.app.databinding.ActivityMainBinding;
 import com.ligera.app.model.entity.Onboarding;
 import com.ligera.app.view.HomeActivity;
 import com.ligera.app.view.RegisterActivity;
@@ -33,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    ActivityMainBinding binding;
+//    ActivityMainBinding binding;
     ViewPager2 onboardingViewPager;
     OnboardingAdapter onboardingAdapter;
     Button shopNowBtn;
@@ -45,11 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_Ligera);
+        EdgeToEdge.enable(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             getSplashScreen().setOnExitAnimationListener(splashScreenView -> {
                 final ObjectAnimator slideUp = ObjectAnimator.ofFloat(
@@ -73,12 +70,12 @@ public class MainActivity extends AppCompatActivity {
                 slideUp.start();
             });
         }
-
         setContentView(R.layout.activity_main);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        Onboarding onboarding = new Onboarding();
-        binding.setOnboarding(onboarding);
+
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+//        Onboarding onboarding = new Onboarding();
+//        binding.setOnboarding(onboarding);
 
 
         // init auth
@@ -86,13 +83,13 @@ public class MainActivity extends AppCompatActivity {
         checkUser();
 
 
-        shopNowBtn = binding.shopNowBtn;
-        onboardingIndicators = binding.onboardingIndicators;
+        shopNowBtn = findViewById(R.id.shop_now_btn);
+        onboardingIndicators = findViewById(R.id.onboarding_indicators);
 
         setupOnboardingItems();
 
         // initializing the ViewPager2 object
-        onboardingViewPager = binding.viewPager;
+        onboardingViewPager = findViewById(R.id.view_pager);
         onboardingViewPager.setAdapter(onboardingAdapter);
         onboardingViewPager.setPageTransformer(new DepthPageTransformer());
 

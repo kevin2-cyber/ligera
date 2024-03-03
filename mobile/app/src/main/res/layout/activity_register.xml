@@ -189,6 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
+                android:layout_marginBottom="6dp"
                 android:text="By joining I agree to receive emails from Ligera"
                 android:textColor="@color/charcoal_gray_light" />
         </LinearLayout>
