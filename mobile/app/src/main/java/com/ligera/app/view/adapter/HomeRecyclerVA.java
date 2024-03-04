@@ -37,6 +37,10 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
         notifyDataSetChanged();
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     @NonNull
     @Override
     public HomeRecyclerVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
