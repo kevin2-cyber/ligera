@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -35,7 +36,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     ActivityHomeBinding binding;
-    Toolbar mToolbar;
+    MaterialToolbar mToolbar;
 
     BottomNavigationView bottomNavigationView;
     HomeFragment homeFragment = new HomeFragment();
