@@ -9,10 +9,14 @@
         <item name="colorError">@color/emerald</item>
         <item name="colorErrorContainer">@color/emerald</item>
 
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
+
 <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
 <!--        <item name="android:navigationBarColor">@android:color/transparent</item>-->
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
 <!--        <item name="android:colorBackground">@color/white</item>-->
+        <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
     </style>
 
     <style name="Theme.Ligera" parent="Base.Theme.Ligera" >
@@ -41,5 +45,26 @@
         <item name="android:paddingRight">12dp</item>
         <item name="android:minWidth">48dp</item>
         <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="TextAppearance.App.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/work_sans</item>
+        <item name="android:fontFamily">@font/work_sans</item>
+    </style>
+
+    <style name="TextAppearance.App.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/work_sans</item>
+        <item name="android:fontFamily">@font/work_sans</item>
+    </style>
+
+    <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>
+        <item name="titleTextAppearance">@style/TextAppearance.App.TitleLarge</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.App.TitleMedium</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Toolbar" parent="">
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
     </style>
 </resources>

@@ -3,17 +3,11 @@ package com.ligera.app.view;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,9 +20,9 @@ import com.ligera.app.view.fragments.FavoritesFragment;
 import com.ligera.app.view.fragments.HomeFragment;
 import com.ligera.app.view.fragments.ProfileFragment;
 
+
 public class HomeActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     ActivityHomeBinding binding;
-    Toolbar mToolbar;
 
     BottomNavigationView bottomNavigationView;
     HomeFragment homeFragment = new HomeFragment();
@@ -40,9 +34,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
@@ -68,7 +59,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.navigation_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,homeFragment).commit();
-            displayMenuInHomeFragment();
             return true;
         } else if (item.getItemId() == R.id.navigation_cart) {
             getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,cartFragment).commit();
@@ -83,8 +73,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
         return false;
     }
 
-    public void displayMenuInHomeFragment() {
-        mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-    }
 }
