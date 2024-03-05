@@ -26,15 +26,14 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-            <com.google.android.material.appbar.MaterialToolbar
+            <androidx.appcompat.widget.Toolbar
                 style="@style/Widget.App.Toolbar"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:menu="@menu/app_bar_menu"
                 app:title="@string/app_name">
 
-            </com.google.android.material.appbar.MaterialToolbar>
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 

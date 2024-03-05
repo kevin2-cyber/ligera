@@ -32,7 +32,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     ActivityHomeBinding binding;
-    MaterialToolbar mToolbar;
+//    MaterialToolbar mToolbar;
 
     BottomNavigationView bottomNavigationView;
     HomeFragment homeFragment = new HomeFragment();
@@ -40,8 +40,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
     FavoritesFragment favoritesFragment = new FavoritesFragment();
     ProfileFragment profileFragment = new ProfileFragment();
     BadgeDrawable badgeDrawable;
-    ArrayList<Product> products;
-    HomeRecyclerVA adapter;
+//    ArrayList<Product> products;
+//    HomeRecyclerVA adapter;
 
 
     @Override
@@ -71,7 +71,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.navigation_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,homeFragment).commit();
-            displayMenuInHomeFragment();
+//            displayMenuInHomeFragment();
             return true;
         } else if (item.getItemId() == R.id.navigation_cart) {
             getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,cartFragment).commit();
@@ -86,49 +86,49 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
         return false;
     }
 
-    public void displayMenuInHomeFragment() {
-        mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-    }
+//    public void displayMenuInHomeFragment() {
+//        mToolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(mToolbar);
+//    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+//
+//        MenuItem itemSearch = menu.findItem(R.id.search);
+//        // get the searchView and searchable configuration
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView = (SearchView) itemSearch.getActionView();
+//        searchView.setQueryHint("Type Here");
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        searchView.setIconified(false);
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                filterList(newText);
+//                return true;
+//            }
+//        });
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
-        MenuItem itemSearch = menu.findItem(R.id.search);
-        // get the searchView and searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) itemSearch.getActionView();
-        searchView.setQueryHint("Type Here");
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconified(false);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterList(newText);
-                return true;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    public void filterList(String newText) {
-        List<Product> filteredProducts = new ArrayList<>();
-        for (Product product : products) {
-            if (product.getName().toLowerCase().contains(newText.toLowerCase())) {
-                filteredProducts.add(product);
-            }
-        }
-
-        if (filteredProducts.isEmpty()) {
-            Toast.makeText(this, "No products", Toast.LENGTH_SHORT).show();
-        } else {
-            adapter.setFilterList(filteredProducts);
-        }
-    }
+//    public void filterList(String newText) {
+//        List<Product> filteredProducts = new ArrayList<>();
+//        for (Product product : products) {
+//            if (product.getName().toLowerCase().contains(newText.toLowerCase())) {
+//                filteredProducts.add(product);
+//            }
+//        }
+//
+//        if (filteredProducts.isEmpty()) {
+//            Toast.makeText(this, "No products", Toast.LENGTH_SHORT).show();
+//        } else {
+//            adapter.setFilterList(filteredProducts);
+//        }
+//    }
 }

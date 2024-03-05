@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,9 +63,8 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
-    MaterialToolbar materialToolbar;
+    Toolbar toolbar;
     SearchView searchView;
-    Context context;
     ArrayList<Product> products;
     HomeRecyclerVA adapter;
 
@@ -88,15 +88,13 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        context = getContext();
         inflater.inflate(R.menu.app_bar_menu, menu);
 
         MenuItem itemSearch = menu.findItem(R.id.search);
         // get the searchView and searchable configuration
-        SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) itemSearch.getActionView();
         searchView.setQueryHint("Type Here");
         ComponentName componentName = requireActivity().getComponentName();
@@ -130,11 +128,10 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         // get the list of products
         products = Constants.getProductData();
         // assign list of products to adapter
-        adapter = new HomeRecyclerVA(getContext(), products);
+        adapter = new HomeRecyclerVA(requireActivity(), products);
         RecyclerView recyclerView = binding.rvItems;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
