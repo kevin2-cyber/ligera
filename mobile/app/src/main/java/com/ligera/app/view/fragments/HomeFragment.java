@@ -88,11 +88,37 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.app_bar_menu, menu);
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//        inflater.inflate(R.menu.app_bar_menu, menu);
+//
+//        MenuItem itemSearch = menu.findItem(R.id.search);
+//        // get the searchView and searchable configuration
+//        SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
+//        searchView = (SearchView) itemSearch.getActionView();
+//        searchView.setQueryHint("Type Here");
+//        ComponentName componentName = requireActivity().getComponentName();
+//        SearchableInfo searchableInfo = searchManager.getSearchableInfo(componentName);
+//        searchView.setSearchableInfo(searchableInfo);
+//        searchView.setIconified(false);
+//
+//
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
-        MenuItem itemSearch = menu.findItem(R.id.search);
+    @Nullable
+    @Override
+    public View getView() {
+        return super.getView();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        binding.toolbar.inflateMenu(R.menu.app_bar_menu);
+
+        MenuItem itemSearch = binding.toolbar.getMenu().findItem(R.id.search);
         // get the searchView and searchable configuration
         SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) itemSearch.getActionView();
@@ -115,25 +141,13 @@ public class HomeFragment extends Fragment {
             }
         };
         searchView.setOnQueryTextListener(onQueryTextListener);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Nullable
-    @Override
-    public View getView() {
-        return super.getView();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
         // get the list of products
         products = Constants.getProductData();
         // assign list of products to adapter
-        adapter = new HomeRecyclerVA(requireActivity(), products);
+        adapter = new HomeRecyclerVA(getActivity(), products);
         RecyclerView recyclerView = binding.rvItems;
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);

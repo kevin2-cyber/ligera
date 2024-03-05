@@ -3,36 +3,26 @@ package com.ligera.app.view;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityHomeBinding;
 import com.ligera.app.model.entity.Product;
-import com.ligera.app.view.adapter.HomeRecyclerVA;
 import com.ligera.app.view.fragments.CartFragment;
 import com.ligera.app.view.fragments.FavoritesFragment;
 import com.ligera.app.view.fragments.HomeFragment;
 import com.ligera.app.view.fragments.ProfileFragment;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     ActivityHomeBinding binding;
-//    MaterialToolbar mToolbar;
 
     BottomNavigationView bottomNavigationView;
     HomeFragment homeFragment = new HomeFragment();
@@ -40,8 +30,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
     FavoritesFragment favoritesFragment = new FavoritesFragment();
     ProfileFragment profileFragment = new ProfileFragment();
     BadgeDrawable badgeDrawable;
-//    ArrayList<Product> products;
-//    HomeRecyclerVA adapter;
 
 
     @Override
@@ -71,7 +59,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.navigation_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,homeFragment).commit();
-//            displayMenuInHomeFragment();
             return true;
         } else if (item.getItemId() == R.id.navigation_cart) {
             getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,cartFragment).commit();
@@ -86,49 +73,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
         return false;
     }
 
-//    public void displayMenuInHomeFragment() {
-//        mToolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(mToolbar);
-//    }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
-//
-//        MenuItem itemSearch = menu.findItem(R.id.search);
-//        // get the searchView and searchable configuration
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView = (SearchView) itemSearch.getActionView();
-//        searchView.setQueryHint("Type Here");
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-//        searchView.setIconified(false);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                filterList(newText);
-//                return true;
-//            }
-//        });
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-//    public void filterList(String newText) {
-//        List<Product> filteredProducts = new ArrayList<>();
-//        for (Product product : products) {
-//            if (product.getName().toLowerCase().contains(newText.toLowerCase())) {
-//                filteredProducts.add(product);
-//            }
-//        }
-//
-//        if (filteredProducts.isEmpty()) {
-//            Toast.makeText(this, "No products", Toast.LENGTH_SHORT).show();
-//        } else {
-//            adapter.setFilterList(filteredProducts);
-//        }
-//    }
 }
