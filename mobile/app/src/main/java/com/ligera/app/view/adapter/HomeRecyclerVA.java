@@ -1,5 +1,6 @@
 package com.ligera.app.view.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -24,13 +25,13 @@ import java.util.List;
 public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecyclerVH> {
     private OnProductItemClickListener listener;
     private ArrayList<Product> productList;
-    private Context context;
+    private final Context context;
 
-    public HomeRecyclerVA(Context context, ArrayList<Product> productList) {
+    public HomeRecyclerVA(Context context) {
         this.context = context;
-        this.productList = productList;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setFilterList(List<Product> products) {
         productList = (ArrayList<Product>) products;
         productList.addAll(products);
@@ -74,7 +75,7 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
     }
 
     public class HomeRecyclerVH extends RecyclerView.ViewHolder {
-        private ProductItemBinding binding;
+        private final ProductItemBinding binding;
 
         public HomeRecyclerVH(@NonNull ProductItemBinding binding) {
             super(binding.getRoot());
