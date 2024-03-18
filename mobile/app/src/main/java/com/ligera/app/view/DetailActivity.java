@@ -1,43 +1,100 @@
 package com.ligera.app.view;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityDetailBinding;
 import com.ligera.app.model.entity.Product;
+import com.ligera.app.viewmodel.DetailViewModel;
+
+import java.util.Objects;
 
 public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding binding;
-    private DetailHandler handler;
+    private Product product;
+
+    public static final String PRODUCT_ID = "product_id";
+    public static final String PRODUCT_IMAGE = "product_image";
+    public static final String PRODUCT_NAME = "product_name";
+    public static final String PRODUCT_DESCRIPTION = "product_description";
+    public static final String PRODUCT_PRICE = "product_price";
+    public static final String PRODUCT_QUANTITY ="product_quantity";
+    public static final String CATEGORY_ID = "category_id";
+    public static final String PRODUCT_BRAND = "product_brand";
+    public static final String PRODUCT_SIZE = "product_size";
+
+    DetailViewModel  viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_detail);
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
-        Product product = new Product();
+        product = new Product();
         binding.setProduct(product);
 
-        handler =  new DetailHandler(this);
-        binding.setHandler(handler);
+
+        viewModel = new ViewModelProvider(this).get(DetailViewModel.class);
+        binding.setViewmodel(viewModel);
+
+
+        Toolbar toolbar = binding.toolbar;
+        setSupportActionBar(toolbar);
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        Intent intent = getIntent();
+        if (intent.hasExtra(PRODUCT_ID)) {
+            product.setName(intent.getStringExtra(PRODUCT_NAME));
+            product.setImage(intent.getIntExtra(PRODUCT_IMAGE, R.drawable.attire));
+            product.setBrand(intent.getStringExtra(PRODUCT_BRAND));
+            product.setDescription(intent.getIntExtra(PRODUCT_DESCRIPTION, R.string.contents));
+//            product.setCategoryId(Integer.parseInt(intent.getStringExtra(CATEGORY_ID)));
+            product.setQuantity(intent.getIntExtra(PRODUCT_QUANTITY, 1));
+            product.setPrice(intent.getStringExtra(PRODUCT_PRICE));
+            product.setSize(intent.getStringExtra(PRODUCT_SIZE));
+        } else {
+            Toast.makeText(this, "No data sent", Toast.LENGTH_LONG).show();
+        }
+
+        viewModel.getCounter().observe(this, counter -> binding.numberText.setText(String.valueOf(counter)));
 
     }
 
-    public class DetailHandler {
-        Context context;
-
-        public DetailHandler(Context context) {
-            this.context = context;
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
+        return super.onOptionsItemSelected(item);
+    }
 
-        public void addToCart(View view) {}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail_app_bar_menu,menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

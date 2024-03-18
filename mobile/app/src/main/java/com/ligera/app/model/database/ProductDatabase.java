@@ -41,7 +41,7 @@ public abstract class ProductDatabase extends RoomDatabase {
     }
 
     // callback
-    private static Callback roomCallback = new Callback() {
+    private static final Callback roomCallback = new Callback() {
 
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
