@@ -57,8 +57,7 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
         Product currentProduct = productList.get(position);
         holder.binding.setProduct(currentProduct);
         holder.setItemImage(currentProduct.getImage());
-        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_one
-        ));
+        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_one));
     }
 
 
