@@ -232,37 +232,45 @@
                 app:layout_constraintTop_toTopOf="@+id/tv_sl_sizes"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
+                app:singleLine="true"
+                app:singleSelection="false"
+                app:selectionRequired="true"
                 tools:layout_editor_absoluteX="0dp">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="S"/>
+                    android:text="S"
+                    android:background="@drawable/sl_size"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="M"/>
+                    android:text="M"
+                    android:background="@drawable/sl_size"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="L"/>
+                    android:text="L"
+                    android:background="@drawable/sl_size"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipXL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XL"/>
+                    android:text="XL"
+                    android:background="@drawable/sl_size"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipXXL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XXL"/>
+                    android:text="XXL"
+                    android:background="@drawable/sl_size"/>
             </com.google.android.material.chip.ChipGroup>
 
 
