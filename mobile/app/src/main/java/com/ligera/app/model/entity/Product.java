@@ -2,6 +2,7 @@ package com.ligera.app.model.entity;
 
 import static androidx.room.ForeignKey.CASCADE;
 
+import android.icu.text.NumberFormat;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import androidx.databinding.library.baseAdapters.BR;
 
+import java.util.Locale;
 import java.util.Objects;
 
 @Entity(tableName = "product_table", foreignKeys = @ForeignKey(entity = Category.class,
@@ -32,7 +34,7 @@ public class Product extends BaseObservable {
     @ColumnInfo(name = "product_name")
     private String name;
     @ColumnInfo(name = "product_description")
-    private String description;
+    private int description;
     @ColumnInfo(name = "product_price")
     private String price;
     @ColumnInfo(name = "product_quantity")
@@ -43,14 +45,25 @@ public class Product extends BaseObservable {
     private String size;
 
     @Ignore
+    NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
+
+    @Ignore
     public Product() {}
 
-    public Product(int productId, String name, int image, String description, String price, int quantity, int categoryId, String brand, String size) {
+    public Product(int productId,
+                   String name,
+                   int image,
+                   int description,
+                   String price,
+                   int quantity,
+                   int categoryId,
+                   String brand,
+                   String size) {
         this.productId = productId;
         this.name = name;
         this.image = image;
         this.description = description;
-        this.price = price;
+        this.price = numberFormat.format(Double.parseDouble(price));
         this.quantity = quantity;
         this.categoryId = categoryId;
         this.brand = brand;
@@ -87,31 +100,31 @@ public class Product extends BaseObservable {
         notifyPropertyChanged(BR.image);
     }
 
-    @BindingAdapter("image")
-    public static void loadImage(ImageView view, String url) {
-        Glide.with(view.getContext())
-                .load(url)
-                .apply(new RequestOptions().fitCenter())
-                .into(view);
-    }
+//    @BindingAdapter("image")
+//    public  void loadImage(ImageView view, String url) {
+//        Glide.with(view.getContext())
+//                .load(url)
+//                .apply(new RequestOptions().fitCenter())
+//                .into(view);
+//    }
 
     @Bindable
-    public String getDescription() {
+    public int getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(int description) {
         this.description = description;
         notifyPropertyChanged(BR.description);
     }
 
     @Bindable
-    public String getPrice() {
-        return "$" + price + ".00";
+    public String getPrice(){
+        return price;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setPrice(String price){
+       this.price = price;
         notifyPropertyChanged(BR.price);
     }
 
@@ -164,8 +177,8 @@ public class Product extends BaseObservable {
                 && categoryId == product.categoryId
                 && name.equals(product.name)
                 && image == product.image
-                && description.equals(product.description)
-                && price.equals(product.price)
+                && description == product.description
+                && price == product.price
                 && quantity == product.quantity
                 && brand.equals(product.brand)
                 && size.equals(product.size);

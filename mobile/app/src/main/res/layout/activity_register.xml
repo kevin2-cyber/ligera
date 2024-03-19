@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.RegisterActivity"
-        android:fitsSystemWindows="false">
+        android:fitsSystemWindows="false"
+        android:id="@+id/register">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/upper_section"
@@ -95,25 +96,29 @@
                 android:layout_gravity="start"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:text="Your Name"
                 android:textStyle="bold" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp">
             <EditText
                 android:id="@+id/et_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:autofillHints="name"
-                android:background="@drawable/et_background"
-                android:drawableStart="@drawable/user_outline"
+                android:drawableEnd="@drawable/user_outline"
                 android:drawablePadding="10dp"
                 android:hint="Your full name here"
                 android:inputType="textPersonName"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"/>
+                android:paddingEnd="10dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/your_email"
@@ -122,25 +127,29 @@
                 android:layout_gravity="start"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:text="Email Address"
                 android:textStyle="bold" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp">
             <EditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:autofillHints="name"
-                android:background="@drawable/et_background"
-                android:drawableStart="@drawable/mail"
+                android:drawableEnd="@drawable/mail"
                 android:drawablePadding="10dp"
                 android:hint="Your Email"
                 android:inputType="textEmailAddress"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"/>
+                android:paddingEnd="10dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/your_password"
@@ -149,25 +158,31 @@
                 android:layout_gravity="start"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:text="Password"
                 android:textStyle="bold" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleDrawable="@drawable/toggle_group_bg">
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:autofillHints="name"
-                android:background="@drawable/et_background"
-                android:drawableStart="@drawable/lock"
                 android:drawablePadding="10dp"
                 android:hint="Enter Password"
                 android:inputType="textPassword"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"/>
+                android:paddingEnd="10dp" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/register_btn"
@@ -188,7 +203,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="6dp"
                 android:text="By joining I agree to receive emails from Ligera"
                 android:textColor="@color/charcoal_gray_light" />

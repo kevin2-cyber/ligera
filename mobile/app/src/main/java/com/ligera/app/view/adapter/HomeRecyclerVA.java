@@ -34,7 +34,6 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
     @SuppressLint("NotifyDataSetChanged")
     public void setFilterList(List<Product> products) {
         productList = (ArrayList<Product>) products;
-        productList.addAll(products);
         notifyDataSetChanged();
     }
 
@@ -58,7 +57,7 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
         Product currentProduct = productList.get(position);
         holder.binding.setProduct(currentProduct);
         holder.setItemImage(currentProduct.getImage());
-        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_two));
+        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_one));
     }
 
 

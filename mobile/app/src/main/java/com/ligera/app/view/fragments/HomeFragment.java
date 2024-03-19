@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ligera.app.R;
 import com.ligera.app.databinding.FragmentHomeBinding;
 import com.ligera.app.model.entity.Product;
+import com.ligera.app.view.DetailActivity;
 import com.ligera.app.view.adapter.HomeRecyclerVA;
 import com.ligera.app.view.util.Constants;
 
@@ -35,6 +37,7 @@ public class HomeFragment extends Fragment {
     SearchView searchView;
     ArrayList<Product> products;
     HomeRecyclerVA adapter;
+    public int selectedProductId;
 
 
     public HomeFragment() {
@@ -106,8 +109,23 @@ public class HomeFragment extends Fragment {
 
         adapter.setProductList(products);
 
+        // sending the data to DetailsActivity
+        adapter.setListener(product -> {
+            selectedProductId = product.getProductId();
+            Intent intent = new Intent(requireActivity(), DetailActivity.class);
 
+            intent.putExtra(DetailActivity.PRODUCT_ID, selectedProductId);
+            intent.putExtra(DetailActivity.PRODUCT_NAME, product.getName());
+            intent.putExtra(DetailActivity.PRODUCT_IMAGE, product.getImage());
+            intent.putExtra(DetailActivity.PRODUCT_DESCRIPTION, product.getDescription());
+            intent.putExtra(DetailActivity.CATEGORY_ID, product.getCategoryId());
+            intent.putExtra(DetailActivity.PRODUCT_PRICE, product.getPrice());
+            intent.putExtra(DetailActivity.PRODUCT_QUANTITY, product.getQuantity());
+            intent.putExtra(DetailActivity.PRODUCT_BRAND, product.getBrand());
+            intent.putExtra(DetailActivity.PRODUCT_SIZE, product.getSize());
 
+            startActivity(intent);
+        });
     }
 
 

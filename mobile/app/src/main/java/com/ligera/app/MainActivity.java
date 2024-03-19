@@ -3,7 +3,9 @@ package com.ligera.app;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.animation.Animator;
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_Ligera);
-        EdgeToEdge.enable(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             getSplashScreen().setOnExitAnimationListener(splashScreenView -> {
                 final ObjectAnimator slideUp = ObjectAnimator.ofFloat(
@@ -70,12 +71,10 @@ public class MainActivity extends AppCompatActivity {
                 slideUp.start();
             });
         }
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
 
-//        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-//        Onboarding onboarding = new Onboarding();
-//        binding.setOnboarding(onboarding);
 
 
         // init auth

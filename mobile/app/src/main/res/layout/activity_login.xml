@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="false"
+        android:id="@+id/login"
         tools:context=".view.LoginActivity">
 
         <LinearLayout
@@ -77,47 +78,56 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="10dp"/>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp">
             <EditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:autofillHints="name"
-                android:background="@drawable/et_background"
                 android:drawableStart="@drawable/mail"
                 android:drawablePadding="10dp"
                 android:hint="Your Email"
                 android:inputType="textEmailAddress"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"/>
+                android:paddingEnd="10dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Password"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:layout_marginStart="50dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Password"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleDrawable="@drawable/toggle_group_bg">
+
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:autofillHints="name"
-                android:background="@drawable/et_background"
-                android:drawableStart="@drawable/lock"
-                android:drawablePadding="10dp"
                 android:hint="Enter Password"
                 android:inputType="textPassword"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"/>
+                android:paddingEnd="0dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tv_forgot_password"
@@ -143,7 +153,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_shape"
                 android:text="login"
-                android:onClick="@{loginClickHandler::validateDate}"
+                android:onClick="@{loginClickHandler::validateData}"
                 android:textColor="@color/white"
                 android:textAllCaps="true"
                 android:layout_marginStart="50dp"

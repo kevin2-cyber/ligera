@@ -12,14 +12,14 @@ import com.ligera.app.model.repository.ProductShopRepository;
 
 import java.util.List;
 
-public class HomeActivityViewModel extends AndroidViewModel {
+public class HomeFragmentViewModel extends AndroidViewModel {
     // repository
     private ProductShopRepository repository;
     // livedata
     private LiveData<List<Category>> allCategories;
     private LiveData<List<Product>> productsOfSelectedCategory;
 
-    public HomeActivityViewModel(@NonNull Application application) {
+    public HomeFragmentViewModel(@NonNull Application application) {
         super(application);
         repository = new ProductShopRepository(application);
     }
