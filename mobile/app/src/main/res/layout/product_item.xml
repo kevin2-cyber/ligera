@@ -22,8 +22,7 @@
             android:layout_gravity="center_horizontal"
             android:background="#B7E7C7"
             android:contentDescription="@string/login_welcome_content"
-            android:scaleType="fitXY"
-            android:src="@{product.image}" />
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/tv_product_name"

@@ -78,7 +78,6 @@ public class DetailActivity extends AppCompatActivity {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .skipMemoryCache(false)
                     .into(binding.ivProduct);
-//            product.setImage(intent.getIntExtra(PRODUCT_IMAGE, R.drawable.attire));
             product.setBrand(intent.getStringExtra(PRODUCT_BRAND));
             product.setDescription(intent.getIntExtra(PRODUCT_DESCRIPTION, R.string.contents));
 //            product.setCategoryId(Integer.parseInt(intent.getStringExtra(CATEGORY_ID)));
