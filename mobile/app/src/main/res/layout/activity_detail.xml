@@ -95,14 +95,14 @@
                 android:id="@+id/tv_product_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="44dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="400dp"
                 android:text="@{product.price}"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.948"
-                app:layout_constraintStart_toEndOf="@+id/tv_product_name" />
+                app:layout_constraintHorizontal_bias="0.954"
+                app:layout_constraintStart_toEndOf="@+id/tv_product_name"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RatingBar
                 android:id="@+id/rt_product"
@@ -134,26 +134,31 @@
 
                 <Button
                     style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:id="@+id/minus"
                     android:onClick="@{viewmodel::decreaseCounter}"
-                    app:icon="@drawable/minus" />
+                    app:icon="@drawable/minus"
+                    app:iconSize="13dp"
+                    app:iconGravity="start"/>
 
                 <Button
                     style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:id="@+id/number_text"
-                    android:text="1" />
+                    android:text="1"
+                    android:textSize="13sp"/>
 
                 <Button
                     style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:id="@+id/addition"
                     android:onClick="@{viewmodel::increaseCounter}"
-                    app:icon="@drawable/addition" />
+                    app:icon="@drawable/addition"
+                    app:iconSize="13dp"
+                    app:iconGravity="start"/>
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
 
@@ -161,11 +166,10 @@
                 android:id="@+id/share_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/share"
-                android:padding="16dp"
                 android:src="@drawable/share"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
