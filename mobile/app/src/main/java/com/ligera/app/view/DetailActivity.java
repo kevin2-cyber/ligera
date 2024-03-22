@@ -16,6 +16,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityDetailBinding;
 import com.ligera.app.model.entity.Product;
@@ -69,7 +72,13 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra(PRODUCT_ID)) {
             product.setName(intent.getStringExtra(PRODUCT_NAME));
-            product.setImage(intent.getIntExtra(PRODUCT_IMAGE, R.drawable.attire));
+            Glide.with(this)
+                    .load(intent.getIntExtra(PRODUCT_IMAGE, R.drawable.attire))
+                    .apply(new RequestOptions().fitCenter())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .skipMemoryCache(false)
+                    .into(binding.ivProduct);
+//            product.setImage(intent.getIntExtra(PRODUCT_IMAGE, R.drawable.attire));
             product.setBrand(intent.getStringExtra(PRODUCT_BRAND));
             product.setDescription(intent.getIntExtra(PRODUCT_DESCRIPTION, R.string.contents));
 //            product.setCategoryId(Integer.parseInt(intent.getStringExtra(CATEGORY_ID)));
