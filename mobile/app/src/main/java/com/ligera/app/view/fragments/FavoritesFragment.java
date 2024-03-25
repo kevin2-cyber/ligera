@@ -47,9 +47,9 @@ public class FavoritesFragment extends Fragment {
 
         updateUI(sharedPreferences);
 
-        binding.switchButton.setThumbDrawable(AppCompatResources.getDrawable(view.getContext(), R.drawable.thumb_layer_list));
+        binding.switchButton.setThumbResource(R.drawable.thumb_layer_list);
 
-        binding.switchButton.setTrackDrawable(AppCompatResources.getDrawable(view.getContext(), R.drawable.track_backgrounds));
+        binding.switchButton.setTrackResource(R.drawable.track_backgrounds);
 
         binding.switchButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
