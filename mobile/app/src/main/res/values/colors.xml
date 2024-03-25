@@ -2,6 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="splash_bg">#24251D</color>
+    <color name="blue_moon">#FF25316D</color>
+    <color name="blue_soft">#FF5F9DF7</color>
+    <color name="orange_sun">#FFFD841F</color>
+    <color name="yellow_soft">#FFFDFDBD</color>
+    <color name="gray">#FF8C8C8C</color>
     <!--Primary Colors-Emerald Green-->
     <color name="emerald">#50c878</color>
     <color name="emerald_light_variant">#8CFEB2</color>

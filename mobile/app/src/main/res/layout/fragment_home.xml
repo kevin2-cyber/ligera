@@ -31,7 +31,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/app_name">
+                app:title="@string/app_name"
+                app:titleTextAppearance="@style/TextAppearance.App.TitleLarge">
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -46,8 +47,6 @@
             android:layout_marginTop="50dp"
             android:paddingStart="30dp"
             android:paddingEnd="0dp"
-            app:stackFromEnd="true"
-            app:reverseLayout="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
