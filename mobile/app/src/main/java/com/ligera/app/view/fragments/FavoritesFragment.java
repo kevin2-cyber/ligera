@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
@@ -42,10 +42,14 @@ public class FavoritesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = view.getContext().getApplicationContext().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         updateUI(sharedPreferences);
+
+        binding.switchButton.setThumbDrawable(AppCompatResources.getDrawable(view.getContext(), R.drawable.thumb_layer_list));
+
+        binding.switchButton.setTrackDrawable(AppCompatResources.getDrawable(view.getContext(), R.drawable.track_backgrounds));
 
         binding.switchButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
