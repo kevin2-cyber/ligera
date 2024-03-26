@@ -18,8 +18,8 @@ import java.util.List;
 
 public class OnboardingAdapter extends RecyclerView.Adapter<OnboardingAdapter.OnboardingViewHolder> {
 
-    List<Onboarding> onboardings;
-    Context context;
+    private final List<Onboarding> onboardings;
+    private final Context context;
 
     public OnboardingAdapter(List<Onboarding> onboardings, Context context) {
         this.onboardings = onboardings;
@@ -45,7 +45,7 @@ public class OnboardingAdapter extends RecyclerView.Adapter<OnboardingAdapter.On
         return onboardings.size();
     }
 
-    public class OnboardingViewHolder extends RecyclerView.ViewHolder {
+    public static class OnboardingViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imageView;
 
         public OnboardingViewHolder(@NonNull View itemView) {
