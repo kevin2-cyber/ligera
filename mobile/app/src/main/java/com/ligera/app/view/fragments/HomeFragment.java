@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.toolbar.inflateMenu(R.menu.app_bar_menu);
+        binding.toolbar.inflateMenu(R.menu.home_app_bar_menu);
 
         MenuItem itemSearch = binding.toolbar.getMenu().findItem(R.id.search);
         // get the searchView and searchable configuration

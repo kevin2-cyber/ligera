@@ -17,29 +17,32 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ProductShopRepository {
-    private ProductDao productDao;
-    private CategoryDao categoryDao;
+    private final ProductDao productDao;
+    private final CategoryDao categoryDao;
     private LiveData<List<Product>> products;
     private LiveData<List<Category>> categories;
+    ExecutorService executorService;
+    Handler handler;
 
     public ProductShopRepository(Application application) {
         ProductDatabase productDatabase = ProductDatabase.getInstance(application);
         productDao = productDatabase.productDao();
         categoryDao = productDatabase.categoryDao();
+        executorService = Executors.newSingleThreadExecutor();
+        handler = new Handler(Looper.getMainLooper());
     }
 
     public LiveData<List<Category>> getCategories() {
-        return categoryDao.getAllCategories();
+        categories = categoryDao.getAllCategories();
+        return categories;
     }
 
     public LiveData<List<Product>> getProducts(int categoryId) {
-        return productDao.getProducts(categoryId);
+        products = productDao.getProducts(categoryId);
+        return products;
     }
 
     public void insertCategory(Category category) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
-
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -50,8 +53,6 @@ public class ProductShopRepository {
     }
 
     public void insertProduct(Product product) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler =  new Handler(Looper.getMainLooper());
 
         executorService.execute(new Runnable() {
             @Override
@@ -65,8 +66,6 @@ public class ProductShopRepository {
     }
 
     public void deleteCategory(Category category) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler =  new Handler(Looper.getMainLooper());
 
         executorService.execute(new Runnable() {
             @Override
@@ -78,8 +77,6 @@ public class ProductShopRepository {
     }
 
     public void deleteProduct(Product product) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler =  new Handler(Looper.getMainLooper());
 
         executorService.execute(new Runnable() {
             @Override
@@ -91,8 +88,6 @@ public class ProductShopRepository {
     }
 
     public void updateCategory(Category category) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler =  new Handler(Looper.getMainLooper());
 
         executorService.execute(new Runnable() {
             @Override
@@ -104,8 +99,6 @@ public class ProductShopRepository {
     }
 
     public void updateProduct(Product product) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler =  new Handler(Looper.getMainLooper());
 
         executorService.execute(new Runnable() {
             @Override

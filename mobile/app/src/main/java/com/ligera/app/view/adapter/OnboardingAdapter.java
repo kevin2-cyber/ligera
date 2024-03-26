@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ligera.app.R;
 import com.ligera.app.model.entity.Onboarding;
 
@@ -43,15 +45,19 @@ public class OnboardingAdapter extends RecyclerView.Adapter<OnboardingAdapter.On
         return onboardings.size();
     }
 
-    static class OnboardingViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
+    public class OnboardingViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView imageView;
 
         public OnboardingViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.iv_onboarding);
         }
         void setOnboardingData(Onboarding onboarding) {
-            imageView.setImageResource(onboarding.getImage());
+            Glide.with(imageView.getContext())
+                            .load(onboarding.getImage())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .skipMemoryCache(false)
+                            .into(imageView);
         }
     }
 }

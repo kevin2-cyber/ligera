@@ -20,7 +20,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:showText="false" />
+            app:showText="true"
+            android:thumb="@drawable/thumb_layer_list"
+            app:track="@drawable/track_backgrounds"/>
 
     </FrameLayout>
 </layout>
