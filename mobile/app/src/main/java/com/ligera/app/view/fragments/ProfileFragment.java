@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.ordersBtn.setOnClickListener(v -> {
+        binding.themeSwitcher.setOnClickListener(v -> {
             ThemeModalBottomSheet modalBottomSheet = new ThemeModalBottomSheet();
             modalBottomSheet.show(requireActivity().getSupportFragmentManager(), ThemeModalBottomSheet.TAG);
         });

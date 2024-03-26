@@ -67,121 +67,70 @@
             app:layout_constraintStart_toStartOf="@+id/tv_account_email"
             app:layout_constraintTop_toBottomOf="@+id/tv_account_email" />
 
-        <LinearLayout
-            android:id="@+id/ll_orders"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="41dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
 
-            <Button
+        <Button
+            android:id="@+id/theme_switcher"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="152dp"
+            android:layout_marginEnd="16dp"
+            app:icon="@drawable/theme"
+            app:iconTint="?attr/colorSecondaryContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
                 android:id="@+id/orders_btn"
                 style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Change theme"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="41dp"
+                android:text="Orders"
                 android:textColor="?attr/colorOnSecondaryContainer"
-                app:icon="@drawable/ic_moon"
-                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:icon="@drawable/bag_outline"
+                app:iconTint="?attr/colorSecondaryContainer"
                 app:iconGravity="textStart"
                 app:iconPadding="10dp"
-                android:layout_marginStart="10dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_seller"/>
 
-            <ImageButton
-                android:id="@+id/orders_arrow"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="180dp"
-                android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24"
-                android:contentDescription="@string/app_name" />
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_wish"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="91dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
 
             <Button
                 style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="92dp"
                 android:text="WishList"
                 android:textColor="?attr/colorOnSecondaryContainer"
                 app:icon="@drawable/sl_favourite"
-                app:iconTint="?attr/colorOnSecondaryContainer"
                 app:iconGravity="textStart"
                 app:iconPadding="10dp"
-                android:layout_marginStart="10dp"/>
+                app:iconTint="?attr/colorSecondaryContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_seller"/>
 
-            <ImageButton
-                android:id="@+id/wish_arrow"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="205dp"
-                android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24"
-                android:contentDescription="@string/app_name" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_delivery"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="141dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
-
-            <Button
+        <Button
                 style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Delivery Address"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="141dp"
                 android:textColor="?attr/colorOnSecondaryContainer"
                 app:icon="@drawable/location"
                 app:iconGravity="textStart"
-                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:iconTint="?attr/colorSecondaryContainer"
                 app:iconPadding="10dp"
-                android:layout_marginStart="10dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_seller"/>
 
-            <ImageButton
-                android:id="@+id/delivery_arrow"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="145dp"
-                android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24"
-                android:contentDescription="@string/app_name" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/ll_payment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="191dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
 
             <Button
                 style="?attr/materialIconButtonStyle"
@@ -189,119 +138,68 @@
                 android:layout_height="wrap_content"
                 android:text="Payment Methods"
                 android:textColor="?attr/colorOnSecondaryContainer"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="191dp"
                 app:icon="@drawable/card"
-                app:iconTint="?attr/colorOnSecondaryContainer"
+                app:iconTint="?attr/colorSecondaryContainer"
                 app:iconGravity="textStart"
                 app:iconPadding="10dp"
-                android:layout_marginStart="10dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_seller" />
 
-            <ImageButton
-                android:id="@+id/payment_arrow"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="135dp"
-                android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24"
-                android:contentDescription="@string/app_name" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_help"
-            android:layout_width="0dp"
+        <Button
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="241dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="240dp"
+            android:text="Help"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            app:icon="@drawable/help"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconTint="?attr/colorSecondaryContainer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller" />
 
-            <Button
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Help"
-                android:textColor="?attr/colorOnSecondaryContainer"
-                app:icon="@drawable/help"
-                app:iconTint="?attr/colorOnSecondaryContainer"
-                app:iconGravity="textStart"
-                app:iconPadding="10dp"
-                android:layout_marginStart="10dp"/>
-
-            <ImageButton
-                android:id="@+id/help_arrow"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="230dp"
-                android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24"
-                android:contentDescription="@string/app_name" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_info"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/button"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="291dp"
-            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="292dp"
+            android:text="About"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            app:icon="@drawable/info"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconTint="?attr/colorSecondaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller" />
 
-            <Button
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="About"
-                android:textColor="?attr/colorOnSecondaryContainer"
-                app:icon="@drawable/info"
-                app:iconTint="?attr/colorOnSecondaryContainer"
-                app:iconGravity="textStart"
-                app:iconPadding="10dp"
-                android:layout_marginStart="10dp"/>
 
-            <ImageButton
-                android:id="@+id/info_arrow"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="220dp"
-                android:rotation="180"
-                android:src="@drawable/baseline_arrow_back_24"
-                android:contentDescription="@string/app_name" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_logout"
-            android:layout_width="0dp"
+        <Button
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="341dp"
-            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="340dp"
+            android:onClick="@{handler::logout}"
+            android:text="Logout"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            app:icon="@drawable/logout"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconTint="?attr/colorSecondaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_seller">
+            app:layout_constraintTop_toBottomOf="@+id/tv_seller" />
 
-            <Button
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Logout"
-                android:onClick="@{handler::logout}"
-                android:textColor="?attr/colorOnSecondaryContainer"
-                app:icon="@drawable/logout"
-                app:iconTint="?attr/colorOnSecondaryContainer"
-                app:iconGravity="textStart"
-                app:iconPadding="10dp"
-                android:layout_marginStart="10dp"/>
-
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
