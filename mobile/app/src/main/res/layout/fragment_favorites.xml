@@ -4,25 +4,15 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".view.fragments.FavoritesFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <!--    <TextView-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="match_parent"-->
-        <!--        android:text="Favorites"-->
-        <!--        android:textSize="24sp"-->
-        <!--        android:gravity="center"/>-->
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:showText="true"
-            android:thumb="@drawable/thumb_layer_list"
-            app:track="@drawable/track_backgrounds"/>
+<!--         TODO: Update blank fragment layout -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Favorites"
+                android:textSize="24sp"
+                android:gravity="center"/>
 
     </FrameLayout>
 </layout>

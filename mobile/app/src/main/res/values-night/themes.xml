@@ -21,6 +21,8 @@
 
         <item name="buttonStyle">@style/Widget.App.Button.OutlinedButton.IconOnly</item>
 
+        <item name="bottomSheetStyle">@style/ModalBottomSheet</item>
+
     </style>
 
     <style name="Theme.Ligera" parent="Base.Theme.Ligera">
@@ -51,5 +53,14 @@
         <item name="android:minWidth">60dp</item>
         <item name="android:minHeight">40dp</item>
         <item name="iconGravity">end</item>
+    </style>
+
+    <style name="ModalBottomSheet" parent="Widget.Material3.BottomSheet.Modal">
+        <!-- Apply attributes here -->
+        <item name="height">500dp</item>
+    </style>
+
+    <style name="ModalBottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheet</item>
     </style>
 </resources>
