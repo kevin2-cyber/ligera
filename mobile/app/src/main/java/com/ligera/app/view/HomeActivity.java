@@ -53,7 +53,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(this);
-//        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+//        bottomNavigationView.setSelectedItemId(bottomNavigationView.getId());
 
         badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.navigation_cart);
         badgeDrawable.setVisible(badgeDrawable.isVisible());
