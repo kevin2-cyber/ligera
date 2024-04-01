@@ -12,7 +12,6 @@
         android:id="@+id/notification_icon"
         android:title="@string/notification"
         android:icon="@drawable/sl_notification"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.widget.CheckBox" />
+        app:showAsAction="ifRoom|collapseActionView"/>
 
 </menu>
