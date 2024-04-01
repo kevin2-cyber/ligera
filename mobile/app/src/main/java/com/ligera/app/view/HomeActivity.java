@@ -24,7 +24,9 @@ import com.ligera.app.view.fragments.HomeFragment;
 import com.ligera.app.view.fragments.ProfileFragment;
 
 
-public class HomeActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, NavigationBarView.OnItemReselectedListener{
+public class HomeActivity extends AppCompatActivity
+        implements NavigationBarView.OnItemSelectedListener,
+        NavigationBarView.OnItemReselectedListener{
     ActivityHomeBinding binding;
 
     BottomNavigationView bottomNavigationView;
