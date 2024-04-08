@@ -17,9 +17,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.R;
 import com.ligera.app.databinding.FragmentProfileBinding;
-import com.ligera.app.databinding.ThemeModalBottomSheetBinding;
 import com.ligera.app.view.LoginActivity;
-import com.ligera.app.view.util.ThemeModalBottomSheet;
+import com.ligera.app.view.bottomsheet.ThemeModalBottomSheet;
 
 
 public class ProfileFragment extends Fragment {
