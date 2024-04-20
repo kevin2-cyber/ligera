@@ -6,7 +6,7 @@
             <solid android:color="@color/blue_soft" />
             <corners android:radius="100dp" />
             <stroke android:width="2dp" android:color="@color/blue_moon" />
-            <size android:height="20dp" />
+            <size android:height="10dp" />
         </shape>
     </item>
 
@@ -15,7 +15,7 @@
             <solid android:color="@color/yellow_soft" />
             <corners android:radius="100dp" />
             <stroke android:width="2dp" android:color="@color/gray" />
-            <size android:height="20dp" />
+            <size android:height="10dp" />
         </shape>
     </item>
 </selector>

@@ -5,7 +5,7 @@
         android:drawable="@drawable/thumb_backgrounds"/>
 
     <item android:gravity="center"
-        android:drawable="@drawable/thum_icons"
+        android:drawable="@drawable/thumb_icons"
         android:top="20dp"
         android:bottom="20dp"
         android:left="20dp"

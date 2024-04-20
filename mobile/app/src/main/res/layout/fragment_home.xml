@@ -38,7 +38,59 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:tabMode="scrollable"
+            app:tabGravity="fill"
+            app:tabIndicatorAnimationMode="elastic"
+            app:tabIndicatorAnimationDuration="600"
+            app:tabIndicatorFullWidth="false"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Popular"/>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mens"/>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Womens"/>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sale"/>
+        </com.google.android.material.tabs.TabLayout>
+
+
+        <Button
+            android:id="@+id/btn_filter"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="186dp"
+            android:layout_marginTop="80dp"
+            android:layoutDirection="rtl"
+            android:text="Filter and sort"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.App.TitleMedium"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            app:icon="@drawable/filter_list"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconTint="?attr/colorSecondaryContainer"
+            app:layout_constraintBottom_toTopOf="@+id/rv_items"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            app:layout_constraintVertical_bias="0.0" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_items"

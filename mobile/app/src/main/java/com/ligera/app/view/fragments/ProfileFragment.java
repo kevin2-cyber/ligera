@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.R;
 import com.ligera.app.databinding.FragmentProfileBinding;
 import com.ligera.app.view.LoginActivity;
+import com.ligera.app.view.bottomsheet.ThemeModalBottomSheet;
 
 
 public class ProfileFragment extends Fragment {
@@ -49,6 +50,11 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.themeSwitcher.setOnClickListener(v -> {
+            ThemeModalBottomSheet modalBottomSheet = new ThemeModalBottomSheet();
+            modalBottomSheet.show(requireActivity().getSupportFragmentManager(), ThemeModalBottomSheet.TAG);
+        });
 
     }
 

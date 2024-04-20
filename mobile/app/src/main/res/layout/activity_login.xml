@@ -113,8 +113,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
-                app:passwordToggleEnabled="true"
-                app:passwordToggleDrawable="@drawable/toggle_group_bg">
+                app:startIconCheckable="true"
+                app:startIconDrawable="@drawable/toggle_group_bg">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_password"
@@ -124,7 +124,7 @@
                 android:autofillHints="name"
                 android:hint="Enter Password"
                 android:inputType="textPassword"
-                android:paddingStart="10dp"
+                android:paddingStart="50dp"
                 android:paddingEnd="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
