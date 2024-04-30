@@ -3,20 +3,16 @@ package com.ligera.app.model.entity;
 import static androidx.room.ForeignKey.CASCADE;
 
 import android.icu.text.NumberFormat;
-import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.BindingAdapter;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import androidx.databinding.library.baseAdapters.BR;
 
 import java.util.Locale;
@@ -168,6 +164,23 @@ public class Product extends BaseObservable {
         notifyPropertyChanged(BR.size);
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", categoryId=" + categoryId +
+                ", image=" + image +
+                ", name='" + name + '\'' +
+                ", description=" + description +
+                ", price='" + price + '\'' +
+                ", quantity=" + quantity +
+                ", brand='" + brand + '\'' +
+                ", size='" + size + '\'' +
+                ", numberFormat=" + numberFormat +
+                '}';
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
@@ -178,7 +191,7 @@ public class Product extends BaseObservable {
                 && name.equals(product.name)
                 && image == product.image
                 && description == product.description
-                && price == product.price
+                && price.equals(product.price)
                 && quantity == product.quantity
                 && brand.equals(product.brand)
                 && size.equals(product.size);

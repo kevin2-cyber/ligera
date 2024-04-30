@@ -6,7 +6,6 @@ plugins {
 android {
     namespace 'com.ligera.app'
     compileSdk 34
-    //android.buildFeatures.dataBinding = true
     defaultConfig {
         applicationId "com.ligera.app"
         minSdk 30
