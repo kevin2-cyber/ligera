@@ -4,8 +4,8 @@
 
 
     <item
-        android:id="@+id/notification_icon"
-        android:title="@string/notification"
+        android:id="@+id/fav_icon"
+        android:title="Like"
         android:icon="@drawable/sl_favourite"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.widget.CheckBox"/>

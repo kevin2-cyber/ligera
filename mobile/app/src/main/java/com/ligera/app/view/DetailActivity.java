@@ -1,9 +1,12 @@
 package com.ligera.app.view;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -19,11 +22,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityDetailBinding;
 import com.ligera.app.model.entity.Product;
 import com.ligera.app.viewmodel.DetailViewModel;
 
+import java.util.List;
 import java.util.Objects;
 
 public class DetailActivity extends AppCompatActivity {
@@ -41,6 +47,7 @@ public class DetailActivity extends AppCompatActivity {
     public static final String PRODUCT_SIZE = "product_size";
 
     DetailViewModel  viewModel;
+    int selectedIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +97,29 @@ public class DetailActivity extends AppCompatActivity {
 
         viewModel.getCounter().observe(this, counter -> binding.numberText.setText(String.valueOf(counter)));
 
+
+        binding.chipGroup.setOnCheckedStateChangeListener((chipGroup, list) -> {
+            if (list.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "Nothing selected",Toast.LENGTH_LONG).show();
+            } else {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i : list) {
+                    Chip chip = findViewById(i);
+                    chip.setChipBackgroundColor(ColorStateList.valueOf(getResources().getColor(R.color.emerald, Resources.getSystem().newTheme())));
+                    stringBuilder.append(",").append(chip.getText());
+                }
+                Toast.makeText(getApplicationContext(), "selected sizes: " + stringBuilder.toString().replaceFirst(",",""), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if (item.getItemId() == R.id.fav_icon) {
+            CheckBox checkBox = findViewById(R.id.fav_icon);
+            checkBox.setBackgroundResource(R.drawable.sl_favourite);
         }
         return super.onOptionsItemSelected(item);
     }

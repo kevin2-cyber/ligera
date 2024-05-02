@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity implements
         badgeDrawable.setVisible(true);
         badgeDrawable.setState(new int[]{android.R.attr.state_focused, android.R.attr.state_pressed});
         badgeDrawable.setBadgeTextColor(ContextCompat.getColor(this, R.color.charcoal_gray_dark));
-        badgeDrawable.setNumber(99);
+        badgeDrawable.setNumber(2);
 
     }
 

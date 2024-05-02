@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/product_card"
-        android:layout_width="150dp"
+        android:layout_width="170dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
         app:cardCornerRadius="15dp"
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
-            android:background="#B7E7C7"
+            android:background="#E2F4E8"
             android:contentDescription="@string/login_welcome_content"
             android:scaleType="fitXY" />
 
