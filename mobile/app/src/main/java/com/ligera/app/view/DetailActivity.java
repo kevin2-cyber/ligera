@@ -111,6 +111,10 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "selected sizes: " + stringBuilder.toString().replaceFirst(",",""), Toast.LENGTH_LONG).show();
             }
         });
+
+
+
+
     }
 
     @Override
@@ -118,7 +122,9 @@ public class DetailActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.fav_icon) {
-            CheckBox checkBox = findViewById(R.id.fav_icon);
+            MenuItem menuItem = binding.toolbar.getMenu().findItem(R.id.fav_icon);
+            CheckBox checkBox = (CheckBox) menuItem.getActionView();
+            assert checkBox != null;
             checkBox.setBackgroundResource(R.drawable.sl_favourite);
         }
         return super.onOptionsItemSelected(item);
