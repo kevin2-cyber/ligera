@@ -10,7 +10,7 @@
         
         <variable
             name="viewmodel"
-            type="com.ligera.app.viewmodel.DetailViewModel" />
+            type="com.ligera.app.viewmodel.DetailActivityViewModel" />
 
     </data>
 
@@ -221,6 +221,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="40dp"
                 android:text="ADD TO CART"
+                android:onClick="@{viewmodel::onSubmitOrder}"
                 android:background="@drawable/button_shape"
                 app:icon="@drawable/bag_outline"
                 app:iconGravity="textStart"
