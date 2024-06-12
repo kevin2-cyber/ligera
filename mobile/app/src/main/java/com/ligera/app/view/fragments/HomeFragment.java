@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -77,13 +78,15 @@ public class HomeFragment extends Fragment {
         // get the searchView and searchable configuration
         SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) itemSearch.getActionView();
+
+        // Create a ContextThemeWrapper with the desired style
+        Context context = getContext();
+        ContextThemeWrapper newContext = new ContextThemeWrapper(context, R.style.CustomSearchViewStyle);
+
+        // Replace the SearchView with a new one using the themed context
+        SearchView newSearchView = new SearchView(newContext);
         assert searchView != null;
         searchView.setQueryHint("Type Here");
-        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate",null,null);
-        View searchPlate = searchView.findViewById(searchPlateId);
-        if (searchPlate != null) {
-            searchPlate.setBackgroundResource(R.drawable.transparent); // or setBackground(null)
-        }
         ComponentName componentName = requireActivity().getComponentName();
         SearchableInfo searchableInfo = searchManager.getSearchableInfo(componentName);
         searchView.setSearchableInfo(searchableInfo);
@@ -102,6 +105,12 @@ public class HomeFragment extends Fragment {
             }
         };
         searchView.setOnQueryTextListener(onQueryTextListener);
+
+        // Transfer listeners and other properties from the old SearchView to the new one
+        newSearchView.setOnQueryTextListener(onQueryTextListener);
+        newSearchView.setSearchableInfo(searchableInfo);
+        newSearchView.setQueryHint(searchView.getQueryHint());
+        newSearchView.setIconifiedByDefault(false);
 
         // get the list of products
         products = Constants.getProductData();
