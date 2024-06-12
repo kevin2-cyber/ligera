@@ -10,11 +10,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ligera.app.model.repository.ProductShopRepository;
 
-public class DetailViewModel extends AndroidViewModel {
+
+public class DetailActivityViewModel extends AndroidViewModel {
     MutableLiveData<Integer> counter = new MutableLiveData<>();
     private final ProductShopRepository repository;
 
-    public DetailViewModel(@NonNull Application application) {
+    public DetailActivityViewModel(@NonNull Application application) {
         super(application);
         repository = new ProductShopRepository(application);
     }
@@ -34,6 +35,8 @@ public class DetailViewModel extends AndroidViewModel {
         // decrease value by 1
         counter.setValue(currentValue - 1);
     }
+
+    public void onSubmitOrder(View view) {}
 
     public LiveData<Integer> getCounter() {
         return counter;

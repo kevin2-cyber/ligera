@@ -23,11 +23,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityDetailBinding;
 import com.ligera.app.model.entity.Product;
-import com.ligera.app.viewmodel.DetailViewModel;
+import com.ligera.app.viewmodel.DetailActivityViewModel;
 
 import java.util.List;
 import java.util.Objects;
@@ -46,7 +45,7 @@ public class DetailActivity extends AppCompatActivity {
     public static final String PRODUCT_BRAND = "product_brand";
     public static final String PRODUCT_SIZE = "product_size";
 
-    DetailViewModel  viewModel;
+    DetailActivityViewModel  viewModel;
     int selectedIndex = 0;
 
     @Override
@@ -66,7 +65,7 @@ public class DetailActivity extends AppCompatActivity {
         binding.setProduct(product);
 
 
-        viewModel = new ViewModelProvider(this).get(DetailViewModel.class);
+        viewModel = new ViewModelProvider(this).get(DetailActivityViewModel.class);
         binding.setViewmodel(viewModel);
 
 

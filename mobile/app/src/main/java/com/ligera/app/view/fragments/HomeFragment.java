@@ -5,6 +5,7 @@ import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -78,6 +79,11 @@ public class HomeFragment extends Fragment {
         searchView = (SearchView) itemSearch.getActionView();
         assert searchView != null;
         searchView.setQueryHint("Type Here");
+        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate",null,null);
+        View searchPlate = searchView.findViewById(searchPlateId);
+        if (searchPlate != null) {
+            searchPlate.setBackgroundResource(R.drawable.transparent); // or setBackground(null)
+        }
         ComponentName componentName = requireActivity().getComponentName();
         SearchableInfo searchableInfo = searchManager.getSearchableInfo(componentName);
         searchView.setSearchableInfo(searchableInfo);
