@@ -16,10 +16,7 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -27,9 +24,10 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.ligera.app.MainActivity;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityRegisterBinding;
+
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -60,13 +58,10 @@ public class RegisterActivity extends AppCompatActivity {
         clickHandler = new RegisterActivityClickHandler(this);
         binding.setRegisterClickHandler(clickHandler);
 
-        binding.etEmail.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                binding.upperSection.setVisibility(View.INVISIBLE);
-                binding.lowerSection.setTranslationY(-530f);
-                return false;
-            }
+        binding.etEmail.setOnTouchListener((v, event) -> {
+            binding.upperSection.setVisibility(View.INVISIBLE);
+            binding.lowerSection.setTranslationY(-530f);
+            return false;
         });
 
         binding.etEmail.setOnEditorActionListener((v, actionId, event) -> {
@@ -125,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
         public void validateData(View view) {
             name = binding.etName.getText().toString();
             email = binding.etEmail.getText().toString();
-            password = binding.etPassword.getText().toString();
+            password = Objects.requireNonNull(binding.etPassword.getText()).toString();
 
             // validate the data
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {

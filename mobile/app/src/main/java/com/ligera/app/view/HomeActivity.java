@@ -26,7 +26,6 @@ import com.ligera.app.view.fragments.ProfileFragment;
 
 public class HomeActivity extends AppCompatActivity implements
         NavigationBarView.OnItemSelectedListener{
-//        NavigationBarView.OnItemReselectedListener{
     ActivityHomeBinding binding;
 
     BottomNavigationView bottomNavigationView;
@@ -55,7 +54,6 @@ public class HomeActivity extends AppCompatActivity implements
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(this);
-//        bottomNavigationView.setOnItemReselectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
 
         badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.navigation_cart);
@@ -84,17 +82,4 @@ public class HomeActivity extends AppCompatActivity implements
         }
         return false;
     }
-
-//    @Override
-//    public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
-////        if (menuItem.getItemId() == R.id.navigation_home) {
-////            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,homeFragment).commit();
-////        } else if (menuItem.getItemId() == R.id.navigation_cart) {
-////            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,cartFragment).commit();
-////        } else if (menuItem.getItemId() == R.id.navigation_liked) {
-////            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,favoritesFragment).commit();
-////        } else if (menuItem.getItemId() == R.id.navigation_profile) {
-////            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,profileFragment).commit();
-////        }
-//    }
 }

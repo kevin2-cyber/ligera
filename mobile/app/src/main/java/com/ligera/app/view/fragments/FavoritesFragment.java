@@ -17,7 +17,7 @@ import com.ligera.app.databinding.FragmentFavoritesBinding;
 
 
 public class FavoritesFragment extends Fragment {
-    private FragmentFavoritesBinding binding;
+    FragmentFavoritesBinding binding;
 
 
 

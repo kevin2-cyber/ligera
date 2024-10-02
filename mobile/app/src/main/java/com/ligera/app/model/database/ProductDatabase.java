@@ -57,31 +57,28 @@ public abstract class ProductDatabase extends RoomDatabase {
         CategoryDao categoryDao = instance.categoryDao();
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                // categories
-                Category categoryOne = new Category();
-                categoryOne.setName("Ligera Collection");
+        executor.execute(() -> {
+            // categories
+            Category categoryOne = new Category();
+            categoryOne.setName("Ligera Collection");
 
-                Category categoryTwo = new Category();
-                categoryTwo.setName("Amor Collection");
+            Category categoryTwo = new Category();
+            categoryTwo.setName("Amor Collection");
 
-                categoryDao.insert(categoryOne);
-                categoryDao.insert(categoryTwo);
+            categoryDao.insert(categoryOne);
+            categoryDao.insert(categoryTwo);
 
-                // products
-                List<Product> products = Constants.getProductData();
-                productDao.insert(products.get(0));
-                productDao.insert(products.get(1));
-                productDao.insert(products.get(2));
-                productDao.insert(products.get(3));
-                productDao.insert(products.get(4));
-                productDao.insert(products.get(5));
-                productDao.insert(products.get(6));
-                productDao.insert(products.get(7));
-                productDao.insert(products.get(8));
-            }
+            // products
+            List<Product> products = Constants.getProductData();
+            productDao.insert(products.get(0));
+            productDao.insert(products.get(1));
+            productDao.insert(products.get(2));
+            productDao.insert(products.get(3));
+            productDao.insert(products.get(4));
+            productDao.insert(products.get(5));
+            productDao.insert(products.get(6));
+            productDao.insert(products.get(7));
+            productDao.insert(products.get(8));
         });
     }
 }

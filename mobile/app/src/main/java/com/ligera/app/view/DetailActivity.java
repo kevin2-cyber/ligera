@@ -28,12 +28,11 @@ import com.ligera.app.databinding.ActivityDetailBinding;
 import com.ligera.app.model.entity.Product;
 import com.ligera.app.viewmodel.DetailActivityViewModel;
 
-import java.util.List;
 import java.util.Objects;
 
 public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding binding;
-    private Product product;
+    Product product;
 
     public static final String PRODUCT_ID = "product_id";
     public static final String PRODUCT_IMAGE = "product_image";
@@ -46,7 +45,6 @@ public class DetailActivity extends AppCompatActivity {
     public static final String PRODUCT_SIZE = "product_size";
 
     DetailActivityViewModel  viewModel;
-    int selectedIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +84,6 @@ public class DetailActivity extends AppCompatActivity {
                     .into(binding.ivProduct);
             product.setBrand(intent.getStringExtra(PRODUCT_BRAND));
             product.setDescription(intent.getIntExtra(PRODUCT_DESCRIPTION, R.string.contents));
-//            product.setCategoryId(Integer.parseInt(intent.getStringExtra(CATEGORY_ID)));
             product.setQuantity(intent.getIntExtra(PRODUCT_QUANTITY, 1));
             product.setPrice(intent.getStringExtra(PRODUCT_PRICE));
             product.setSize(intent.getStringExtra(PRODUCT_SIZE));
