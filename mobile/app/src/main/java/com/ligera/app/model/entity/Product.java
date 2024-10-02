@@ -96,13 +96,7 @@ public class Product extends BaseObservable {
         notifyPropertyChanged(BR.image);
     }
 
-//    @BindingAdapter("image")
-//    public  void loadImage(ImageView view, String url) {
-//        Glide.with(view.getContext())
-//                .load(url)
-//                .apply(new RequestOptions().fitCenter())
-//                .into(view);
-//    }
+
 
     @Bindable
     public int getDescription() {

@@ -19,8 +19,8 @@ import java.util.concurrent.Executors;
 public class ProductShopRepository {
     private final ProductDao productDao;
     private final CategoryDao categoryDao;
-    private LiveData<List<Product>> products;
-    private LiveData<List<Category>> categories;
+    LiveData<List<Product>> products;
+    LiveData<List<Category>> categories;
     ExecutorService executorService;
     Handler handler;
 
@@ -43,69 +43,51 @@ public class ProductShopRepository {
     }
 
     public void insertCategory(Category category) {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                // Inserting categories
-                categoryDao.insert(category);
-            }
+        executorService.execute(() -> {
+            // Inserting categories
+            categoryDao.insert(category);
         });
     }
 
     public void insertProduct(Product product) {
 
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                // Inserting products
-                productDao.insert(product);
+        executorService.execute(() -> {
+            // Inserting products
+            productDao.insert(product);
 
-                // do after background execution is done - post execution
-            }
+            // do after background execution is done - post execution
         });
     }
 
     public void deleteCategory(Category category) {
 
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                // deleting categories
-                categoryDao.delete(category);
-            }
+        executorService.execute(() -> {
+            // deleting categories
+            categoryDao.delete(category);
         });
     }
 
     public void deleteProduct(Product product) {
 
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                // deleting products
-                productDao.delete(product);
-            }
+        executorService.execute(() -> {
+            // deleting products
+            productDao.delete(product);
         });
     }
 
     public void updateCategory(Category category) {
 
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                // update categories
-                categoryDao.update(category);
-            }
+        executorService.execute(() -> {
+            // update categories
+            categoryDao.update(category);
         });
     }
 
     public void updateProduct(Product product) {
 
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                // update product
-                productDao.update(product);
-            }
+        executorService.execute(() -> {
+            // update product
+            productDao.update(product);
         });
     }
 }

@@ -24,7 +24,7 @@ import com.ligera.app.view.bottomsheet.ThemeModalBottomSheet;
 public class ProfileFragment extends Fragment {
     FragmentProfileBinding binding;
     private FirebaseAuth auth;
-    private ProfileClickHandler handler;
+    ProfileClickHandler handler;
 
 
     public ProfileFragment() {

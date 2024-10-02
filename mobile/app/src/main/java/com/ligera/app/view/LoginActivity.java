@@ -18,8 +18,6 @@ import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -30,7 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityLoginBinding;
 
-import java.util.ArrayList;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     String email = "";
     String password = "";
     private InputMethodManager inputMethodManager;
-    private LoginClickHandler clickHandler;
+    LoginClickHandler clickHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         public void validateData(View view) {
             // get data
             email = binding.etEmail.getText().toString().trim();
-            password = binding.etPassword.getText().toString().trim();
+            password = Objects.requireNonNull(binding.etPassword.getText()).toString().trim();
 
             // validate user
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
