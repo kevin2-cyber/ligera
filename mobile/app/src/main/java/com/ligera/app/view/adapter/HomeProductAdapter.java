@@ -1,6 +1,5 @@
 package com.ligera.app.view.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,6 +8,7 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,24 +17,33 @@ import com.bumptech.glide.request.RequestOptions;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ProductItemBinding;
 import com.ligera.app.model.entity.Product;
-import com.ligera.app.view.util.ProductDiffCallback;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecyclerVH> {
+public class HomeProductAdapter extends ListAdapter<Product, HomeProductAdapter.HomeRecyclerVH> {
     private OnProductItemClickListener listener;
-    private ArrayList<Product> productList;
     private final Context context;
 
-    public HomeRecyclerVA(Context context) {
-        this.context = context;
-    }
+    // Implement DiffUtil properly
+    private static final DiffUtil.ItemCallback<Product> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+                    return oldItem.getProductId() == newItem.getProductId();
+                }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setFilterList(List<Product> products) {
-        productList = (ArrayList<Product>) products;
-        notifyDataSetChanged();
+                @Override
+                public boolean areContentsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+                    return oldItem.equals(newItem);
+                }
+
+                @Override
+                public Object getChangePayload(@NonNull Product oldItem, @NonNull Product newItem) {
+                    return super.getChangePayload(oldItem, newItem);
+                }
+            };
+
+    public HomeProductAdapter(Context context) {
+        super(DIFF_CALLBACK);
+        this.context = context;
     }
 
     public Context getContext() {
@@ -54,23 +63,10 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
 
     @Override
     public void onBindViewHolder(@NonNull HomeRecyclerVH holder, int position) {
-        Product currentProduct = productList.get(position);
+        Product currentProduct = getItem(position);
         holder.binding.setProduct(currentProduct);
         holder.setItemImage(currentProduct.getImage());
         holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_one));
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return productList != null ? productList.size() : 0;
-    }
-
-    public void setProductList(ArrayList<Product> newProductList) {
-        final DiffUtil.DiffResult result =
-                DiffUtil.calculateDiff(new ProductDiffCallback(productList, newProductList),false);
-        productList = newProductList;
-        result.dispatchUpdatesTo(HomeRecyclerVA.this);
     }
 
     public class HomeRecyclerVH extends RecyclerView.ViewHolder {
@@ -83,7 +79,7 @@ public class HomeRecyclerVA extends RecyclerView.Adapter<HomeRecyclerVA.HomeRecy
             binding.getRoot().setOnClickListener(view -> {
                 int clickedPosition = getAdapterPosition();
                 if (listener != null && clickedPosition != RecyclerView.NO_POSITION) {
-                    listener.onProductItemClick(productList.get(clickedPosition));
+                    listener.onProductItemClick(getItem(clickedPosition));
                 }
             });
         }

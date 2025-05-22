@@ -1,11 +1,13 @@
 package com.ligera.app.view.fragments;
 
+import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,18 +28,19 @@ import com.ligera.app.R;
 import com.ligera.app.databinding.FragmentHomeBinding;
 import com.ligera.app.model.entity.Product;
 import com.ligera.app.view.DetailActivity;
-import com.ligera.app.view.adapter.HomeRecyclerVA;
+import com.ligera.app.view.adapter.HomeProductAdapter;
 import com.ligera.app.view.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     SearchView searchView;
     ArrayList<Product> products;
-    HomeRecyclerVA adapter;
+    HomeProductAdapter adapter;
     public int selectedProductId;
 
 
@@ -114,14 +117,13 @@ public class HomeFragment extends Fragment {
         // get the list of products
         products = Constants.getProductData();
         // assign list of products to adapter
-        adapter = new HomeRecyclerVA(getActivity());
+        adapter = new HomeProductAdapter(getActivity());
         RecyclerView recyclerView = binding.rvItems;
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-
-        adapter.setProductList(products);
+        adapter.submitList(products);
 
         // sending the data to DetailsActivity
         adapter.setListener(product -> {
@@ -138,24 +140,23 @@ public class HomeFragment extends Fragment {
             intent.putExtra(DetailActivity.PRODUCT_BRAND, product.getBrand());
             intent.putExtra(DetailActivity.PRODUCT_SIZE, product.getSize());
 
-            startActivity(intent);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(requireActivity()).toBundle());
         });
     }
 
 
+    public void filterList(String query) {
+        try {
+            List<Product> filtered = products.stream()
+                    .filter(n -> TextUtils.isEmpty(query)
+                    || n.getName().toLowerCase().contains(query.toLowerCase())
+                    || n.getBrand().toLowerCase().contains(query.toLowerCase())
+                    || String.valueOf(n.getDescription()).toLowerCase().contains(query.toLowerCase()))
+                    .collect(Collectors.toList());
 
-    public void filterList(String newText) {
-        List<Product> filteredProducts = new ArrayList<>();
-        for (Product product : products) {
-            if (product.getName().toLowerCase().contains(newText.toLowerCase())) {
-                filteredProducts.add(product);
-            }
-        }
-
-        if (filteredProducts.isEmpty()) {
-            Toast.makeText(getActivity(), "No products", Toast.LENGTH_SHORT).show();
-        } else {
-            adapter.setFilterList(filteredProducts);
+            adapter.submitList(filtered);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Error filtering list: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

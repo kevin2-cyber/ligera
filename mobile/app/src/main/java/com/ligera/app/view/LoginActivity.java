@@ -138,10 +138,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
-        private void login() {
-            // show progress
-            bar.setVisibility(View.VISIBLE);
-            bar.setVisibility(View.GONE);
+        public void login() {
+//            // show progress
+//            bar.setVisibility(View.VISIBLE);
+//            bar.setVisibility(View.GONE);
 
             // open profile
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);

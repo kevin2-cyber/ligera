@@ -6,15 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.R;
 import com.ligera.app.databinding.FragmentProfileBinding;
 import com.ligera.app.view.LoginActivity;
@@ -23,7 +20,6 @@ import com.ligera.app.view.bottomsheet.ThemeModalBottomSheet;
 
 public class ProfileFragment extends Fragment {
     FragmentProfileBinding binding;
-    private FirebaseAuth auth;
     ProfileClickHandler handler;
 
 
@@ -59,26 +55,6 @@ public class ProfileFragment extends Fragment {
     }
 
 
-
-    public void checkUser() {
-
-        auth = FirebaseAuth.getInstance();
-        // check if user is logged in or not
-        FirebaseUser user = auth.getCurrentUser();
-
-        if (user != null) {
-            // user is not null, user is logged in, get user info
-            String email = user.getEmail();
-
-
-            Toast.makeText(requireActivity(), "You're logged in as " + email, Toast.LENGTH_SHORT).show();
-        } else {
-            //user is null, user not logged in go to login activity
-            startActivity(new Intent(requireActivity(), LoginActivity.class));
-            requireActivity().finish();
-        }
-    }
-
     public class ProfileClickHandler {
         Context context;
 
@@ -87,8 +63,9 @@ public class ProfileFragment extends Fragment {
         }
 
         public void logout(View view) {
-            checkUser();
-            auth.signOut();
+            //user is null, user not logged in go to login activity
+            startActivity(new Intent(requireActivity(), LoginActivity.class));
+            requireActivity().finish();
         }
     }
 }

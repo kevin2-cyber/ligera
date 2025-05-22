@@ -153,7 +153,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_shape"
                 android:text="login"
-                android:onClick="@{loginClickHandler::validateData}"
+                android:onClick="@{() -> loginClickHandler.login()}"
                 android:textColor="@color/white"
                 android:textAllCaps="true"
                 android:layout_marginStart="50dp"
