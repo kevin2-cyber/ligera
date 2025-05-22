@@ -32,7 +32,7 @@
         <!--Inactive icon-->
         <item name="colorOnSurfaceVariant">@color/charcoal_gray</item>
         <!--Active icon-->
-        <item name="colorOnSecondaryContainer">@color/black</item>
+        <item name="colorOnSecondaryContainer">@color/pearl_light_variant</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.NavigationBarView.ActiveIndicator</item>
     </style>
 

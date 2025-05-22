@@ -41,7 +41,7 @@
         <!--Inactive icon-->
         <item name="colorOnSurfaceVariant">@color/charcoal_gray</item>
         <!--Active icon-->
-        <item name="colorOnSecondaryContainer">@color/white</item>
+        <item name="colorOnSecondaryContainer">@color/charcoal_gray</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.NavigationBarView.ActiveIndicator</item>
     </style>
 
