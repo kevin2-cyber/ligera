@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -50,6 +52,9 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+
+        getWindow().setExitTransition(new Explode());
         setContentView(R.layout.activity_detail);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail), (v, insets) -> {

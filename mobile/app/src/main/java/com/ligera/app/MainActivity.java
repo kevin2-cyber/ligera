@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.view.Window;
 
 import com.ligera.app.view.OnboardingActivity;
 import com.ligera.app.viewmodel.SplashViewModel;
@@ -19,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+
+        getWindow().setExitTransition(new Explode());
 
         splashViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
 
