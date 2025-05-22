@@ -1,14 +1,9 @@
 package com.ligera.app.view;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnticipateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,13 +11,8 @@ import android.widget.LinearLayout;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.R;
 import com.ligera.app.model.entity.Onboarding;
 import com.ligera.app.view.adapter.OnboardingAdapter;
@@ -39,16 +29,12 @@ public class OnboardingActivity extends AppCompatActivity {
     LinearLayout onboardingIndicators;
 
     List<Onboarding> onboardings;
-    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_onboarding);
-        // init auth
-        auth = FirebaseAuth.getInstance();
-        checkUser();
 
 
         shopNowBtn = findViewById(R.id.shop_now_btn);
@@ -153,17 +139,6 @@ public class OnboardingActivity extends AppCompatActivity {
             shopNowBtn.setVisibility(View.VISIBLE);
         } else {
             shopNowBtn.setVisibility(View.GONE);
-        }
-    }
-
-    private void checkUser() {
-        // if user is already logged in go to profile activity
-        // get current user
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-            // user is already logged in
-            startActivity(new Intent(this, HomeActivity.class));
-            finish();
         }
     }
 }
