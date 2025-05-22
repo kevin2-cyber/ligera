@@ -1,5 +1,15 @@
 package com.ligera.app.view.fragments;
 
+import static com.ligera.app.view.DetailActivity.CATEGORY_ID;
+import static com.ligera.app.view.DetailActivity.PRODUCT_BRAND;
+import static com.ligera.app.view.DetailActivity.PRODUCT_DESCRIPTION;
+import static com.ligera.app.view.DetailActivity.PRODUCT_ID;
+import static com.ligera.app.view.DetailActivity.PRODUCT_IMAGE;
+import static com.ligera.app.view.DetailActivity.PRODUCT_NAME;
+import static com.ligera.app.view.DetailActivity.PRODUCT_PRICE;
+import static com.ligera.app.view.DetailActivity.PRODUCT_QUANTITY;
+import static com.ligera.app.view.DetailActivity.PRODUCT_SIZE;
+
 import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -9,6 +19,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +30,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +51,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements MenuProvider {
     private FragmentHomeBinding binding;
     SearchView searchView;
     ArrayList<Product> products;
@@ -55,13 +70,14 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
             binding = DataBindingUtil.inflate(inflater,R.layout.fragment_home, container, false);
             binding.setProduct(new Product());
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(this, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
         return binding.getRoot();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -127,20 +143,25 @@ public class HomeFragment extends Fragment {
 
         // sending the data to DetailsActivity
         adapter.setListener(product -> {
+
+            View transitionView = requireView().findViewById(R.id.imageView);
             selectedProductId = product.getProductId();
             Intent intent = new Intent(requireActivity(), DetailActivity.class);
 
-            intent.putExtra(DetailActivity.PRODUCT_ID, selectedProductId);
-            intent.putExtra(DetailActivity.PRODUCT_NAME, product.getName());
-            intent.putExtra(DetailActivity.PRODUCT_IMAGE, product.getImage());
-            intent.putExtra(DetailActivity.PRODUCT_DESCRIPTION, product.getDescription());
-            intent.putExtra(DetailActivity.CATEGORY_ID, product.getCategoryId());
-            intent.putExtra(DetailActivity.PRODUCT_PRICE, product.getPrice());
-            intent.putExtra(DetailActivity.PRODUCT_QUANTITY, product.getQuantity());
-            intent.putExtra(DetailActivity.PRODUCT_BRAND, product.getBrand());
-            intent.putExtra(DetailActivity.PRODUCT_SIZE, product.getSize());
+            intent.putExtra(PRODUCT_ID, selectedProductId);
+            intent.putExtra(PRODUCT_NAME, product.getName());
+            intent.putExtra(PRODUCT_IMAGE, product.getImage());
+            intent.putExtra(PRODUCT_DESCRIPTION, product.getDescription());
+            intent.putExtra(CATEGORY_ID, product.getCategoryId());
+            intent.putExtra(PRODUCT_PRICE, product.getPrice());
+            intent.putExtra(PRODUCT_QUANTITY, product.getQuantity());
+            intent.putExtra(PRODUCT_BRAND, product.getBrand());
+            intent.putExtra(PRODUCT_SIZE, product.getSize());
 
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(requireActivity()).toBundle());
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation(requireActivity(), transitionView, PRODUCT_IMAGE);
+
+            startActivity(intent, options.toBundle());
         });
     }
 
@@ -160,6 +181,13 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.home_app_bar_menu, menu);
+    }
 
-
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
 }
