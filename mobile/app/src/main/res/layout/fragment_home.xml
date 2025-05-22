@@ -76,7 +76,7 @@
             style="?attr/materialIconButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="186dp"
+            android:layout_marginStart="160dp"
             android:layout_marginTop="60dp"
             android:layoutDirection="rtl"
             android:text="Filter and sort"
