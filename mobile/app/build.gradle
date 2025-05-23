@@ -13,11 +13,31 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Default API configuration - will be overridden in specific build types
+        buildConfigField "String", "API_BASE_URL", "\"https://api.ligera.com/\""
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            buildConfigField "String", "API_BASE_URL", "\"https://dev-api.ligera.com/\""
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        
+        staging {
+            initWith debug
+            minifyEnabled true
+            buildConfigField "String", "API_BASE_URL", "\"https://staging-api.ligera.com/\""
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        
+        release {
+            minifyEnabled true
+            buildConfigField "String", "API_BASE_URL", "\"https://api.ligera.com/\""
+            buildConfigField "boolean", "DEBUG_MODE", "false"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -28,12 +48,11 @@ android {
 
     buildFeatures {
         dataBinding true
+        viewBinding true
     }
 }
 
 dependencies {
-    // glide
-    implementation libs.glide
     implementation libs.activity
     // Room
     implementation libs.room.runtime
@@ -46,6 +65,26 @@ dependencies {
     // splash screen dependency for Android 11 and below
     implementation libs.core.splashscreen
 
+    // Core Android Components
+    implementation libs.core
+    
+    // Advanced Animations
+    implementation libs.lottie
+    
+    // Glide for image loading and animations
+    implementation libs.glide
+    annotationProcessor libs.compiler
+    
+    // Navigation Components
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
+    
+//    // Lifecycle Components
+//    implementation libs.lifecycle.viewmodel
+//    implementation libs.lifecycle.livedata
+//    implementation libs.lifecycle.runtime
+    
+    // Retrofit for network requests
     implementation libs.retrofit
     implementation libs.converter.gson
 
