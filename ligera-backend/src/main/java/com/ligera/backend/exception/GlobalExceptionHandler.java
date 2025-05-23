@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -36,6 +38,39 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    /**
+     * Handle password validation exceptions
+     */
+    @ExceptionHandler(PasswordValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ApiResponse(
+            responseCode = "400",
+            description = "Password validation failed",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+    )
+    public ResponseEntity<ErrorResponse> handlePasswordValidationException(
+            PasswordValidationException ex, HttpServletRequest request) {
+        log.warn("Password validation failed: {}", ex.getMessage());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message("Password validation failed")
+                .path(request.getRequestURI())
+                .build();
+        
+        // Add validation errors as field errors
+        Map<String, String> fieldErrors = new HashMap<>();
+        List<String> errors = ex.getValidationErrors();
+        for (int i = 0; i < errors.size(); i++) {
+            fieldErrors.put("passwordRequirement" + (i+1), errors.get(i));
+        }
+        errorResponse.addValidationErrors(fieldErrors);
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 
     /**
      * Handle custom authentication exceptions
@@ -317,6 +352,36 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Handle rate limit exceeded exceptions
+     */
+    @ExceptionHandler(RateLimitExceededException.class)
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    @ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+    )
+    public ResponseEntity<ErrorResponse> handleRateLimitExceededException(RateLimitExceededException ex, HttpServletRequest request) {
+        log.warn("Rate limit exceeded: {}", request.getRemoteAddr());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.TOO_MANY_REQUESTS.value())
+                .error("Too Many Requests")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Retry-After", "60"); // Suggest client retry after 60 seconds
+
+        return ResponseEntity
+                .status(HttpStatus.TOO_MANY_REQUESTS)
+                .headers(headers)
+                .body(errorResponse);
     }
 
     /**

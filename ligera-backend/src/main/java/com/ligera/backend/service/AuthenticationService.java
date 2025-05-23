@@ -8,9 +8,11 @@ import com.ligera.backend.dtos.response.UserResponse;
 import com.ligera.backend.enums.AccountStatus;
 import com.ligera.backend.enums.Role;
 import com.ligera.backend.exception.AuthException;
+import com.ligera.backend.exception.PasswordValidationException;
 import com.ligera.backend.models.User;
 import com.ligera.backend.repositories.UserRepository;
 import com.ligera.backend.security.JwtUtils;
+import com.ligera.backend.security.validation.PasswordValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +37,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
+    private final PasswordValidator passwordValidator;
 
     /**
      * Register a new user
@@ -50,6 +53,16 @@ public class AuthenticationService {
         if (userRepository.existsByEmail(request.getEmail())) {
             log.warn("Email already in use: {}", request.getEmail());
             throw new AuthException("Email already in use");
+        }
+        
+        // Validate password strength
+        PasswordValidator.ValidationResult validationResult = passwordValidator.validate(request.getPassword());
+        if (!validationResult.valid()) {
+            log.warn("Password validation failed during registration: {}", validationResult);
+            throw new PasswordValidationException(
+                "Password does not meet security requirements", 
+                validationResult.errors()
+            );
         }
 
         // Create new user
@@ -127,6 +140,16 @@ public class AuthenticationService {
         if (!passwordEncoder.matches(request.getCurrentPassword(), currentUser.getPassword())) {
             log.warn("Current password does not match for user: {}", currentUser.getEmail());
             throw new AuthException("Current password is incorrect");
+        }
+        
+        // Validate new password strength
+        PasswordValidator.ValidationResult validationResult = passwordValidator.validate(request.getNewPassword());
+        if (!validationResult.valid()) {
+            log.warn("Password validation failed during password change: {}", validationResult);
+            throw new PasswordValidationException(
+                "New password does not meet security requirements", 
+                validationResult.errors()
+            );
         }
 
         // Update password

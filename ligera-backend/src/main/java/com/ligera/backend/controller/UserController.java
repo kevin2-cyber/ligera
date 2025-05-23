@@ -15,11 +15,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Controller handling user profile operations
+ * Controller for user profile operations
  */
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/users")
 @RequiredArgsConstructor
+@com.ligera.backend.versioning.ApiVersionRequestMapping(version = com.ligera.backend.versioning.ApiVersion.V1)
 @PreAuthorize("isAuthenticated()")
 @Tag(name = "User", description = "User API")
 @SecurityRequirement(name = "bearerAuth")

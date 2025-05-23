@@ -1,5 +1,6 @@
 package com.ligera.backend.service;
 
+import com.ligera.backend.config.CacheConfig;
 import com.ligera.backend.dtos.response.UserResponse;
 import com.ligera.backend.exception.AuthException;
 import com.ligera.backend.models.User;
@@ -7,6 +8,9 @@ import com.ligera.backend.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +34,9 @@ public class UserService {
      * @return user entity
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = CacheConfig.USER_CACHE, key = "#id")
     public User getUserById(Long id) {
-        log.debug("Getting user by ID: {}", id);
+        log.debug("Cache miss - Getting user by ID: {}", id);
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
     }
@@ -43,8 +48,9 @@ public class UserService {
      * @return optional user
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = CacheConfig.USER_EMAIL_CACHE, key = "#email")
     public Optional<User> getUserByEmail(String email) {
-        log.debug("Getting user by email: {}", email);
+        log.debug("Cache miss - Getting user by email: {}", email);
         return userRepository.findByEmail(email);
     }
 
@@ -55,6 +61,11 @@ public class UserService {
      * @return updated user
      */
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(value = CacheConfig.USER_CACHE, key = "#user.id"),
+        @CacheEvict(value = CacheConfig.USER_EMAIL_CACHE, key = "#user.email"),
+        @CacheEvict(value = CacheConfig.USER_PROFILE_CACHE, allEntries = true)
+    })
     public User updateUser(User user) {
         log.info("Updating user profile for user: {}", user.getEmail());
         
@@ -81,7 +92,9 @@ public class UserService {
      * @return user response DTO
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = CacheConfig.USER_PROFILE_CACHE, key = "@authenticationService.getCurrentUser().getId()")
     public UserResponse getCurrentUserProfile() {
+        log.debug("Cache miss - Getting current user profile");
         User currentUser = authenticationService.getCurrentUser();
         return UserResponse.fromEntity(currentUser);
     }
