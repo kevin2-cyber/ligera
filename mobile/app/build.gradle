@@ -43,6 +43,7 @@ dependencies {
     implementation libs.material
     implementation libs.constraintlayout
     implementation libs.scrollingpagerindicator
+    implementation libs.dotsindicator
     // splash screen dependency for Android 11 and below
     implementation libs.core.splashscreen
     testImplementation libs.junit

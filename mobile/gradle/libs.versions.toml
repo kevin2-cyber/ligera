@@ -11,6 +11,7 @@ junitVersion = "1.2.1"
 material = "1.12.0"
 roomRuntime = "2.7.1"
 scrollingpagerindicator = "1.2.5"
+dotsindicator = "4.3"
 
 [libraries]
 activity = { module = "androidx.activity:activity", version.ref = "activity" }
@@ -25,6 +26,7 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 scrollingpagerindicator = { module = "ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator", version.ref = "scrollingpagerindicator" }
+dotsindicator = { module = "com.tbuonomo:dotsindicator", version = "5.1.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
