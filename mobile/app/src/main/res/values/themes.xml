@@ -32,7 +32,7 @@
         <!--Inactive icon-->
         <item name="colorOnSurfaceVariant">@color/charcoal_gray</item>
         <!--Active icon-->
-        <item name="colorOnSecondaryContainer">@color/black</item>
+        <item name="colorOnSecondaryContainer">@color/pearl_light_variant</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.NavigationBarView.ActiveIndicator</item>
     </style>
 
@@ -47,8 +47,8 @@
     </style>
 
     <style name="TextAppearance.App.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
-        <item name="fontFamily">@font/work_sans</item>
-        <item name="android:fontFamily">@font/work_sans</item>
+        <item name="fontFamily">@font/oneuisans</item>
+        <item name="android:fontFamily">@font/oneuisans</item>
     </style>
 
     <style name="TextAppearance.App.TitleMedium" parent="TextAppearance.Material3.TitleMedium">

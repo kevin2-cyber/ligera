@@ -14,16 +14,16 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.transition.Explode;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityRegisterBinding;
 
@@ -33,7 +33,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     ActivityRegisterBinding binding;
     private ProgressBar bar;
-    private FirebaseAuth auth;
     String name = "";
     String email = "";
     String password = "";
@@ -45,9 +44,13 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+
+        getWindow().setExitTransition(new Explode());
         setContentView(R.layout.activity_register);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register),
+                (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -85,8 +88,6 @@ public class RegisterActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         });
-
-        auth = FirebaseAuth.getInstance();
     }
 
     private void togglePassword(View view) {
@@ -107,6 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         // go back to previous activity, when back button of actionbar clicked
         onBackPressed();
+        getOnBackPressedDispatcher();
         return super.onSupportNavigateUp();
     }
 
@@ -153,24 +155,15 @@ public class RegisterActivity extends AppCompatActivity {
             bar.setVisibility(View.VISIBLE);
 
             // create account
-            auth.createUserWithEmailAndPassword(email, password)
-                    .addOnSuccessListener(task -> {
 
-                        // dismiss progress
-                        bar.setVisibility(View.GONE);
-                        FirebaseUser user = auth.getCurrentUser();
-                        assert user != null;
-                        String email = user.getEmail();
-                        Toast.makeText(RegisterActivity.this, "Account created with " + email, Toast.LENGTH_LONG).show();
+            // dismiss progress
+            bar.setVisibility(View.GONE);
+            Toast.makeText(RegisterActivity.this, "Account created with " + email, Toast.LENGTH_LONG).show();
 
-                        startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
-                        finish();
-                    })
-                    .addOnFailureListener(e -> {
-                        //signup failed
-                        bar.setVisibility(View.GONE);
-                        Toast.makeText(RegisterActivity.this, "Sign up failed due to " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    });
-        }
+            startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
+            finish();
+            //signup failed
+            bar.setVisibility(View.GONE);
+}
     }
 }

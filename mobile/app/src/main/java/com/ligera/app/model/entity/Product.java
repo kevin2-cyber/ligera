@@ -193,7 +193,15 @@ public class Product extends BaseObservable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, categoryId, name, image, description, price, size, quantity, brand);
+        return Objects.hash(productId,
+                categoryId,
+                name,
+                image,
+                description,
+                price,
+                size,
+                quantity,
+                brand);
     }
 }
 

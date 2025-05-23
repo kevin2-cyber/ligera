@@ -8,9 +8,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
+
+import com.google.android.material.transition.MaterialFadeThrough;
+import com.google.android.material.transition.MaterialContainerTransform;
+import com.google.android.material.transition.MaterialElevationScale;
 
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -40,6 +46,25 @@ public class HomeActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+
+        // Configure Material Design transitions
+        MaterialFadeThrough fadeThrough = new MaterialFadeThrough();
+        fadeThrough.setDuration(300);
+        
+        // Set activity transitions
+        getWindow().setEnterTransition(fadeThrough);
+        getWindow().setExitTransition(fadeThrough);
+        getWindow().setReenterTransition(fadeThrough);
+        getWindow().setReturnTransition(fadeThrough);
+        
+        // Configure shared element transitions
+        MaterialContainerTransform containerTransform = new MaterialContainerTransform();
+        containerTransform.setDuration(400);
+        containerTransform.setFadeMode(MaterialContainerTransform.FADE_MODE_THROUGH);
+        getWindow().setSharedElementEnterTransition(containerTransform);
+        getWindow().setSharedElementReturnTransition(containerTransform);
+        
         setContentView(R.layout.activity_home);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.home), (v, insets) -> {
@@ -67,17 +92,40 @@ public class HomeActivity extends AppCompatActivity implements
     // switch between fragments when view is selected
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Create the Material Design transition for fragment navigation
+        MaterialFadeThrough fadeThrough = new MaterialFadeThrough();
+        fadeThrough.setDuration(300);
+        
+        // Create the fragment transaction with transition
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        
         if (item.getItemId() == R.id.navigation_home) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,homeFragment).commit();
+            homeFragment.setEnterTransition(fadeThrough);
+            homeFragment.setExitTransition(fadeThrough);
+            homeFragment.setReenterTransition(fadeThrough);
+            homeFragment.setReturnTransition(fadeThrough);
+            transaction.replace(R.id.flFragment, homeFragment).commit();
             return true;
         } else if (item.getItemId() == R.id.navigation_cart) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,cartFragment).commit();
+            cartFragment.setEnterTransition(fadeThrough);
+            cartFragment.setExitTransition(fadeThrough);
+            cartFragment.setReenterTransition(fadeThrough);
+            cartFragment.setReturnTransition(fadeThrough);
+            transaction.replace(R.id.flFragment, cartFragment).commit();
             return true;
         } else if (item.getItemId() == R.id.navigation_liked) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,favoritesFragment).commit();
+            favoritesFragment.setEnterTransition(fadeThrough);
+            favoritesFragment.setExitTransition(fadeThrough);
+            favoritesFragment.setReenterTransition(fadeThrough);
+            favoritesFragment.setReturnTransition(fadeThrough);
+            transaction.replace(R.id.flFragment, favoritesFragment).commit();
             return true;
         } else if (item.getItemId() == R.id.navigation_profile) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,profileFragment).commit();
+            profileFragment.setEnterTransition(fadeThrough);
+            profileFragment.setExitTransition(fadeThrough);
+            profileFragment.setReenterTransition(fadeThrough);
+            profileFragment.setReturnTransition(fadeThrough);
+            transaction.replace(R.id.flFragment, profileFragment).commit();
             return true;
         }
         return false;

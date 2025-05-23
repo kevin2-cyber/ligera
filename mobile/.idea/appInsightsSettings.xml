@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.ligera.app" />
-                  <option name="mobileSdkAppId" value="1:955773843699:android:de58b144aac81b807f9f86" />
-                  <option name="projectId" value="ligera-a1202" />
-                  <option name="projectNumber" value="955773843699" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

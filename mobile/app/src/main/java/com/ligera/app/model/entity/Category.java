@@ -60,7 +60,8 @@ public class Category extends BaseObservable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Category category = (Category) o;
-        return categoryId == category.categoryId && Objects.equals(name, category.name);
+        return categoryId == category.categoryId
+                && Objects.equals(name, category.name);
     }
 
     @Override

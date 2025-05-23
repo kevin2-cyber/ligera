@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -50,6 +52,9 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+
+        getWindow().setExitTransition(new Explode());
         setContentView(R.layout.activity_detail);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail), (v, insets) -> {
@@ -87,6 +92,9 @@ public class DetailActivity extends AppCompatActivity {
             product.setQuantity(intent.getIntExtra(PRODUCT_QUANTITY, 1));
             product.setPrice(intent.getStringExtra(PRODUCT_PRICE));
             product.setSize(intent.getStringExtra(PRODUCT_SIZE));
+
+            ViewCompat.setTransitionName(binding.ivProduct, PRODUCT_IMAGE);
+
         } else {
             Toast.makeText(this, "No data sent", Toast.LENGTH_LONG).show();
         }
@@ -107,10 +115,6 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "selected sizes: " + stringBuilder.toString().replaceFirst(",",""), Toast.LENGTH_LONG).show();
             }
         });
-
-
-
-
     }
 
     @Override
