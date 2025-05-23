@@ -1,5 +1,6 @@
 package com.ligera.backend.security.validation;
 
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -235,6 +236,7 @@ public class PasswordValidator {
      * Result of password validation
      */
     public record ValidationResult(boolean valid, List<String> errors) {
+        @Nonnull
         @Override
         public String toString() {
             if (valid) {
