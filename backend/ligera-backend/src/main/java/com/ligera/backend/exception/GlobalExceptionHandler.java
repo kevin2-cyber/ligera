@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.security.auth.message.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -48,7 +49,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleAuthException(AuthException ex, HttpServletRequest request) {
         log.error("Authentication error: {}", ex.getMessage());
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.UNAUTHORIZED.value())
@@ -56,7 +57,7 @@ public class GlobalExceptionHandler {
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
@@ -72,7 +73,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
         log.error("Access denied: {}", ex.getMessage());
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.FORBIDDEN.value())
@@ -80,7 +81,7 @@ public class GlobalExceptionHandler {
                 .message("You don't have permission to access this resource")
                 .path(request.getRequestURI())
                 .build();
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
@@ -96,7 +97,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
         log.error("Authentication failed: {}", ex.getMessage());
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.UNAUTHORIZED.value())
@@ -104,7 +105,7 @@ public class GlobalExceptionHandler {
                 .message("Authentication failed: " + ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
@@ -120,7 +121,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException ex, HttpServletRequest request) {
         log.error("User not found: {}", ex.getMessage());
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -128,7 +129,7 @@ public class GlobalExceptionHandler {
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
@@ -144,7 +145,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
         log.error("Validation error: {}", ex.getMessage());
-        
+
         Map<String, String> fieldErrors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -153,7 +154,7 @@ public class GlobalExceptionHandler {
                         error -> error.getDefaultMessage() == null ? "Invalid value" : error.getDefaultMessage(),
                         (error1, error2) -> error1
                 ));
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -161,9 +162,9 @@ public class GlobalExceptionHandler {
                 .message("Validation failed for request")
                 .path(request.getRequestURI())
                 .build();
-        
+
         errorResponse.addValidationErrors(fieldErrors);
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -179,15 +180,15 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex, HttpServletRequest request) {
         log.error("Constraint violation: {}", ex.getMessage());
-        
+
         Map<String, String> fieldErrors = new HashMap<>();
-        
+
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             String propertyPath = violation.getPropertyPath().toString();
             String field = propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
             fieldErrors.put(field, violation.getMessage());
         }
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -195,9 +196,9 @@ public class GlobalExceptionHandler {
                 .message("Constraint violation")
                 .path(request.getRequestURI())
                 .build();
-        
+
         errorResponse.addValidationErrors(fieldErrors);
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -213,7 +214,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleBindException(BindException ex, HttpServletRequest request) {
         log.error("Binding error: {}", ex.getMessage());
-        
+
         Map<String, String> fieldErrors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -222,7 +223,7 @@ public class GlobalExceptionHandler {
                         error -> error.getDefaultMessage() == null ? "Invalid value" : error.getDefaultMessage(),
                         (error1, error2) -> error1
                 ));
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -230,9 +231,9 @@ public class GlobalExceptionHandler {
                 .message("Binding failed for request")
                 .path(request.getRequestURI())
                 .build();
-        
+
         errorResponse.addValidationErrors(fieldErrors);
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -248,7 +249,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex, HttpServletRequest request) {
         log.error("Entity not found: {}", ex.getMessage());
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -256,7 +257,7 @@ public class GlobalExceptionHandler {
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
@@ -272,7 +273,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex, HttpServletRequest request) {
         log.error("Data integrity violation: {}", ex.getMessage());
-        
+
         String message = ex.getMessage();
         // Extract more readable message from the exception if possible
         if (message.contains("constraint")) {
@@ -282,7 +283,7 @@ public class GlobalExceptionHandler {
                 message = "Data integrity violation occurred";
             }
         }
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
@@ -290,7 +291,7 @@ public class GlobalExceptionHandler {
                 .message(message)
                 .path(request.getRequestURI())
                 .build();
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
@@ -306,7 +307,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
         log.error("Runtime exception: ", ex);
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -314,7 +315,7 @@ public class GlobalExceptionHandler {
                 .message("An internal server error occurred")
                 .path(request.getRequestURI())
                 .build();
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -330,7 +331,7 @@ public class GlobalExceptionHandler {
     )
     public ResponseEntity<ErrorResponse> handleException(Exception ex, HttpServletRequest request) {
         log.error("Unhandled exception: ", ex);
-        
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -338,7 +339,7 @@ public class GlobalExceptionHandler {
                 .message("An unexpected error occurred. Please try again later.")
                 .path(request.getRequestURI())
                 .build();
-                
+
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+}
