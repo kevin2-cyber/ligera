@@ -92,6 +92,9 @@ public class DetailActivity extends AppCompatActivity {
             product.setQuantity(intent.getIntExtra(PRODUCT_QUANTITY, 1));
             product.setPrice(intent.getStringExtra(PRODUCT_PRICE));
             product.setSize(intent.getStringExtra(PRODUCT_SIZE));
+
+            ViewCompat.setTransitionName(binding.ivProduct, PRODUCT_IMAGE);
+
         } else {
             Toast.makeText(this, "No data sent", Toast.LENGTH_LONG).show();
         }
@@ -112,10 +115,6 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "selected sizes: " + stringBuilder.toString().replaceFirst(",",""), Toast.LENGTH_LONG).show();
             }
         });
-
-
-
-
     }
 
     @Override
