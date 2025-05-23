@@ -1,5 +1,6 @@
 package com.ligera.app.view.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,7 +84,7 @@ public class CartFragment extends Fragment {
         MaterialContainerTransform containerTransform = new MaterialContainerTransform();
         containerTransform.setDuration(400); // Match HomeActivity container transform duration
         containerTransform.setFadeMode(MaterialContainerTransform.FADE_MODE_THROUGH);
-        containerTransform.setScrimColor(getResources().getColor(R.color.colorTransparent, null));
+        containerTransform.setScrimColor(Color.TRANSPARENT);
         setSharedElementEnterTransition(containerTransform);
         setSharedElementReturnTransition(containerTransform);
     }

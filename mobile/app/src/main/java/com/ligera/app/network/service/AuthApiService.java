@@ -32,6 +32,19 @@ public interface AuthApiService {
     LiveData<ApiResponse<AuthResponse>> login(@Body LoginRequest request);
     
     /**
+     * Refresh access token using refresh token
+     * 
+     * @param request refresh token request
+     * @return authentication response with new JWT token
+     */
+    @Headers({
+        "Content-Type: application/json",
+        "Accept: application/json"
+    })
+    @POST(ApiConfig.Endpoints.REFRESH_TOKEN)
+    LiveData<ApiResponse<AuthResponse>> refreshToken(@Body RefreshTokenRequest request);
+    
+    /**
      * Register new user
      * 
      * @param request registration data
