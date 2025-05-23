@@ -35,23 +35,38 @@
         android:background="@drawable/sn_bg"
         android:textAllCaps="true"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/onboarding_indicators"
+        app:layout_constraintBottom_toTopOf="@+id/indicator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/onboarding_indicators"
+    <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
+        android:id="@+id/indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:padding="15dp"
         android:gravity="center"
+        app:spi_dotSelectedSize="20dp"
+        app:spi_dotSpacing="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal"/>
+        app:layout_constraintStart_toStartOf="parent"/>
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/onboarding_indicators"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="44dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:padding="15dp"-->
+<!--        android:gravity="center"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.498"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:orientation="horizontal"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
