@@ -45,6 +45,17 @@ dependencies {
     implementation libs.dotsindicator
     // splash screen dependency for Android 11 and below
     implementation libs.core.splashscreen
+
+    implementation libs.retrofit
+    implementation libs.converter.gson
+
+    // define a BOM and its version
+    implementation(platform(libs.okhttp.bom))
+
+    // define any required OkHttp artifacts without version
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

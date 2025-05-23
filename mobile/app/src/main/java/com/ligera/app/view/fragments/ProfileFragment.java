@@ -12,6 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.transition.MaterialContainerTransform;
+import com.google.android.material.transition.MaterialElevationScale;
+import com.google.android.material.transition.MaterialFadeThrough;
+
 import com.ligera.app.R;
 import com.ligera.app.databinding.FragmentProfileBinding;
 import com.ligera.app.view.LoginActivity;
@@ -31,6 +35,24 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Set up Material Design transitions
+        MaterialFadeThrough fadeThrough = new MaterialFadeThrough();
+        fadeThrough.setDuration(300); // Match HomeActivity transition duration
+        
+        // Set enter and exit transitions
+        setEnterTransition(fadeThrough);
+        setExitTransition(fadeThrough);
+        setReenterTransition(fadeThrough);
+        setReturnTransition(fadeThrough);
+        
+        // Configure shared element transitions
+        MaterialContainerTransform containerTransform = new MaterialContainerTransform();
+        containerTransform.setDuration(400); // Match HomeActivity container transform duration
+        containerTransform.setFadeMode(MaterialContainerTransform.FADE_MODE_THROUGH);
+        containerTransform.setScrimColor(getResources().getColor(R.color.transparent, null));
+        setSharedElementEnterTransition(containerTransform);
+        setSharedElementReturnTransition(containerTransform);
     }
 
     @Override
@@ -47,7 +69,19 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Add elevation scale transition for theme switcher
         binding.themeSwitcher.setOnClickListener(v -> {
+            // Apply MaterialElevationScale transition when opening the theme bottom sheet
+            MaterialElevationScale exitTransition = new MaterialElevationScale(false);
+            exitTransition.setDuration(300);
+            setExitTransition(exitTransition);
+            
+            // Set up return transition for when bottom sheet is dismissed
+            MaterialElevationScale returnTransition = new MaterialElevationScale(true);
+            returnTransition.setDuration(300);
+            setReenterTransition(returnTransition);
+            
+            // Create and show theme bottom sheet
             ThemeModalBottomSheet modalBottomSheet = new ThemeModalBottomSheet();
             modalBottomSheet.show(requireActivity().getSupportFragmentManager(), ThemeModalBottomSheet.TAG);
         });
@@ -63,8 +97,16 @@ public class ProfileFragment extends Fragment {
         }
 
         public void logout(View view) {
-            //user is null, user not logged in go to login activity
-            startActivity(new Intent(requireActivity(), LoginActivity.class));
+            // Apply transition for logout
+            MaterialFadeThrough fadeThrough = new MaterialFadeThrough();
+            fadeThrough.setDuration(300);
+            
+            // Set exit transition for the fragment
+            setExitTransition(fadeThrough);
+            
+            // Start login activity with transition
+            Intent intent = new Intent(requireActivity(), LoginActivity.class);
+            startActivity(intent);
             requireActivity().finish();
         }
     }

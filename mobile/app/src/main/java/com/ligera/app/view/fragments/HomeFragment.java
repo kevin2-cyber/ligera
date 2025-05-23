@@ -39,6 +39,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.transition.MaterialContainerTransform;
+import com.google.android.material.transition.MaterialElevationScale;
+import com.google.android.material.transition.MaterialFadeThrough;
+
 import com.ligera.app.R;
 import com.ligera.app.databinding.FragmentHomeBinding;
 import com.ligera.app.model.entity.Product;
@@ -78,6 +82,28 @@ public class HomeFragment extends Fragment implements MenuProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Set up Material Design transitions
+        MaterialFadeThrough fadeThrough = new MaterialFadeThrough();
+        fadeThrough.setDuration(300); // Match HomeActivity transition duration
+        
+        // Set enter and exit transitions
+        setEnterTransition(fadeThrough);
+        setExitTransition(fadeThrough);
+        setReenterTransition(fadeThrough);
+        setReturnTransition(fadeThrough);
+        
+        // Set up MaterialElevationScale for nested navigation
+        MaterialElevationScale elevationScale = new MaterialElevationScale(true);
+        elevationScale.setDuration(300);
+        
+        // Configure shared element transitions
+        MaterialContainerTransform containerTransform = new MaterialContainerTransform();
+        containerTransform.setDuration(400); // Match HomeActivity container transform duration
+        containerTransform.setFadeMode(MaterialContainerTransform.FADE_MODE_THROUGH);
+        containerTransform.setScrimColor(getResources().getColor(R.color.transparent, null));
+        setSharedElementEnterTransition(containerTransform);
+        setSharedElementReturnTransition(containerTransform);
     }
 
     @Nullable
@@ -136,7 +162,15 @@ public class HomeFragment extends Fragment implements MenuProvider {
         adapter = new HomeProductAdapter(getActivity());
         RecyclerView recyclerView = binding.rvItems;
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        
+        // Configure custom item animator with Material motion
+        DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
+        itemAnimator.setAddDuration(300);
+        itemAnimator.setRemoveDuration(300);
+        itemAnimator.setChangeDuration(300);
+        itemAnimator.setMoveDuration(300);
+        recyclerView.setItemAnimator(itemAnimator);
+        
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         adapter.submitList(products);
@@ -158,8 +192,21 @@ public class HomeFragment extends Fragment implements MenuProvider {
             intent.putExtra(PRODUCT_BRAND, product.getBrand());
             intent.putExtra(PRODUCT_SIZE, product.getSize());
 
+            // Apply MaterialContainerTransform for shared element transition
+            transitionView.setTransitionName("product_image_" + product.getProductId());
+            
+            // Create exit transition for current fragment when navigating to detail
+            MaterialElevationScale exitTransition = new MaterialElevationScale(false);
+            exitTransition.setDuration(300);
+            setExitTransition(exitTransition);
+            
+            // Create reenter transition for when returning from detail view
+            MaterialElevationScale reenterTransition = new MaterialElevationScale(true);
+            reenterTransition.setDuration(300);
+            setReenterTransition(reenterTransition);
+            
             ActivityOptions options = ActivityOptions
-                    .makeSceneTransitionAnimation(requireActivity(), transitionView, PRODUCT_IMAGE);
+                    .makeSceneTransitionAnimation(requireActivity(), transitionView, "product_image_" + product.getProductId());
 
             startActivity(intent, options.toBundle());
         });
