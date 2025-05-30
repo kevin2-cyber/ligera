@@ -3,37 +3,98 @@ plugins {
 }
 
 android {
-    namespace 'com.kimikevin.ligera'
-    compileSdk 35
-
+    namespace 'com.ligera.app'
+    compileSdk 36
     defaultConfig {
-        applicationId "com.kimikevin.ligera"
+        applicationId "com.ligera.app"
         minSdk 26
-        targetSdk 35
+        targetSdk 36
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Default API configuration - will be overridden in specific build types
+        buildConfigField "String", "API_BASE_URL", "\"https://api.ligera.com/\""
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            buildConfigField "String", "API_BASE_URL", "\"https://dev-api.ligera.com/\""
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        
+        staging {
+            initWith debug
+            minifyEnabled true
+            buildConfigField "String", "API_BASE_URL", "\"https://staging-api.ligera.com/\""
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        
+        release {
+            minifyEnabled true
+            buildConfigField "String", "API_BASE_URL", "\"https://api.ligera.com/\""
+            buildConfigField "boolean", "DEBUG_MODE", "false"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        dataBinding true
+        viewBinding true
     }
 }
 
 dependencies {
-
+    implementation libs.activity
+    // Room
+    implementation libs.room.runtime
+    annotationProcessor libs.room.compiler
+    // material and appcompat
     implementation libs.appcompat
     implementation libs.material
-    implementation libs.activity
     implementation libs.constraintlayout
+    implementation libs.dotsindicator
+    // splash screen dependency for Android 11 and below
+    implementation libs.core.splashscreen
+
+    // Core Android Components
+    implementation libs.core
+    
+    // Advanced Animations
+    implementation libs.lottie
+    
+    // Glide for image loading and animations
+    implementation libs.glide
+    annotationProcessor libs.compiler
+    
+    // Navigation Components
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
+    
+//    // Lifecycle Components
+//    implementation libs.lifecycle.viewmodel
+//    implementation libs.lifecycle.livedata
+//    implementation libs.lifecycle.runtime
+    
+    // Retrofit for network requests
+    implementation libs.retrofit
+    implementation libs.converter.gson
+
+    // define a BOM and its version
+    implementation(platform(libs.okhttp.bom))
+
+    // define any required OkHttp artifacts without version
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
