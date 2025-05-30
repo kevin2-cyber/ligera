@@ -1,0 +1,131 @@
+      authenticated: 60  # Max requests per minute for authenticated users
+    refill:
+      duration:
+        minutes: 1     # Refill period in minutes
+      tokens:
+        anonymous: 30  # Tokens to refill for anonymous users
+        authenticated: 60  # Tokens to refill for authenticated users
+
+# ===============================
+# = LOGGING CONFIGURATION
+# ===============================
+logging:
+  level:
+    root: INFO
+    com.ligera.backend: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.hibernate: ERROR
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/ligera-backend.log
+    max-size: 10MB
+    max-history: 7
+
+# ===============================
+# = ACTUATOR ENDPOINTS
+# ===============================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+  health:
+    db:
+      enabled: true
+    redis:
+      enabled: true
+
+# ===============================
+# = SWAGGER/OPENAPI CONFIGURATION
+# ===============================
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    oauth:
+      client-id: ligera-client
+      client-secret: ligera-secret
+  info:
+    title: Ligera Clothing Marketplace API
+    description: REST API for Ligera Clothing Marketplace
+    version: 1.0.0
+    contact:
+      name: Ligera Development Team
+      email: dev@ligera.com
+    license:
+      name: MIT License
+
+# Active profile will determine which configuration to use
+spring.profiles.active: dev
+
+# ===============================
+# = SERVER CONFIGURATION
+# ===============================
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-binding-errors: always
+  # Add security headers
+  headers:
+    frame-options: DENY
+    content-type-options: NOSNIFF
+    xss-protection: 1; mode=block
+    cache-control: no-cache, no-store, max-age=0, must-revalidate
+  # Configure compression
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/plain,text/css,text/javascript,application/javascript
+    min-response-size: 2048
+# ===============================
+spring:
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  
+  # Disable default exception handling for REST
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+# ===============================
+# = JWT CONFIGURATION
+# ===============================
+app:
+  jwt:
+    # In production, set via environment variable: ${JWT_SECRET}
+    secret: ${JWT_SECRET:p4ssw0rd_l1g3r4_s3cr3t_k3y_sh0uld_b3_l0ng3r_4nd_m0r3_c0mpl3x_1n_pr0duct10n}
+    expiration-ms: 86400000  # 24 hours
+    token-prefix: "Bearer "
+    
+  # ===============================
+  # = PASSWORD SECURITY CONFIGURATION
+  # ===============================
+  security:
+    password:
+      min-length: 8
+      min-uppercase: 1
+      min-lowercase: 1
+      min-digits: 1
+      min-special-chars: 1
+      check-common-passwords: true
+      common-passwords-path: security/common-passwords.txt
+
+
