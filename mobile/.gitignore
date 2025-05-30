@@ -13,6 +13,3 @@
 .externalNativeBuild
 .cxx
 local.properties
-daemon
-caches
-jdks

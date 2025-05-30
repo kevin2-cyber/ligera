@@ -3,12 +3,13 @@ plugins {
 }
 
 android {
-    namespace 'com.ligera.app'
-    compileSdk 36
+    namespace 'com.kimikevin.ligera'
+    compileSdk 35
+
     defaultConfig {
-        applicationId "com.ligera.app"
+        applicationId "com.kimikevin.ligera"
         minSdk 26
-        targetSdk 36
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
@@ -22,40 +23,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
-    buildFeatures {
-        dataBinding true
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
 dependencies {
-    // glide
-    implementation libs.glide
-    implementation libs.activity
-    // Room
-    implementation libs.room.runtime
-    annotationProcessor libs.room.compiler
-    // material and appcompat
+
     implementation libs.appcompat
     implementation libs.material
+    implementation libs.activity
     implementation libs.constraintlayout
-    implementation libs.dotsindicator
-    // splash screen dependency for Android 11 and below
-    implementation libs.core.splashscreen
-
-    implementation libs.retrofit
-    implementation libs.converter.gson
-
-    // define a BOM and its version
-    implementation(platform(libs.okhttp.bom))
-
-    // define any required OkHttp artifacts without version
-    implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
-
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
