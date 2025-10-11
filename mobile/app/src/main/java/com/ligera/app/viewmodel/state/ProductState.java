@@ -6,6 +6,8 @@ import androidx.paging.PagedList;
 
 import com.ligera.app.db.entity.CategoryEntity;
 import com.ligera.app.db.entity.ProductEntity;
+import com.ligera.app.model.entity.Category;
+import com.ligera.app.model.entity.Product;
 import com.ligera.app.network.model.response.ProductListResponse;
 
 import java.util.Collections;
@@ -82,11 +84,11 @@ public class ProductState {
     private ProductState(
             @NonNull Status status,
             @NonNull ContentType contentType,
-            @Nullable PagedList<ProductEntity> products,
-            @Nullable List<ProductEntity> featuredProducts,
-            @Nullable List<ProductEntity> popularProducts,
-            @Nullable ProductEntity productDetails,
-            @Nullable List<CategoryEntity> categories,
+            @Nullable PagedList<Product> products,
+            @Nullable List<Product> featuredProducts,
+            @Nullable List<Product> popularProducts,
+            @Nullable Product productDetails,
+            @Nullable List<Category> categories,
             @Nullable ProductListResponse filterResults,
             @Nullable String errorMessage,
             @Nullable Throwable error,
