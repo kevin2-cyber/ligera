@@ -100,6 +100,9 @@ dependencies {
     // Javax Inject
     implementation libs.javax.inject
 
+    // Swipe to refresh
+    implementation libs.swiperefreshlayout
+
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

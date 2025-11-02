@@ -20,6 +20,7 @@ roomRuntime = "2.7.1"
 dotsindicator = "5.1.0"
 core = "1.16.0"
 javaxInject = "1"
+swipeRefreshLayout = "1.1.0"
 
 [libraries]
 activity = { module = "androidx.activity:activity", version.ref = "activity" }
@@ -46,6 +47,7 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRunti
 dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
 core = { module = "androidx.core:core", version.ref = "core" }
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
+swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipeRefreshLayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

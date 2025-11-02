@@ -17,8 +17,9 @@ import com.ligera.app.model.dao.ProductDao;
 import com.ligera.app.model.entity.Category;
 import com.ligera.app.model.entity.Product;
 import com.ligera.app.util.AppExecutors;
+import com.ligera.app.view.util.Constants;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 
 /**
  * Main database class for the application
@@ -45,7 +46,7 @@ public abstract class AppDatabase extends RoomDatabase {
     /**
      * Database write executor for background operations
      */
-    public static final ExecutorService databaseWriteExecutor = (ExecutorService) new AppExecutors().diskIO();
+    public static final Executor databaseWriteExecutor = new AppExecutors().diskIO();
     
     /**
      * Get database instance using singleton pattern
@@ -130,6 +131,10 @@ public abstract class AppDatabase extends RoomDatabase {
                     categoryDao.insert(categoryTwo);
 
                     Log.d(TAG, "Database initialized with categories");
+
+                    // Insert sample products
+                    productDao.insertAll(Constants.getProductData());
+                    Log.d(TAG, "Database initialized with sample products");
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Error initializing database", e);

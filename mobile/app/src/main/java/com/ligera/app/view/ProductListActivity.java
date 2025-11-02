@@ -26,7 +26,6 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
-import timber.log.Timber;
 
 /**
  * Example activity demonstrating NetworkManager usage for product listing
