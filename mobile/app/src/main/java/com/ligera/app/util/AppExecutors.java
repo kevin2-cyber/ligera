@@ -7,22 +7,13 @@ import androidx.annotation.NonNull;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Global executor pools for the whole application.
  * Grouping tasks like this avoids the effects of task starvation (e.g., disk reads don't wait
  * behind webservice requests).
  */
-@Singleton
 public class AppExecutors {
-
-    private static final int THREAD_COUNT = 3;
 
     private final Executor diskIO;
     private final Executor networkIO;
@@ -32,9 +23,7 @@ public class AppExecutors {
      * Create AppExecutors with default thread configuration
      */
     public AppExecutors() {
-        this(Executors.newSingleThreadExecutor(), new ThreadPoolExecutor(3,
-                5, 60, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>()),
+        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),
                 new MainThreadExecutor());
     }
 
@@ -77,4 +66,3 @@ public class AppExecutors {
         }
     }
 }
-

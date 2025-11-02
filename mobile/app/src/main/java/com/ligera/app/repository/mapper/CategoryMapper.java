@@ -1,6 +1,6 @@
 package com.ligera.app.repository.mapper;
 
-import com.ligera.app.db.entity.CategoryEntity;
+import com.ligera.app.model.entity.Category;
 import com.ligera.app.network.model.response.CategoryResponse;
 
 import java.util.ArrayList;
@@ -13,17 +13,17 @@ import java.util.stream.Collectors;
 public class CategoryMapper {
 
     /**
-     * Map CategoryResponse to CategoryEntity
+     * Map CategoryResponse to Category
      *
      * @param response CategoryResponse from network
-     * @return CategoryEntity for database
+     * @return Category for database
      */
-    public static CategoryEntity mapResponseToEntity(CategoryResponse response) {
+    public static Category mapResponseToEntity(CategoryResponse response) {
         if (response == null) {
             return null;
         }
         
-        CategoryEntity entity = new CategoryEntity();
+        Category entity = new Category();
         entity.setId(response.getId());
         entity.setName(response.getName());
         entity.setDescription(response.getDescription());
@@ -36,12 +36,12 @@ public class CategoryMapper {
     }
     
     /**
-     * Map list of CategoryResponse to list of CategoryEntity
+     * Map list of CategoryResponse to list of Category
      *
      * @param responses List of CategoryResponse from network
-     * @return List of CategoryEntity for database
+     * @return List of Category for database
      */
-    public static List<CategoryEntity> mapResponseToEntity(List<CategoryResponse> responses) {
+    public static List<Category> mapResponseToEntity(List<CategoryResponse> responses) {
         if (responses == null) {
             return new ArrayList<>();
         }
@@ -51,4 +51,3 @@ public class CategoryMapper {
                 .collect(Collectors.toList());
     }
 }
-

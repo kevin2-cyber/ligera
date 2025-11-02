@@ -1,22 +1,33 @@
 package com.ligera.app.view.util;
 
-import com.ligera.app.R;
 import com.ligera.app.model.entity.Product;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Constants {
+    /**
+     * Provides a list of sample products. 
+     * Note: This is mock data and may not reflect the actual data structure from the API.
+     */
     public static ArrayList<Product> getProductData() {
         ArrayList<Product> products = new ArrayList<>();
-        products.add(new Product(0,"Hoodie", R.drawable.hoodie, R.string.contents, "2000.00", 2, 1, "Ligera","XL"));
-        products.add(new Product(1,"Attire", R.drawable.attire, R.string.contents, "4000.00", 2, 2, "Ligera","XL"));
-        products.add(new Product(2,"Done", R.drawable.done, R.string.contents, "8000.00", 2, 1, "Ligera","XL"));
-        products.add(new Product(3,"Made", R.drawable.made, R.string.contents, "1000.00", 2, 2, "Ligera","XL"));
-        products.add(new Product(4,"Shirt", R.drawable.shirt, R.string.contents, "1200.00", 2, 1, "Ligera","XL"));
-        products.add(new Product(5,"Sown", R.drawable.sown, R.string.contents, "1400.00", 2, 2, "Ligera","XL"));
-        products.add(new Product(6,"Style", R.drawable.style, R.string.contents, "1600.00", 2, 1, "Ligera","XL"));
-        products.add(new Product(7,"Tailor", R.drawable.tailor, R.string.contents, "1800.00", 2, 2, "Ligera","XL"));
-        products.add(new Product(8,"Worn", R.drawable.worn, R.string.contents, "6000.00", 2, 1, "Ligera","XL"));
+        String placeholderDesc = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
+        
+        // Create URIs for drawable resources
+        // Assumes you have drawables named hoodie, attire, etc. in your res/drawable folder
+        String drawableUriBase = "android.resource://com.ligera.app/drawable/";
+
+        products.add(new Product(0L, "Hoodie", placeholderDesc, new BigDecimal("2000.00"), drawableUriBase + "hoodie", 2, 1L, "Ligera", "XL"));
+        products.add(new Product(1L, "Attire", placeholderDesc, new BigDecimal("4000.00"), drawableUriBase + "attire", 2, 2L, "Ligera", "XL"));
+        products.add(new Product(2L, "Done", placeholderDesc, new BigDecimal("8000.00"), drawableUriBase + "done", 2, 1L, "Ligera", "XL"));
+        products.add(new Product(3L, "Made", placeholderDesc, new BigDecimal("1000.00"), drawableUriBase + "made", 2, 2L, "Ligera", "XL"));
+        products.add(new Product(4L, "Shirt", placeholderDesc, new BigDecimal("1200.00"), drawableUriBase + "shirt", 2, 1L, "Ligera", "XL"));
+        products.add(new Product(5L, "Sown", placeholderDesc, new BigDecimal("1400.00"), drawableUriBase + "sown", 2, 2L, "Ligera", "XL"));
+        products.add(new Product(6L, "Style", placeholderDesc, new BigDecimal("1600.00"), drawableUriBase + "style", 2, 1L, "Ligera", "XL"));
+        products.add(new Product(7L, "Tailor", placeholderDesc, new BigDecimal("1800.00"), drawableUriBase + "tailor", 2, 2L, "Ligera", "XL"));
+        products.add(new Product(8L, "Worn", placeholderDesc, new BigDecimal("6000.00"), drawableUriBase + "worn", 2, 1L, "Ligera", "XL"));
+        
         return products;
     }
 }

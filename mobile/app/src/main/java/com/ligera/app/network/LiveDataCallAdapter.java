@@ -2,7 +2,6 @@ package com.ligera.app.network;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.ligera.app.network.model.ApiResponse;
 
@@ -31,7 +30,7 @@ public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiRespon
 
     @Override
     public LiveData<ApiResponse<R>> adapt(@NonNull Call<R> call) {
-        return new LiveData<>() {
+        return new LiveData<ApiResponse<R>>() {
             final AtomicBoolean started = new AtomicBoolean(false);
 
             @Override
@@ -41,12 +40,12 @@ public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiRespon
                     call.enqueue(new Callback<R>() {
                         @Override
                         public void onResponse(@NonNull Call<R> call, @NonNull Response<R> response) {
-                            postValue(new ApiResponse<>(response));
+                            postValue(ApiResponse.create(response));
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<R> call, @NonNull Throwable throwable) {
-                            postValue(new ApiResponse<>(throwable));
+                            postValue(ApiResponse.create(throwable));
                         }
                     });
                 }
@@ -54,4 +53,3 @@ public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiRespon
         };
     }
 }
-

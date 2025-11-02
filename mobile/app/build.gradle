@@ -49,6 +49,7 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
+        buildConfig true
     }
 }
 
@@ -94,6 +95,13 @@ dependencies {
     // define any required OkHttp artifacts without version
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    implementation libs.paging.runtime
+
+    // Javax Inject
+    implementation libs.javax.inject
+
+    // Swipe to refresh
+    implementation libs.swiperefreshlayout
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

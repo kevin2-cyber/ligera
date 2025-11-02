@@ -1,31 +1,43 @@
 package com.ligera.app.viewmodel;
 
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.logging.Logger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SplashViewModel extends ViewModel {
+    private static final String TAG = SplashViewModel.class.getSimpleName();
     private final MutableLiveData<Boolean> isLoadingComplete = new MutableLiveData<>(false);
-    private final Logger logger = Logger.getLogger(SplashViewModel.class.getName());
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public SplashViewModel() {
         loadData();
     }
 
     private void loadData() {
-        new Thread(() -> {
+        executor.execute(() -> {
             try {
+                // Simulate a delay for loading data or other setup
                 Thread.sleep(1000);
-                isLoadingComplete.postValue(true);
             } catch (InterruptedException e) {
-                logger.info(e.toString());
+                Log.e(TAG, "Splash screen delay interrupted", e);
+                Thread.currentThread().interrupt();
+            } finally {
+                isLoadingComplete.postValue(true);
             }
-        }).start();
+        });
     }
 
     public LiveData<Boolean> getLoadingStatus() {
         return isLoadingComplete;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        executor.shutdownNow();
     }
 }

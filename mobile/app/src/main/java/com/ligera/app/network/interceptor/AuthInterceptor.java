@@ -1,5 +1,7 @@
 package com.ligera.app.network.interceptor;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -18,8 +20,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
-import timber.log.Timber;
 
 /**
  * Interceptor to add JWT authorization header to requests
@@ -79,7 +79,7 @@ public class AuthInterceptor implements Interceptor {
         
         // If the response is 401 Unauthorized, attempt to refresh the token
         if (response.code() == 401) {
-            Timber.d("Received 401 response, attempting to refresh token");
+            Log.d(TAG, "Received 401 response, attempting to refresh token");
             
             // Close the body of the error response
             if (response.body() != null) {
@@ -91,7 +91,7 @@ public class AuthInterceptor implements Interceptor {
             
             // If token refresh was successful, retry the original request with the new token
             if (newToken != null && !newToken.isEmpty()) {
-                Timber.d("Token refresh successful, retrying original request");
+                Log.d(TAG, "Token refresh successful, retrying original request");
                 Request newRequest = originalRequest.newBuilder()
                         .header("Authorization", "Bearer " + newToken)
                         .method(originalRequest.method(), originalRequest.body())
@@ -104,7 +104,7 @@ public class AuthInterceptor implements Interceptor {
                 return chain.proceed(newRequest);
             } else {
                 // If token refresh failed, proceed with the 401 response
-                Timber.w("Token refresh failed, returning 401 response");
+                Log.w(TAG, "Token refresh failed, returning 401 response");
                 return response;
             }
         }
@@ -125,7 +125,7 @@ public class AuthInterceptor implements Interceptor {
         
         // If no refresh token is available, return null
         if (refreshToken == null || refreshToken.isEmpty()) {
-            Timber.w("No refresh token available, cannot refresh");
+            Log.w(TAG, "No refresh token available, cannot refresh");
             return null;
         }
         
@@ -136,14 +136,14 @@ public class AuthInterceptor implements Interceptor {
             lockAcquired = refreshTokenLock.tryLock(10, TimeUnit.SECONDS);
             
             if (!lockAcquired) {
-                Timber.w("Failed to acquire refresh token lock, another thread may be refreshing");
+                Log.w(TAG, "Failed to acquire refresh token lock, another thread may be refreshing");
                 return null;
             }
             
             // Before making the request, check if token has already been refreshed by another thread
             String currentToken = tokenManager.getAccessToken();
             if (currentToken != null && !currentToken.isEmpty() && !tokenManager.isTokenExpired()) {
-                Timber.d("Token already refreshed by another thread");
+                Log.d(TAG, "Token already refreshed by another thread");
                 return currentToken;
             }
             
@@ -175,30 +175,30 @@ public class AuthInterceptor implements Interceptor {
                                 System.currentTimeMillis() + (authResponse.getExpiresIn() * 1000)
                         );
                         
-                        Timber.d("Token refreshed successfully");
+                        Log.d(TAG, "Token refreshed successfully");
                         return authResponse.getToken();
                     }
                 } else {
                     // Log the failure
                     String errorBody = response.body() != null ? response.body().string() : "No response body";
-                    Timber.e("Token refresh failed: %s, %s", response.code(), errorBody);
+                    Log.e(TAG, "Token refresh failed: " + response.code() + ", " + errorBody);
                     
                     // If refresh token is invalid (401), clear all tokens to force re-login
                     if (response.code() == 401) {
-                        Timber.w("Refresh token is invalid, clearing all tokens");
+                        Log.w(TAG, "Refresh token is invalid, clearing all tokens");
                         tokenManager.clearTokens();
                     }
                 }
                 
                 response.close();
             } catch (IOException e) {
-                Timber.e(e, "Error refreshing token: %s", e.getMessage());
+                Log.e(TAG, "Error refreshing token: " + e.getMessage(), e);
             }
             
             return null;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            Timber.e(e, "Thread interrupted while waiting for refresh token lock");
+            Log.e(TAG, "Thread interrupted while waiting for refresh token lock", e);
             return null;
         } finally {
             // Always release the lock if we acquired it
@@ -208,4 +208,3 @@ public class AuthInterceptor implements Interceptor {
         }
     }
 }
-

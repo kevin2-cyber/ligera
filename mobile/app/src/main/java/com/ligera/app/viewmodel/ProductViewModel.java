@@ -5,15 +5,15 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.paging.PagedList;
 
-import com.ligera.app.db.AppDatabase;
-import com.ligera.app.db.entity.CategoryEntity;
-import com.ligera.app.db.entity.ProductEntity;
+import com.ligera.app.model.database.AppDatabase;
+import com.ligera.app.model.entity.Category;
+import com.ligera.app.model.entity.Product;
 import com.ligera.app.network.RetrofitClient;
 import com.ligera.app.network.TokenManager;
 import com.ligera.app.network.model.request.ProductFilterRequest;
@@ -30,74 +30,76 @@ import java.util.List;
  */
 public class ProductViewModel extends AndroidViewModel {
     private static final String TAG = "ProductViewModel";
-    
+
     private final ProductRepository repository;
-    
+
     // LiveData for different product states
     private final MediatorLiveData<ProductState> productState = new MediatorLiveData<>();
     private final MutableLiveData<String> searchQuery = new MutableLiveData<>();
     private final MutableLiveData<ProductFilterRequest> filterRequest = new MutableLiveData<>();
     private final MutableLiveData<Long> selectedProductId = new MutableLiveData<>();
     private final MutableLiveData<Long> selectedCategoryId = new MutableLiveData<>();
-    
+
     // LiveData sources for observing repository results
-    private LiveData<Resource<PagedList<ProductEntity>>> productsSource;
-    private LiveData<Resource<ProductEntity>> productDetailsSource;
-    private LiveData<Resource<List<ProductEntity>>> featuredProductsSource;
-    private LiveData<Resource<List<ProductEntity>>> popularProductsSource;
-    private LiveData<Resource<List<CategoryEntity>>> categoriesSource;
-    private LiveData<Resource<PagedList<ProductEntity>>> searchResultsSource;
+    private LiveData<Resource<PagedList<Product>>> productsSource;
+    private LiveData<Resource<Product>> productDetailsSource;
+    private LiveData<Resource<List<Product>>> featuredProductsSource;
+    private LiveData<Resource<List<Product>>> popularProductsSource;
+    private LiveData<Resource<List<Category>>> categoriesSource;
+    private LiveData<Resource<PagedList<Product>>> searchResultsSource;
     private LiveData<Resource<ProductListResponse>> filterResultsSource;
-    
+
     public ProductViewModel(@NonNull Application application) {
         super(application);
-        
+
         // Initialize repository
         AppDatabase database = AppDatabase.getInstance(application);
         TokenManager tokenManager = TokenManager.getInstance(application);
         ProductApiService apiService = RetrofitClient.getInstance(tokenManager).getClientV1().create(ProductApiService.class);
         repository = new ProductRepository(database, apiService);
-        
+
         // Set initial state
         productState.setValue(ProductState.loading());
-        
+    }
+
+    public void init(@NonNull LifecycleOwner owner) {
         // Load initial data
         loadProducts();
         loadFeaturedProducts(8);
         loadPopularProducts(8);
         loadCategories();
-        
+
         // Set up search query observer
-        searchQuery.observeForever(query -> {
+        searchQuery.observe(owner, query -> {
             if (query != null && !query.isEmpty()) {
                 searchProducts(query);
             }
         });
-        
+
         // Set up filter request observer
-        filterRequest.observeForever(request -> {
+        filterRequest.observe(owner, request -> {
             if (request != null) {
                 filterProducts(request, 0, 20);
             }
         });
-        
+
         // Set up selected product observer
-        selectedProductId.observeForever(id -> {
+        selectedProductId.observe(owner, id -> {
             if (id != null && id > 0) {
                 loadProductDetails(id);
             }
         });
-        
+
         // Set up selected category observer
-        selectedCategoryId.observeForever(id -> {
+        selectedCategoryId.observe(owner, id -> {
             if (id != null && id > 0) {
                 loadProductsByCategory(id);
             }
         });
     }
-    
+
     // Public methods for UI interactions
-    
+
     /**
      * Get product state
      *
@@ -106,7 +108,7 @@ public class ProductViewModel extends AndroidViewModel {
     public LiveData<ProductState> getProductState() {
         return productState;
     }
-    
+
     /**
      * Load all products
      */
@@ -115,33 +117,33 @@ public class ProductViewModel extends AndroidViewModel {
         if (productsSource != null) {
             productState.removeSource(productsSource);
         }
-        
+
         // Set loading state
         productState.setValue(ProductState.loading());
-        
+
         // Get products from repository
         productsSource = repository.getProducts();
-        
+
         // Observe products
         productState.addSource(productsSource, resource -> {
+            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
             switch (resource.status) {
                 case LOADING:
-                    productState.setValue(ProductState.loading());
+                    productState.setValue(currentState.toBuilder().loading(true).build());
                     break;
                 case SUCCESS:
-                    if (resource.data != null) {
-                        productState.setValue(ProductState.successProducts(resource.data));
-                    } else {
-                        productState.setValue(ProductState.successProducts(null));
-                    }
+                    productState.setValue(currentState.toBuilder().loading(false).products(resource.data).build());
                     break;
                 case ERROR:
-                    productState.setValue(ProductState.error(resource.message, null));
+                    productState.setValue(currentState.toBuilder().loading(false).error(resource.message).build());
+                    break;
+                case OFFLINE:
+                    productState.setValue(currentState.toBuilder().loading(false).offline(true).build());
                     break;
             }
         });
     }
-    
+
     /**
      * Load featured products
      *
@@ -152,31 +154,31 @@ public class ProductViewModel extends AndroidViewModel {
         if (featuredProductsSource != null) {
             productState.removeSource(featuredProductsSource);
         }
-        
+
         // Get featured products from repository
         featuredProductsSource = repository.getFeaturedProducts(limit);
-        
+
         // Observe featured products
         productState.addSource(featuredProductsSource, resource -> {
+            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
             switch (resource.status) {
                 case LOADING:
                     // Don't update state to loading to avoid UI flicker
                     break;
                 case SUCCESS:
-                    if (resource.data != null) {
-                        productState.setValue(ProductState.successFeaturedProducts(resource.data));
-                    } else {
-                        productState.setValue(ProductState.successFeaturedProducts(null));
-                    }
+                    productState.setValue(currentState.toBuilder().featuredProducts(resource.data).build());
                     break;
                 case ERROR:
                     Log.e(TAG, "Error loading featured products: " + resource.message);
                     // Don't update state to error to avoid disrupting the UI
                     break;
+                case OFFLINE:
+                    // Don't update state to offline to avoid disrupting the UI
+                    break;
             }
         });
     }
-    
+
     /**
      * Load popular products
      *
@@ -187,31 +189,31 @@ public class ProductViewModel extends AndroidViewModel {
         if (popularProductsSource != null) {
             productState.removeSource(popularProductsSource);
         }
-        
+
         // Get popular products from repository
         popularProductsSource = repository.getPopularProducts(limit);
-        
+
         // Observe popular products
         productState.addSource(popularProductsSource, resource -> {
+            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
             switch (resource.status) {
                 case LOADING:
                     // Don't update state to loading to avoid UI flicker
                     break;
                 case SUCCESS:
-                    if (resource.data != null) {
-                        productState.setValue(ProductState.successPopularProducts(resource.data));
-                    } else {
-                        productState.setValue(ProductState.successPopularProducts(null));
-                    }
+                    productState.setValue(currentState.toBuilder().popularProducts(resource.data).build());
                     break;
                 case ERROR:
                     Log.e(TAG, "Error loading popular products: " + resource.message);
                     // Don't update state to error to avoid disrupting the UI
                     break;
+                case OFFLINE:
+                    // Don't update state to offline to avoid disrupting the UI
+                    break;
             }
         });
     }
-    
+
     /**
      * Load product details
      *
@@ -222,89 +224,93 @@ public class ProductViewModel extends AndroidViewModel {
         if (productDetailsSource != null) {
             productState.removeSource(productDetailsSource);
         }
-        
+
         // Set loading state
         productState.setValue(ProductState.loading());
-        
+
         // Get product details from repository
         productDetailsSource = repository.getProductById(productId);
-        
+
         // Observe product details
         productState.addSource(productDetailsSource, resource -> {
+            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
             switch (resource.status) {
                 case LOADING:
-                    productState.setValue(ProductState.loading());
+                    productState.setValue(currentState.toBuilder().loading(true).build());
                     break;
                 case SUCCESS:
                     if (resource.data != null) {
-                        productState.setValue(ProductState.successProductDetails(resource.data));
+                        productState.setValue(currentState.toBuilder().loading(false).productDetails(resource.data).build());
                     } else {
-                        productState.setValue(ProductState.error("Product not found", null));
+                        productState.setValue(currentState.toBuilder().loading(false).error("Product not found").build());
                     }
                     break;
                 case ERROR:
-                    productState.setValue(ProductState.error(resource.message, null));
+                    productState.setValue(currentState.toBuilder().loading(false).error(resource.message).build());
+                    break;
+                case OFFLINE:
+                    productState.setValue(currentState.toBuilder().loading(false).offline(true).build());
                     break;
             }
         });
     }
-    
+
     /**
      * Search products
      *
      * @param query Search query
      */
-    public void searchProducts(String query) {
+    public void searchProducts(@NonNull String query) {
         // Set query
         searchQuery.setValue(query);
-        
+
         // Remove previous source
         if (searchResultsSource != null) {
             productState.removeSource(searchResultsSource);
         }
-        
+
         // Set loading state
         productState.setValue(ProductState.loading());
-        
+
         // Get search results from repository
         searchResultsSource = repository.searchProducts(query);
-        
+
         // Observe search results
         productState.addSource(searchResultsSource, resource -> {
+            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
             switch (resource.status) {
                 case LOADING:
-                    productState.setValue(ProductState.loading());
+                    productState.setValue(currentState.toBuilder().loading(true).build());
                     break;
                 case SUCCESS:
-                    if (resource.data != null) {
-                        productState.setValue(ProductState.successProducts(resource.data));
-                    } else {
-                        productState.setValue(ProductState.successProducts(null));
-                    }
+                    productState.setValue(currentState.toBuilder().loading(false).products(resource.data).searchQuery(query).build());
                     break;
                 case ERROR:
-                    productState.setValue(ProductState.error(resource.message, null));
+                    productState.setValue(currentState.toBuilder().loading(false).error(resource.message).build());
+                    break;
+                case OFFLINE:
+                    productState.setValue(currentState.toBuilder().loading(false).offline(true).build());
                     break;
             }
         });
     }
-    
+
     /**
      * Clear search
      */
     public void clearSearch() {
         // Clear search query
         searchQuery.setValue(null);
-        
+
         // Remove search results source
         if (searchResultsSource != null) {
             productState.removeSource(searchResultsSource);
         }
-        
+
         // Load all products
         loadProducts();
     }
-    
+
     /**
      * Filter products
      *
@@ -312,58 +318,61 @@ public class ProductViewModel extends AndroidViewModel {
      * @param page Page number
      * @param size Page size
      */
-    public void filterProducts(ProductFilterRequest request, int page, int size) {
+    public void filterProducts(@NonNull ProductFilterRequest request, int page, int size) {
         // Set filter request
         filterRequest.setValue(request);
-        
+
         // Remove previous source
         if (filterResultsSource != null) {
             productState.removeSource(filterResultsSource);
         }
-        
+
         // Set loading state
         productState.setValue(ProductState.loading());
-        
+
         // Get filter results from repository
         filterResultsSource = repository.filterProducts(request, page, size);
-        
+
         // Observe filter results
         productState.addSource(filterResultsSource, resource -> {
+            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
             switch (resource.status) {
                 case LOADING:
-                    productState.setValue(ProductState.loading());
+                    productState.setValue(currentState.toBuilder().loading(true).build());
                     break;
                 case SUCCESS:
                     if (resource.data != null) {
-                        String query = request.getQuery();
-                        productState.setValue(ProductState.successFilterResults(resource.data, query));
+                        productState.setValue(currentState.toBuilder().loading(false).filterResults(resource.data).build());
                     } else {
-                        productState.setValue(ProductState.successFilterResults(null, null));
+                        productState.setValue(currentState.toBuilder().loading(false).filterResults(null).build());
                     }
                     break;
                 case ERROR:
-                    productState.setValue(ProductState.error(resource.message, null));
+                    productState.setValue(currentState.toBuilder().loading(false).error(resource.message).build());
+                    break;
+                case OFFLINE:
+                    productState.setValue(currentState.toBuilder().loading(false).offline(true).build());
                     break;
             }
         });
     }
-    
+
     /**
      * Reset filters
      */
     public void resetFilters() {
         // Clear filter request
         filterRequest.setValue(null);
-        
+
         // Remove filter results source
         if (filterResultsSource != null) {
             productState.removeSource(filterResultsSource);
         }
-        
+
         // Load all products
         loadProducts();
     }
-    
+
     /**
      * Load categories
      */
@@ -372,31 +381,31 @@ public class ProductViewModel extends AndroidViewModel {
         if (categoriesSource != null) {
             productState.removeSource(categoriesSource);
         }
-        
+
         // Get categories from repository
         categoriesSource = repository.getCategories();
-        
+
         // Observe categories
         productState.addSource(categoriesSource, resource -> {
+            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
             switch (resource.status) {
                 case LOADING:
                     // Don't update state to loading to avoid UI flicker
                     break;
                 case SUCCESS:
-                    if (resource.data != null) {
-                        productState.setValue(ProductState.successCategories(resource.data));
-                    } else {
-                        productState.setValue(ProductState.successCategories(null));
-                    }
+                    productState.setValue(currentState.toBuilder().categories(resource.data).build());
                     break;
                 case ERROR:
                     Log.e(TAG, "Error loading categories: " + resource.message);
                     // Don't update state to error to avoid disrupting the UI
                     break;
+                case OFFLINE:
+                    // Don't update state to offline to avoid disrupting the UI
+                    break;
             }
         });
     }
-    
+
     /**
      * Load products by category
      *
@@ -405,16 +414,16 @@ public class ProductViewModel extends AndroidViewModel {
     public void loadProductsByCategory(long categoryId) {
         // Set selected category
         selectedCategoryId.setValue(categoryId);
-        
+
         // Build filter request for category
         ProductFilterRequest request = new ProductFilterRequest.Builder()
                 .categoryId(categoryId)
                 .build();
-        
+
         // Filter products by category
         filterProducts(request, 0, 20);
     }
-    
+
     /**
      * Refresh data
      */
@@ -429,10 +438,10 @@ public class ProductViewModel extends AndroidViewModel {
             loadCategories();
             return;
         }
-        
+
         // Set refreshing state
-        productState.setValue(ProductState.refreshing(currentState));
-        
+        productState.setValue(currentState.toBuilder().refreshing(true).build());
+
         // Refresh data based on current state
         if (currentState.getProductDetails() != null) {
             // Refresh product details
@@ -456,7 +465,7 @@ public class ProductViewModel extends AndroidViewModel {
             loadCategories();
         }
     }
-    
+
     /**
      * Retry last operation
      */
@@ -467,18 +476,18 @@ public class ProductViewModel extends AndroidViewModel {
             // If no current state or not in error state, do nothing
             return;
         }
-        
+
         // Retry based on error context
         refreshData();
     }
-    
+
     /**
      * Clean up resources
      */
     @Override
     protected void onCleared() {
         super.onCleared();
-        
+
         // Remove all sources
         if (productsSource != null) {
             productState.removeSource(productsSource);
@@ -501,11 +510,5 @@ public class ProductViewModel extends AndroidViewModel {
         if (filterResultsSource != null) {
             productState.removeSource(filterResultsSource);
         }
-        
-        // Clear observers
-        searchQuery.removeObservers(getApplication());
-        filterRequest.removeObservers(getApplication());
-        selectedProductId.removeObservers(getApplication());
-        selectedCategoryId.removeObservers(getApplication());
     }
 }

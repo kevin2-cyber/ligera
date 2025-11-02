@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.util.Log;
 
 import com.ligera.app.network.ApiConfig;
 
@@ -17,7 +18,6 @@ import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import timber.log.Timber;
 
 /**
  * OkHttp interceptor that checks for network connectivity before attempting a request
@@ -52,7 +52,7 @@ public class NetworkConnectionInterceptor implements Interceptor {
         
         // Check if there's any network connection
         if (connectionType == ConnectionType.NONE) {
-            Timber.d("No network connection detected");
+            Log.d(TAG,"No network connection detected");
             throw new NoNetworkException(ApiConfig.ErrorMessages.NO_NETWORK);
         }
         
@@ -66,15 +66,15 @@ public class NetworkConnectionInterceptor implements Interceptor {
         if (connectionType == ConnectionType.CELLULAR) {
             // For mobile data, consider using caching to reduce data usage
             if (isMobileDataSavingEnabled()) {
-                Timber.d("Mobile data with data saving - applying caching strategy");
+                Log.d(TAG,"Mobile data with data saving - applying caching strategy");
                 builder.cacheControl(new CacheControl.Builder()
                         .maxStale(7, TimeUnit.DAYS)
                         .build());
             } else {
-                Timber.d("Mobile data connection detected");
+                Log.d(TAG,"Mobile data connection detected");
             }
         } else if (connectionType == ConnectionType.WIFI) {
-            Timber.d("WiFi connection detected");
+            Log.d(TAG,"WiFi connection detected");
             
             // For WiFi, we can use normal caching strategy
             if (!originalRequest.cacheControl().noCache()) {
@@ -105,7 +105,7 @@ public class NetworkConnectionInterceptor implements Interceptor {
                 errorMessage = ApiConfig.ErrorMessages.NETWORK_ERROR;
             }
             
-            Timber.e(e, "Network error: %s", errorMessage);
+            Log.e(TAG, "Network error: %s " + errorMessage);
             throw new NetworkException(errorMessage, e);
         }
     }
@@ -155,7 +155,7 @@ public class NetworkConnectionInterceptor implements Interceptor {
                 }
             } catch (SecurityException e) {
                 // Fallback for permission issues
-                Timber.e(e, "Security exception checking network state");
+                Log.e(TAG, "Security exception checking network state");
                 return fallbackConnectionCheck();
             }
         } else {
@@ -190,7 +190,7 @@ public class NetworkConnectionInterceptor implements Interceptor {
                 return ConnectionType.OTHER;
             }
         } catch (Exception e) {
-            Timber.e(e, "Error in fallback connection check");
+            Log.e(TAG, "Error in fallback connection check");
             return ConnectionType.NONE;
         }
     }
@@ -207,7 +207,7 @@ public class NetworkConnectionInterceptor implements Interceptor {
                         connectivityManager.getRestrictBackgroundStatus();
                 return status == ConnectivityManager.RestrictBackgroundStatus.ENABLED;
             } catch (Exception e) {
-                Timber.e(e, "Error checking data saver status");
+                Log.e(TAG, "Error checking data saver status");
                 return false;
             }
         }
@@ -220,34 +220,31 @@ public class NetworkConnectionInterceptor implements Interceptor {
      * @return true if connection is weak, false otherwise
      */
     private boolean isWeakConnection() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            try {
-                android.net.Network activeNetwork = connectivityManager.getActiveNetwork();
-                if (activeNetwork == null) {
-                    return true;
-                }
-                
-                NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(activeNetwork);
-                if (capabilities == null) {
-                    return true;
-                }
-                
-                // Check signal strength
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    int signalStrength = capabilities.getSignalStrength();
-                    // Signal strength is from 0 to 100, with 100 being the best
-                    return signalStrength < 30; // Consider below 30 as weak
-                }
-                
-                return false;
-            } catch (Exception e) {
-                Timber.e(e, "Error checking signal strength");
-                return true; // Assume weak connection if we can't determine
+        try {
+            android.net.Network activeNetwork = connectivityManager.getActiveNetwork();
+            if (activeNetwork == null) {
+                return true;
             }
-        } else {
-            // For older versions, we don't have a reliable way to check signal strength
-            // So we'll assume it's not weak
+
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(activeNetwork);
+            if (capabilities == null) {
+                return true;
+            }
+
+            // Check signal strength
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                int signalStrength = 0;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    signalStrength = capabilities.getSignalStrength();
+                }
+                // Signal strength is from 0 to 100, with 100 being the best
+                return signalStrength < 30; // Consider below 30 as weak
+            }
+
             return false;
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking signal strength", e);
+            return true; // Assume weak connection if we can't determine
         }
     }
     

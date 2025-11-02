@@ -85,7 +85,7 @@ public class AnimationUtils {
      *
      * @param activity Current activity
      * @param intent Intent for the new activity
-     * @param slideDirection Direction to slide (true for slide up, false for slide right)
+     * @param slideUp Direction to slide (true for slide up, false for slide right)
      */
     public static void startActivityWithSlide(Activity activity, Intent intent, boolean slideUp) {
         activity.startActivity(intent);
@@ -125,7 +125,7 @@ public class AnimationUtils {
      * Finish an activity with a slide transition
      *
      * @param activity Activity to finish
-     * @param slideDirection Direction to slide (true for slide down, false for slide left)
+     * @param slideDown Direction to slide (true for slide down, false for slide left)
      */
     public static void finishActivityWithSlide(Activity activity, boolean slideDown) {
         activity.finish();
