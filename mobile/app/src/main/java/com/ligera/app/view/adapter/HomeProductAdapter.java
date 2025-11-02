@@ -27,7 +27,7 @@ public class HomeProductAdapter extends ListAdapter<Product, HomeProductAdapter.
             new DiffUtil.ItemCallback<>() {
                 @Override
                 public boolean areItemsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
-                    return oldItem.getProductId() == newItem.getProductId();
+                    return oldItem.getId() == newItem.getId();
                 }
 
                 @Override
@@ -64,9 +64,17 @@ public class HomeProductAdapter extends ListAdapter<Product, HomeProductAdapter.
     @Override
     public void onBindViewHolder(@NonNull HomeRecyclerVH holder, int position) {
         Product currentProduct = getItem(position);
-        holder.binding.setProduct(currentProduct);
-        holder.setItemImage(currentProduct.getImage());
-        holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_one));
+        if (currentProduct != null) {
+            holder.binding.setProduct(currentProduct);
+            holder.setItemImage(currentProduct.getImageUrl());
+            holder.binding.productCard.startAnimation(AnimationUtils.loadAnimation(holder.binding.productCard.getContext(), R.anim.anim_one));
+        } else {
+            // Null item passed when placeholders are enabled.
+            // Clear the view to prevent showing stale data.
+            holder.binding.setProduct(null);
+            Glide.with(holder.binding.imageView.getContext()).clear(holder.binding.imageView);
+            holder.binding.productCard.clearAnimation();
+        }
     }
 
     public class HomeRecyclerVH extends RecyclerView.ViewHolder {
@@ -77,16 +85,19 @@ public class HomeProductAdapter extends ListAdapter<Product, HomeProductAdapter.
             this.binding = binding;
 
             binding.getRoot().setOnClickListener(view -> {
-                int clickedPosition = getAdapterPosition();
+                int clickedPosition = getBindingAdapterPosition();
                 if (listener != null && clickedPosition != RecyclerView.NO_POSITION) {
-                    listener.onProductItemClick(getItem(clickedPosition));
+                    Product product = getItem(clickedPosition);
+                    if (product != null) {
+                        listener.onProductItemClick(product);
+                    }
                 }
             });
         }
 
-        public void setItemImage(int image) {
+        public void setItemImage(String imageUrl) {
             Glide.with(binding.imageView.getContext())
-                    .load(image)
+                    .load(imageUrl)
                     .apply(new RequestOptions().fitCenter())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .skipMemoryCache(false)

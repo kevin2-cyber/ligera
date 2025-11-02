@@ -1,5 +1,7 @@
 package com.ligera.app.model.converter;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.TypeConverter;
@@ -14,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * Room type converter for List<String> values
  * <p>
@@ -24,6 +24,7 @@ import timber.log.Timber;
  * </p>
  */
 public class StringListConverter {
+    private static final String TAG = StringListConverter.class.getSimpleName();
     
     // Use a static Gson instance for better performance
     private static final Gson gson = new GsonBuilder()
@@ -49,7 +50,7 @@ public class StringListConverter {
         try {
             return gson.fromJson(value, LIST_STRING_TYPE);
         } catch (JsonSyntaxException e) {
-            Timber.e(e, "Error parsing JSON string to List<String>: %s", value);
+            Log.e(TAG, "Error parsing JSON string to List<String>: " + value, e);
             // Return an empty list if there was an error parsing the JSON
             return new ArrayList<>();
         }
@@ -75,7 +76,7 @@ public class StringListConverter {
         try {
             return gson.toJson(list, LIST_STRING_TYPE);
         } catch (Exception e) {
-            Timber.e(e, "Error converting List<String> to JSON string");
+            Log.e(TAG, "Error converting List<String> to JSON string", e);
             // Return an empty JSON array if there was an error converting to JSON
             return "[]";
         }

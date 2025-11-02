@@ -3,8 +3,8 @@ package com.ligera.app.network;
 import androidx.lifecycle.LiveData;
 
 import com.ligera.app.network.model.ApiResponse;
-import com.ligera.app.network.model.CategoryResponse;
-import com.ligera.app.network.model.ProductResponse;
+import com.ligera.app.network.model.response.CategoryResponse;
+import com.ligera.app.network.model.response.ProductResponse;
 
 import java.util.List;
 

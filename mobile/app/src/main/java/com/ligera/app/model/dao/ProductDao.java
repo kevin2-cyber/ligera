@@ -12,6 +12,7 @@ import androidx.room.Update;
 
 import com.ligera.app.model.entity.Product;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -244,7 +245,7 @@ public interface ProductDao {
            "(:inStockOnly = 0 OR quantity > 0) " +
            "ORDER BY name ASC")
     LiveData<List<Product>> getFilteredProducts(long categoryId, 
-                                               BigDecimal minPrice, 
+                                               BigDecimal minPrice,
                                                BigDecimal maxPrice, 
                                                boolean inStockOnly);
     

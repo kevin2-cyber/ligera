@@ -7,11 +7,11 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
@@ -19,12 +19,9 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.ligera.app.network.interceptor.NetworkConnectionInterceptor;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import timber.log.Timber;
+import java.util.Set;
 
 /**
  * A lifecycle-aware network monitor that provides real-time updates on network state changes.
@@ -69,7 +66,7 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
      */
     public void startMonitoring() {
         if (isMonitoring.compareAndSet(false, true)) {
-            Timber.d("Starting network monitoring");
+            Log.d(TAG, "Starting network monitoring");
             
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 registerNetworkCallbackModern();
@@ -84,7 +81,7 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
      */
     public void stopMonitoring() {
         if (isMonitoring.compareAndSet(true, false)) {
-            Timber.d("Stopping network monitoring");
+            Log.d(TAG, "Stopping network monitoring");
             
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 unregisterNetworkCallbackModern();
@@ -106,19 +103,19 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
             networkCallback = new ConnectivityManager.NetworkCallback() {
                 @Override
                 public void onAvailable(@NonNull Network network) {
-                    Timber.d("Network available");
+                    Log.d(TAG, "Network available");
                     updateNetworkState();
                 }
                 
                 @Override
                 public void onLost(@NonNull Network network) {
-                    Timber.d("Network lost");
+                    Log.d(TAG, "Network lost");
                     updateNetworkState();
                 }
                 
                 @Override
                 public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities capabilities) {
-                    Timber.d("Network capabilities changed");
+                    Log.d(TAG, "Network capabilities changed");
                     updateNetworkState();
                 }
             };
@@ -126,7 +123,7 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
             try {
                 connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
             } catch (Exception e) {
-                Timber.e(e, "Error registering network callback");
+                Log.e(TAG, "Error registering network callback", e);
             }
         }
     }
@@ -140,7 +137,7 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
                 connectivityManager.unregisterNetworkCallback(networkCallback);
                 networkCallback = null;
             } catch (Exception e) {
-                Timber.e(e, "Error unregistering network callback");
+                Log.e(TAG, "Error unregistering network callback", e);
             }
         }
     }
@@ -165,7 +162,7 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
                 context.unregisterReceiver(broadcastReceiver);
                 broadcastReceiver = null;
             } catch (Exception e) {
-                Timber.e(e, "Error unregistering broadcast receiver");
+                Log.e(TAG, "Error unregistering broadcast receiver", e);
             }
         }
     }
@@ -200,7 +197,7 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
         
         // If the state has changed, notify callbacks
         if (!newState.equals(currentNetworkState)) {
-            Timber.d("Network state changed: %s -> %s", currentNetworkState, newState);
+            Log.d(TAG, "Network state changed: " + currentNetworkState + " -> " + newState);
             
             // Update current state
             currentNetworkState = newState;
@@ -263,7 +260,7 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
                 
                 return !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
             } catch (SecurityException e) {
-                Timber.e(e, "Security exception checking metered state");
+                Log.e(TAG, "Security exception checking metered state", e);
                 return isMeteredLegacy();
             }
         } else {
@@ -309,7 +306,7 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
                 
                 return capabilities.getSignalStrength();
             } catch (Exception e) {
-                Timber.e(e, "Error getting signal strength");
+                Log.e(TAG, "Error getting signal strength", e);
                 return -1;
             }
         }
@@ -337,7 +334,7 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                Timber.d("Connectivity change detected via broadcast");
+                Log.d(TAG, "Connectivity change detected via broadcast");
                 updateNetworkState();
             }
         }
@@ -447,4 +444,3 @@ public class NetworkMonitor implements DefaultLifecycleObserver {
         }
     }
 }
-

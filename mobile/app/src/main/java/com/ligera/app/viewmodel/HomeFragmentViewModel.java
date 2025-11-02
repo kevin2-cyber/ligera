@@ -6,26 +6,32 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.ligera.app.model.database.AppDatabase;
 import com.ligera.app.model.entity.Category;
 import com.ligera.app.model.entity.Product;
-import com.ligera.app.model.repository.ProductShopRepository;
+import com.ligera.app.network.RetrofitClient;
+import com.ligera.app.network.TokenManager;
+import com.ligera.app.network.service.ProductApiService;
+import com.ligera.app.repository.ProductRepository;
 
 import java.util.List;
 
 public class HomeFragmentViewModel extends AndroidViewModel {
-    // repository
-    private ProductShopRepository repository;
-    // livedata
-    private LiveData<List<Category>> allCategories;
+    private final ProductRepository repository;
+
+    private final LiveData<List<Category>> allCategories;
     private LiveData<List<Product>> productsOfSelectedCategory;
 
     public HomeFragmentViewModel(@NonNull Application application) {
         super(application);
-        repository = new ProductShopRepository(application);
+        AppDatabase database = AppDatabase.getInstance(application);
+        TokenManager tokenManager = TokenManager.getInstance(application);
+        ProductApiService apiService = RetrofitClient.getInstance(tokenManager).getClientV1().create(ProductApiService.class);
+        repository = new ProductRepository(database, apiService);
+        allCategories = repository.getCategories();
     }
 
     public LiveData<List<Category>> getAllCategories() {
-        allCategories = repository.getCategories();
         return allCategories;
     }
 

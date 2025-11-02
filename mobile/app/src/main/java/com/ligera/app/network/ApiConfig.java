@@ -1,5 +1,7 @@
 package com.ligera.app.network;
 
+import com.ligera.app.BuildConfig;
+
 /**
  * Configuration constants for API
  * Using BuildConfig for environment-specific settings
@@ -63,9 +65,30 @@ public class ApiConfig {
         public static final String ORDER_DETAIL = "orders/{id}";
         public static final String CREATE_ORDER = "orders";
     }
-    
-}
-    
-    // Common HTTP headers
-    
 
+    // Error codes
+    public static final class ErrorCodes {
+        public static final int BAD_REQUEST = 400;
+        public static final int UNAUTHORIZED = 401;
+        public static final int FORBIDDEN = 403;
+        public static final int NOT_FOUND = 404;
+        public static final int TIMEOUT = 408;
+        public static final int INTERNAL_SERVER_ERROR = 500;
+        public static final int BAD_GATEWAY = 502;
+        public static final int SERVICE_UNAVAILABLE = 503;
+        public static final int GATEWAY_TIMEOUT = 504;
+        public static final int NETWORK_ERROR = -1; // Custom code for network-related errors
+    }
+
+    // Error messages
+    public static final class ErrorMessages {
+        public static final String AUTHENTICATION_FAILED = "Authentication failed. Please check your credentials.";
+        public static final String TIMEOUT = "The connection has timed out. Please try again.";
+        public static final String SERVER_ERROR = "We're having some trouble on our end. Please try again later.";
+        public static final String UNKNOWN_ERROR = "An unknown error occurred.";
+        public static final String NO_NETWORK = "No network connection. Please check your settings.";
+        public static final String CONNECTION_TIMEOUT = "Could not connect to the server. Please check your internet connection.";
+        public static final String WEAK_CONNECTION = "Your connection is too weak to perform this action.";
+        public static final String NETWORK_ERROR = "A network error occurred. Please try again.";
+    }
+}

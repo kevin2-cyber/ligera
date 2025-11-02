@@ -120,7 +120,7 @@ public interface CategoryDao {
     /**
      * Get categories by path (hierarchical search)
      *
-     * @param path Category path (comma-separated category IDs)
+     * @param pathIds Category path (comma-separated category IDs)
      * @return LiveData of categories matching the path
      */
     @Query("SELECT * FROM categories WHERE id IN (:pathIds)")

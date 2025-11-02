@@ -18,7 +18,8 @@ public class Resource<T> {
     public enum Status {
         SUCCESS,
         ERROR,
-        LOADING
+        LOADING,
+        OFFLINE
     }
 
     @NonNull
@@ -31,7 +32,7 @@ public class Resource<T> {
     public final String message;
 
     @Nullable
-    private final Throwable error;
+    public final Throwable error;
 
     /**
      * Private constructor to enforce the use of factory methods
@@ -59,7 +60,7 @@ public class Resource<T> {
      * @param <T>  Type of the data
      * @return A new successful resource
      */
-    public static  <T> Resource<T> success(@Nullable T data) {
+    public static <T> Resource<T> success(@Nullable T data) {
         return new Resource<>(Status.SUCCESS, data, null, null);
     }
 
@@ -71,7 +72,7 @@ public class Resource<T> {
      * @param <T>  Type of the data
      * @return A new error resource
      */
-    public static <T> Resource<T> error(String msg, @Nullable T data) {
+    public static <T> Resource<T> error(@NonNull String msg, @Nullable T data) {
         return new Resource<>(Status.ERROR, data, msg, null);
     }
 
@@ -84,38 +85,83 @@ public class Resource<T> {
      * @param <T>   Type of the data
      * @return A new error resource
      */
-    public static <T> Resource<T> error(String msg, Throwable error, @Nullable T data) {
+    public static <T> Resource<T> error(@NonNull String msg, @Nullable Throwable error, @Nullable T data) {
         return new Resource<>(Status.ERROR, data, msg, error);
     }
 
+    /**
+     * Creates a loading resource with optional data
+     *
+     * @param data The data
+     * @param <T>  Type of the data
+     * @return A new loading resource
+     */
+    public static <T> Resource<T> loading(@Nullable T data) {
+        return new Resource<>(Status.LOADING, data, null, null);
+    }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+    /**
+     * Creates a loading resource
+     *
+     * @param <T>  Type of the data
+     * @return A new loading resource
+     */
+    public static <T> Resource<T> loading() {
+        return new Resource<>(Status.LOADING, null, null, null);
+    }
 
-            Resource<?> resource = (Resource<?>) o;
+    /**
+     * Creates an offline resource with optional data and a message.
+     *
+     * @param data Optional data
+     * @param message A message describing the offline state
+     * @param <T> Type of the data
+     * @return A new offline resource
+     */
+    public static <T> Resource<T> offline(@Nullable T data, @NonNull String message) {
+        return new Resource<>(Status.OFFLINE, data, message, null);
+    }
 
-            if (status != resource.status) return false;
-            if (!Objects.equals(data, resource.data)) return false;
-            return Objects.equals(message, resource.message);
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resource<?> resource = (Resource<?>) o;
+        return status == resource.status &&
+                Objects.equals(data, resource.data) &&
+                Objects.equals(message, resource.message) &&
+                Objects.equals(error, resource.error);
+    }
 
-        @Override
-        public int hashCode() {
-            int result = status.hashCode();
-            result = 31 * result + (data != null ? data.hashCode() : 0);
-            result = 31 * result + (message != null ? message.hashCode() : 0);
-            return result;
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(status, data, message, error);
+    }
 
-        @NonNull
-        @Override
-        public String toString() {
-            return "Resource{" +
-                    "status=" + status +
-                    ", data=" + data +
-                    ", message='" + message + '\'' +
-                    '}';
-        }
+    @NonNull
+    @Override
+    public String toString() {
+        return "Resource{" +
+                "status=" + status +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                ", error=" + error +
+                '}';
+    }
+
+    public boolean isSuccess() {
+        return status == Status.SUCCESS;
+    }
+
+    public boolean isLoading() {
+        return status == Status.LOADING;
+    }
+
+    public boolean isError() {
+        return status == Status.ERROR;
+    }
+
+    public boolean isOffline() {
+        return status == Status.OFFLINE;
+    }
 }

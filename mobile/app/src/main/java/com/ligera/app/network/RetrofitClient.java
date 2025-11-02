@@ -1,5 +1,6 @@
 package com.ligera.app.network;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.collection.LruCache;
 
@@ -15,14 +16,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import timber.log.Timber;
 
 /**
  * Singleton class for configuring and providing Retrofit client instances
  */
 public class RetrofitClient {
     private static final String TAG = "RetrofitClient";
-    private static final int MAX_RETRY_COUNT = 3;
     private static final int MEMORY_CACHE_SIZE = 10 * 1024 * 1024; // 10MB
     
     // Singleton instance
@@ -45,7 +44,7 @@ public class RetrofitClient {
         this.networkConnectionInterceptor = networkConnectionInterceptor;
         
         // Initialize the memory cache for API responses
-        responseCache = new LruCache<String, Object>(MEMORY_CACHE_SIZE);
+        responseCache = new LruCache<>(MEMORY_CACHE_SIZE);
         
         // Create logging interceptor based on configuration
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -67,25 +66,10 @@ public class RetrofitClient {
                 .readTimeout(ApiConfig.DEFAULT_READ_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(ApiConfig.DEFAULT_WRITE_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(networkConnectionInterceptor)
-                .add                .retryOnConnectionFailure(true);
-    }
-    
-    /**
-     * Determines if an exception is retryable
-     * 
-     * @param e The exception to check
-     * @return true if the request should be retried, false otherwise
-     */
-    private boolean isRetryable(IOException e) {
-        // Connection timeouts, socket timeouts, and certain other network errors are retryable
-        String message = e.getMessage();
-        if (message == null) return false;
-        
-        return message.contains("timeout") 
-                || message.contains("connection")
-                || message.contains("refused")
-                || message.contains("reset")
-                || message.contains("unreachable");
+                .addInterceptor(authInterceptor)
+                .addInterceptor(errorHandlingInterceptor)
+                .addInterceptor(loggingInterceptor)
+                .retryOnConnectionFailure(true);
     }
     
     /**
@@ -97,7 +81,7 @@ public class RetrofitClient {
     public void addToCache(String key, Object value) {
         if (key != null && value != null) {
             responseCache.put(key, value);
-            Timber.d("Added item to cache with key: %s", key);
+            Log.d(TAG, "Added item to cache with key: " + key);
         }
     }
     
@@ -110,9 +94,9 @@ public class RetrofitClient {
     public Object getFromCache(String key) {
         Object value = responseCache.get(key);
         if (value != null) {
-            Timber.d("Cache hit for key: %s", key);
+            Log.d(TAG, "Cache hit for key: " + key);
         } else {
-            Timber.d("Cache miss for key: %s", key);
+            Log.d(TAG, "Cache miss for key: " + key);
         }
         return value;
     }
@@ -124,7 +108,7 @@ public class RetrofitClient {
      */
     public void removeFromCache(String key) {
         responseCache.remove(key);
-        Timber.d("Removed item from cache with key: %s", key);
+        Log.d(TAG, "Removed item from cache with key: " + key);
     }
     
     /**
@@ -132,7 +116,7 @@ public class RetrofitClient {
      */
     public void clearCache() {
         responseCache.evictAll();
-        Timber.d("Cache cleared");
+        Log.d(TAG, "Cache cleared");
     }
     
     /**
@@ -178,6 +162,7 @@ public class RetrofitClient {
                     .build();
         }
         return retrofitV1;
+    }
     
     /**
      * Get Retrofit client for API v2
@@ -192,14 +177,14 @@ public class RetrofitClient {
             // Build HTTP client with v2 version interceptor
             OkHttpClient httpClient = httpClientBuilder
                     .addInterceptor(versionInterceptor)
-                    .connectTimeout(ApiConfig.V2_CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                    .readTimeout(ApiConfig.V2_READ_TIMEOUT, TimeUnit.SECONDS)
-                    .writeTimeout(ApiConfig.V2_WRITE_TIMEOUT, TimeUnit.SECONDS)
+                    .connectTimeout(ApiConfig.DEFAULT_CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                    .readTimeout(ApiConfig.DEFAULT_READ_TIMEOUT, TimeUnit.SECONDS)
+                    .writeTimeout(ApiConfig.DEFAULT_WRITE_TIMEOUT, TimeUnit.SECONDS)
                     .build();
             
             // Build Retrofit instance
             retrofitV2 = new Retrofit.Builder()
-                    .baseUrl(ApiConfig.V2_BASE_URL)
+                    .baseUrl(ApiConfig.BASE_URL)
                     .client(httpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(new LiveDataCallAdapterFactory())
@@ -214,6 +199,8 @@ public class RetrofitClient {
      */
     public void resetClients() {
         retrofitV1 = null;
+        retrofitV2 = null;
+    }
     
     /**
      * Get a client with custom timeout settings for specific API needs
@@ -297,4 +284,3 @@ public class RetrofitClient {
                 ApiConfig.DEFAULT_WRITE_TIMEOUT);
     }
 }
-

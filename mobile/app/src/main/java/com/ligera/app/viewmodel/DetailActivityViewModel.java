@@ -8,16 +8,23 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.ligera.app.model.repository.ProductShopRepository;
+import com.ligera.app.model.database.AppDatabase;
+import com.ligera.app.network.RetrofitClient;
+import com.ligera.app.network.TokenManager;
+import com.ligera.app.network.service.ProductApiService;
+import com.ligera.app.repository.ProductRepository;
 
 
 public class DetailActivityViewModel extends AndroidViewModel {
-    MutableLiveData<Integer> counter = new MutableLiveData<>();
-    private final ProductShopRepository repository;
+    private final MutableLiveData<Integer> counter = new MutableLiveData<>();
+    private final ProductRepository repository;
 
     public DetailActivityViewModel(@NonNull Application application) {
         super(application);
-        repository = new ProductShopRepository(application);
+        AppDatabase database = AppDatabase.getInstance(application);
+        TokenManager tokenManager = TokenManager.getInstance(application);
+        ProductApiService apiService = RetrofitClient.getInstance(tokenManager).getClientV1().create(ProductApiService.class);
+        repository = new ProductRepository(database, apiService);
     }
 
     public void increaseCounter(View view) {
@@ -33,7 +40,9 @@ public class DetailActivityViewModel extends AndroidViewModel {
         int currentValue = counter.getValue() != null ? counter.getValue() : 0;
 
         // decrease value by 1
-        counter.setValue(currentValue - 1);
+        if (currentValue > 0) {
+            counter.setValue(currentValue - 1);
+        }
     }
 
     public void onSubmitOrder(View view) {}

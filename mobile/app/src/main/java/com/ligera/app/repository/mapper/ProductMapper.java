@@ -1,8 +1,11 @@
 package com.ligera.app.repository.mapper;
 
-import com.ligera.app.db.entity.ProductEntity;
+import android.util.Log;
+import com.ligera.app.model.entity.Product;
 import com.ligera.app.network.model.response.ProductResponse;
 
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,51 +15,66 @@ import java.util.stream.Collectors;
  */
 public class ProductMapper {
 
+    private static final String TAG = "ProductMapper";
+
     /**
-     * Map ProductResponse to ProductEntity
+     * Map ProductResponse to Product
      *
      * @param response ProductResponse from network
-     * @return ProductEntity for database
+     * @return Product for database
      */
-    public static ProductEntity mapResponseToEntity(ProductResponse response) {
+    public static Product mapResponseToEntity(ProductResponse response) {
         if (response == null) {
             return null;
         }
         
-        ProductEntity entity = new ProductEntity();
+        Product entity = new Product();
         entity.setId(response.getId());
         entity.setName(response.getName());
         entity.setDescription(response.getDescription());
         entity.setPrice(response.getPrice());
-        entity.setImage(response.getImage());
-        entity.setImages(response.getImages());
+        entity.setImageUrl(response.getImage());
+        entity.setImageUrls(response.getImages());
         entity.setCategoryId(response.getCategoryId());
-        entity.setCategoryName(response.getCategoryName());
         entity.setRating(response.getRating());
-        entity.setReviewCount(response.getReviewCount());
-        entity.setInStock(response.isInStock());
         entity.setQuantity(response.getQuantity());
         entity.setBrand(response.getBrand());
         entity.setSize(response.getSize());
-        entity.setColor(response.getColor());
         entity.setFeatured(response.isFeatured());
         entity.setPopular(response.isPopular());
-        entity.setDiscountPercentage(response.getDiscountPercentage());
         entity.setTags(response.getTags());
-        entity.setCreatedAt(response.getCreatedAt());
-        entity.setUpdatedAt(response.getUpdatedAt());
+
+        // Handle date conversion from String to long
+        if (response.getCreatedAt() != null && !response.getCreatedAt().isEmpty()) {
+            try {
+                entity.setCreatedAt(Instant.parse(response.getCreatedAt()).toEpochMilli());
+            } catch (DateTimeParseException e) {
+                Log.e(TAG, "Could not parse createdAt date: " + response.getCreatedAt(), e);
+                entity.setCreatedAt(System.currentTimeMillis()); // Fallback
+            }
+        }
+
+        if (response.getUpdatedAt() != null && !response.getUpdatedAt().isEmpty()) {
+            try {
+                entity.setLastUpdated(Instant.parse(response.getUpdatedAt()).toEpochMilli());
+            } catch (DateTimeParseException e) {
+                Log.e(TAG, "Could not parse updatedAt date: " + response.getUpdatedAt(), e);
+                entity.setLastUpdated(System.currentTimeMillis()); // Fallback
+            }
+        }
+        
         entity.setLastRefreshed(System.currentTimeMillis());
         
         return entity;
     }
     
     /**
-     * Map list of ProductResponse to list of ProductEntity
+     * Map list of ProductResponse to list of Product
      *
      * @param responses List of ProductResponse from network
-     * @return List of ProductEntity for database
+     * @return List of Product for database
      */
-    public static List<ProductEntity> mapResponseToEntity(List<ProductResponse> responses) {
+    public static List<Product> mapResponseToEntity(List<ProductResponse> responses) {
         if (responses == null) {
             return new ArrayList<>();
         }
@@ -66,4 +84,3 @@ public class ProductMapper {
                 .collect(Collectors.toList());
     }
 }
-
