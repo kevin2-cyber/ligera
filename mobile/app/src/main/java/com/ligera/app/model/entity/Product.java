@@ -138,6 +138,7 @@ public class Product extends BaseObservable {
         notifyPropertyChanged(BR.id);
     }
 
+    @NonNull
     @Bindable
     public String getName() {
         return name;

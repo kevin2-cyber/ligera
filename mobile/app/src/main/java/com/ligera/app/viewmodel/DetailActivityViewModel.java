@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.ligera.app.model.database.AppDatabase;
 import com.ligera.app.network.RetrofitClient;
 import com.ligera.app.network.TokenManager;
+import com.ligera.app.network.interceptor.NetworkConnectionInterceptor;
 import com.ligera.app.network.service.ProductApiService;
 import com.ligera.app.repository.ProductRepository;
 
@@ -23,7 +24,7 @@ public class DetailActivityViewModel extends AndroidViewModel {
         super(application);
         AppDatabase database = AppDatabase.getInstance(application);
         TokenManager tokenManager = TokenManager.getInstance(application);
-        ProductApiService apiService = RetrofitClient.getInstance(tokenManager).getClientV1().create(ProductApiService.class);
+        ProductApiService apiService = RetrofitClient.getInstance(tokenManager, new NetworkConnectionInterceptor(application)).getClientV1().create(ProductApiService.class);
         repository = new ProductRepository(database, apiService);
     }
 

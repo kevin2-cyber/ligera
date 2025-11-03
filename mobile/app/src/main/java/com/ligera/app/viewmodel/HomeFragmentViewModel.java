@@ -5,38 +5,49 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
+import androidx.lifecycle.ViewModelKt;
+import androidx.paging.PagingData;
+import androidx.paging.rxjava3.PagingRx;
 
 import com.ligera.app.model.database.AppDatabase;
 import com.ligera.app.model.entity.Category;
 import com.ligera.app.model.entity.Product;
 import com.ligera.app.network.RetrofitClient;
 import com.ligera.app.network.TokenManager;
+import com.ligera.app.network.interceptor.NetworkConnectionInterceptor;
 import com.ligera.app.network.service.ProductApiService;
 import com.ligera.app.repository.ProductRepository;
+import com.ligera.app.util.Resource;
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Flowable;
+import kotlinx.coroutines.CoroutineScope;
 
 public class HomeFragmentViewModel extends AndroidViewModel {
     private final ProductRepository repository;
 
-    private final LiveData<List<Category>> allCategories;
-    private LiveData<List<Product>> productsOfSelectedCategory;
+    private final LiveData<Resource<List<Category>>> allCategories;
+    private LiveData<PagingData<Product>> productsOfSelectedCategory;
 
     public HomeFragmentViewModel(@NonNull Application application) {
         super(application);
         AppDatabase database = AppDatabase.getInstance(application);
         TokenManager tokenManager = TokenManager.getInstance(application);
-        ProductApiService apiService = RetrofitClient.getInstance(tokenManager).getClientV1().create(ProductApiService.class);
+        ProductApiService apiService = RetrofitClient.getInstance(tokenManager, new NetworkConnectionInterceptor(application)).getClientV1().create(ProductApiService.class);
         repository = new ProductRepository(database, apiService);
         allCategories = repository.getCategories();
     }
 
-    public LiveData<List<Category>> getAllCategories() {
+    public LiveData<Resource<List<Category>>> getAllCategories() {
         return allCategories;
     }
 
-    public LiveData<List<Product>> getProductsOfSelectedCategory(int categoryId) {
-        productsOfSelectedCategory = repository.getProducts(categoryId);
+    public LiveData<PagingData<Product>> getProductsOfSelectedCategory(long categoryId) {
+        CoroutineScope viewModelScope = ViewModelKt.getViewModelScope(this);
+        Flowable<PagingData<Product>> productsFlowable = repository.getProductsByCategory(categoryId);
+        productsOfSelectedCategory = LiveDataReactiveStreams.fromPublisher(PagingRx.cachedIn(productsFlowable, viewModelScope));
         return productsOfSelectedCategory;
     }
 

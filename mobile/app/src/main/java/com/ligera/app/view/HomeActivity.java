@@ -16,7 +16,6 @@ import android.view.Window;
 
 import com.google.android.material.transition.MaterialFadeThrough;
 import com.google.android.material.transition.MaterialContainerTransform;
-import com.google.android.material.transition.MaterialElevationScale;
 
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

@@ -7,23 +7,30 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.paging.PagedList;
+import androidx.lifecycle.ViewModelKt;
+import androidx.paging.PagingData;
+import androidx.paging.rxjava3.PagingRx;
 
 import com.ligera.app.model.database.AppDatabase;
 import com.ligera.app.model.entity.Category;
 import com.ligera.app.model.entity.Product;
 import com.ligera.app.network.RetrofitClient;
 import com.ligera.app.network.TokenManager;
+import com.ligera.app.network.interceptor.NetworkConnectionInterceptor;
 import com.ligera.app.network.model.request.ProductFilterRequest;
 import com.ligera.app.network.model.response.ProductListResponse;
 import com.ligera.app.network.service.ProductApiService;
 import com.ligera.app.repository.ProductRepository;
-import com.ligera.app.repository.util.Resource;
+import com.ligera.app.util.Resource;
 import com.ligera.app.viewmodel.state.ProductState;
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Flowable;
+import kotlinx.coroutines.CoroutineScope;
 
 /**
  * ViewModel for product-related operations
@@ -41,12 +48,12 @@ public class ProductViewModel extends AndroidViewModel {
     private final MutableLiveData<Long> selectedCategoryId = new MutableLiveData<>();
 
     // LiveData sources for observing repository results
-    private LiveData<Resource<PagedList<Product>>> productsSource;
+    private LiveData<PagingData<Product>> productsSource;
     private LiveData<Resource<Product>> productDetailsSource;
     private LiveData<Resource<List<Product>>> featuredProductsSource;
     private LiveData<Resource<List<Product>>> popularProductsSource;
     private LiveData<Resource<List<Category>>> categoriesSource;
-    private LiveData<Resource<PagedList<Product>>> searchResultsSource;
+    private LiveData<PagingData<Product>> searchResultsSource;
     private LiveData<Resource<ProductListResponse>> filterResultsSource;
 
     public ProductViewModel(@NonNull Application application) {
@@ -55,7 +62,7 @@ public class ProductViewModel extends AndroidViewModel {
         // Initialize repository
         AppDatabase database = AppDatabase.getInstance(application);
         TokenManager tokenManager = TokenManager.getInstance(application);
-        ProductApiService apiService = RetrofitClient.getInstance(tokenManager).getClientV1().create(ProductApiService.class);
+        ProductApiService apiService = RetrofitClient.getInstance(tokenManager, new NetworkConnectionInterceptor(application)).getClientV1().create(ProductApiService.class);
         repository = new ProductRepository(database, apiService);
 
         // Set initial state
@@ -119,29 +126,15 @@ public class ProductViewModel extends AndroidViewModel {
         }
 
         // Set loading state
-        productState.setValue(ProductState.loading());
+        productState.setValue(new ProductState.Builder().loading(true).build());
 
         // Get products from repository
-        productsSource = repository.getProducts();
+        CoroutineScope viewModelScope = ViewModelKt.getViewModelScope(this);
+        Flowable<PagingData<Product>> productsFlowable = repository.getProducts();
+        productsSource = LiveDataReactiveStreams.fromPublisher(PagingRx.cachedIn(productsFlowable, viewModelScope));
 
         // Observe products
-        productState.addSource(productsSource, resource -> {
-            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
-            switch (resource.status) {
-                case LOADING:
-                    productState.setValue(currentState.toBuilder().loading(true).build());
-                    break;
-                case SUCCESS:
-                    productState.setValue(currentState.toBuilder().loading(false).products(resource.data).build());
-                    break;
-                case ERROR:
-                    productState.setValue(currentState.toBuilder().loading(false).error(resource.message).build());
-                    break;
-                case OFFLINE:
-                    productState.setValue(currentState.toBuilder().loading(false).offline(true).build());
-                    break;
-            }
-        });
+        productState.addSource(productsSource, pagingData -> productState.setValue(new ProductState.Builder().loading(false).products(pagingData).build()));
     }
 
     /**
@@ -160,13 +153,13 @@ public class ProductViewModel extends AndroidViewModel {
 
         // Observe featured products
         productState.addSource(featuredProductsSource, resource -> {
-            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
+            ProductState.Builder newState = new ProductState.Builder();
             switch (resource.status) {
                 case LOADING:
                     // Don't update state to loading to avoid UI flicker
                     break;
                 case SUCCESS:
-                    productState.setValue(currentState.toBuilder().featuredProducts(resource.data).build());
+                    newState.featuredProducts(resource.data);
                     break;
                 case ERROR:
                     Log.e(TAG, "Error loading featured products: " + resource.message);
@@ -176,6 +169,7 @@ public class ProductViewModel extends AndroidViewModel {
                     // Don't update state to offline to avoid disrupting the UI
                     break;
             }
+            productState.setValue(newState.build());
         });
     }
 
@@ -195,13 +189,13 @@ public class ProductViewModel extends AndroidViewModel {
 
         // Observe popular products
         productState.addSource(popularProductsSource, resource -> {
-            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
+            ProductState.Builder newState = new ProductState.Builder();
             switch (resource.status) {
                 case LOADING:
                     // Don't update state to loading to avoid UI flicker
                     break;
                 case SUCCESS:
-                    productState.setValue(currentState.toBuilder().popularProducts(resource.data).build());
+                    newState.popularProducts(resource.data);
                     break;
                 case ERROR:
                     Log.e(TAG, "Error loading popular products: " + resource.message);
@@ -211,6 +205,7 @@ public class ProductViewModel extends AndroidViewModel {
                     // Don't update state to offline to avoid disrupting the UI
                     break;
             }
+            productState.setValue(newState.build());
         });
     }
 
@@ -226,32 +221,33 @@ public class ProductViewModel extends AndroidViewModel {
         }
 
         // Set loading state
-        productState.setValue(ProductState.loading());
+        productState.setValue(new ProductState.Builder().loading(true).build());
 
         // Get product details from repository
         productDetailsSource = repository.getProductById(productId);
 
         // Observe product details
         productState.addSource(productDetailsSource, resource -> {
-            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
+            ProductState.Builder newState = new ProductState.Builder();
             switch (resource.status) {
                 case LOADING:
-                    productState.setValue(currentState.toBuilder().loading(true).build());
+                    newState.loading(true);
                     break;
                 case SUCCESS:
                     if (resource.data != null) {
-                        productState.setValue(currentState.toBuilder().loading(false).productDetails(resource.data).build());
+                        newState.loading(false).productDetails(resource.data);
                     } else {
-                        productState.setValue(currentState.toBuilder().loading(false).error("Product not found").build());
+                        newState.loading(false).error("Product not found");
                     }
                     break;
                 case ERROR:
-                    productState.setValue(currentState.toBuilder().loading(false).error(resource.message).build());
+                    newState.loading(false).error(resource.message);
                     break;
                 case OFFLINE:
-                    productState.setValue(currentState.toBuilder().loading(false).offline(true).build());
+                    newState.loading(false).offline(true);
                     break;
             }
+            productState.setValue(newState.build());
         });
     }
 
@@ -270,29 +266,15 @@ public class ProductViewModel extends AndroidViewModel {
         }
 
         // Set loading state
-        productState.setValue(ProductState.loading());
+        productState.setValue(new ProductState.Builder().loading(true).build());
 
         // Get search results from repository
-        searchResultsSource = repository.searchProducts(query);
+        CoroutineScope viewModelScope = ViewModelKt.getViewModelScope(this);
+        Flowable<PagingData<Product>> productsFlowable = repository.searchProducts(query);
+        searchResultsSource = LiveDataReactiveStreams.fromPublisher(PagingRx.cachedIn(productsFlowable, viewModelScope));
 
         // Observe search results
-        productState.addSource(searchResultsSource, resource -> {
-            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
-            switch (resource.status) {
-                case LOADING:
-                    productState.setValue(currentState.toBuilder().loading(true).build());
-                    break;
-                case SUCCESS:
-                    productState.setValue(currentState.toBuilder().loading(false).products(resource.data).searchQuery(query).build());
-                    break;
-                case ERROR:
-                    productState.setValue(currentState.toBuilder().loading(false).error(resource.message).build());
-                    break;
-                case OFFLINE:
-                    productState.setValue(currentState.toBuilder().loading(false).offline(true).build());
-                    break;
-            }
-        });
+        productState.addSource(searchResultsSource, pagingData -> productState.setValue(new ProductState.Builder().loading(false).products(pagingData).searchQuery(query).build()));
     }
 
     /**
@@ -328,32 +310,33 @@ public class ProductViewModel extends AndroidViewModel {
         }
 
         // Set loading state
-        productState.setValue(ProductState.loading());
+        productState.setValue(new ProductState.Builder().loading(true).build());
 
         // Get filter results from repository
         filterResultsSource = repository.filterProducts(request, page, size);
 
         // Observe filter results
         productState.addSource(filterResultsSource, resource -> {
-            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
+            ProductState.Builder newState = new ProductState.Builder();
             switch (resource.status) {
                 case LOADING:
-                    productState.setValue(currentState.toBuilder().loading(true).build());
+                    newState.loading(true);
                     break;
                 case SUCCESS:
                     if (resource.data != null) {
-                        productState.setValue(currentState.toBuilder().loading(false).filterResults(resource.data).build());
+                        newState.loading(false).filterResults(resource.data);
                     } else {
-                        productState.setValue(currentState.toBuilder().loading(false).filterResults(null).build());
+                        newState.loading(false).filterResults(null);
                     }
                     break;
                 case ERROR:
-                    productState.setValue(currentState.toBuilder().loading(false).error(resource.message).build());
+                    newState.loading(false).error(resource.message);
                     break;
                 case OFFLINE:
-                    productState.setValue(currentState.toBuilder().loading(false).offline(true).build());
+                    newState.loading(false).offline(true);
                     break;
             }
+            productState.setValue(newState.build());
         });
     }
 
@@ -387,13 +370,13 @@ public class ProductViewModel extends AndroidViewModel {
 
         // Observe categories
         productState.addSource(categoriesSource, resource -> {
-            ProductState currentState = productState.getValue() != null ? productState.getValue() : ProductState.loading();
+            ProductState.Builder newState = new ProductState.Builder();
             switch (resource.status) {
                 case LOADING:
                     // Don't update state to loading to avoid UI flicker
                     break;
                 case SUCCESS:
-                    productState.setValue(currentState.toBuilder().categories(resource.data).build());
+                    newState.categories(resource.data);
                     break;
                 case ERROR:
                     Log.e(TAG, "Error loading categories: " + resource.message);
@@ -403,6 +386,7 @@ public class ProductViewModel extends AndroidViewModel {
                     // Don't update state to offline to avoid disrupting the UI
                     break;
             }
+            productState.setValue(newState.build());
         });
     }
 
@@ -440,7 +424,7 @@ public class ProductViewModel extends AndroidViewModel {
         }
 
         // Set refreshing state
-        productState.setValue(currentState.toBuilder().refreshing(true).build());
+        productState.setValue(new ProductState.Builder().refreshing(true).build());
 
         // Refresh data based on current state
         if (currentState.getProductDetails() != null) {
@@ -472,7 +456,7 @@ public class ProductViewModel extends AndroidViewModel {
     public void retry() {
         // Get current state
         ProductState currentState = productState.getValue();
-        if (currentState == null || !currentState.isError()) {
+        if (currentState == null || currentState.getError() == null) {
             // If no current state or not in error state, do nothing
             return;
         }

@@ -7,8 +7,8 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,7 +18,7 @@ import com.ligera.app.R;
 import com.ligera.app.databinding.ProductItemBinding;
 import com.ligera.app.model.entity.Product;
 
-public class HomeProductAdapter extends ListAdapter<Product, HomeProductAdapter.HomeRecyclerVH> {
+public class HomeProductAdapter extends PagingDataAdapter<Product, HomeProductAdapter.HomeRecyclerVH> {
     private OnProductItemClickListener listener;
     private final Context context;
 
@@ -33,11 +33,6 @@ public class HomeProductAdapter extends ListAdapter<Product, HomeProductAdapter.
                 @Override
                 public boolean areContentsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
                     return oldItem.equals(newItem);
-                }
-
-                @Override
-                public Object getChangePayload(@NonNull Product oldItem, @NonNull Product newItem) {
-                    return super.getChangePayload(oldItem, newItem);
                 }
             };
 

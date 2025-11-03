@@ -90,5 +90,7 @@ public class ApiConfig {
         public static final String CONNECTION_TIMEOUT = "Could not connect to the server. Please check your internet connection.";
         public static final String WEAK_CONNECTION = "Your connection is too weak to perform this action.";
         public static final String NETWORK_ERROR = "A network error occurred. Please try again.";
+        public static final String MOBILE_DATA_ERROR = "An error occurred while using mobile data. Please try again.";
+        public static final String WIFI_ERROR = "An error occurred on your Wi-Fi network. Please try again.";
     }
 }

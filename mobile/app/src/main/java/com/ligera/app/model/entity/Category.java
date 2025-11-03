@@ -78,7 +78,6 @@ public class Category extends BaseObservable implements NetworkBoundResource.Has
     @ColumnInfo(name = "slug_url")
     private String slugUrl;
 
-    @Ignore
     public Category() {
         this.createdAt = System.currentTimeMillis();
         this.lastUpdated = System.currentTimeMillis();
@@ -321,7 +320,7 @@ public class Category extends BaseObservable implements NetworkBoundResource.Has
      * @return true if this category has associated products.
      */
     @Bindable
-    public boolean hasChildren() {
+    public boolean isChildren() {
         return productCount > 0;
     }
 }
