@@ -108,17 +108,17 @@ public class ProductRepository {
      * @return Flowable of PagingData of Product
      */
     public Flowable<PagingData<Product>> getProducts() {
-        return new Pager<>(
+        return PagingRx.getFlowable(new Pager<>(
                 new PagingConfig(PAGE_SIZE, PAGE_SIZE * 2, true),
                 productDao::getAllProducts
-        ).getFlowable();
+        ));
     }
 
     public Flowable<PagingData<Product>> getProductsByCategory(long categoryId) {
-        return new Pager<>(
+        return PagingRx.getFlowable(new Pager<>(
                 new PagingConfig(PAGE_SIZE, PAGE_SIZE * 2, true),
                 () -> productDao.getProductsByCategory(categoryId)
-        ).getFlowable();
+        ));
     }
 
     /**
@@ -220,10 +220,10 @@ public class ProductRepository {
      * @return Flowable of PagingData of Product
      */
     public Flowable<PagingData<Product>> searchProducts(final String query) {
-        return new Pager<>(
+        return PagingRx.getFlowable(new Pager<>(
                 new PagingConfig(PAGE_SIZE, PAGE_SIZE * 2, true),
                 () -> productDao.searchProducts(query)
-        ).getFlowable();
+        ));
     }
 
     /**
