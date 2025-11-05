@@ -34,6 +34,10 @@ public class DetailActivityViewModel extends AndroidViewModel {
         return repository.getProductById(productId);
     }
 
+    public void setFavorite(long id, boolean isFavourite) {
+        repository.setFavorite(id, isFavourite);
+    }
+
     public void increaseCounter(View view) {
         // retrieve the current value from LiveData
         int currentValue = counter.getValue() != null ? counter.getValue() : 0;

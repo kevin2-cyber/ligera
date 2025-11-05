@@ -97,6 +97,23 @@ public interface ProductDao {
     LiveData<List<Product>> getPopularProducts(int limit);
 
     /**
+     * Get all favorite products.
+     *
+     * @return A LiveData list of all products marked as favorite.
+     */
+    @Query("SELECT * FROM products WHERE is_favorite = 1")
+    LiveData<List<Product>> getFavoriteProducts();
+
+    /**
+     * Updates the favorite status of a product.
+     *
+     * @param productId The ID of the product to update.
+     * @param isFavorite The new favorite status.
+     */
+    @Query("UPDATE products SET is_favorite = :isFavorite WHERE id = :productId")
+    void updateFavoriteStatus(long productId, boolean isFavorite);
+
+    /**
      * Search products by name or description with paging support
      *
      * @param query search query

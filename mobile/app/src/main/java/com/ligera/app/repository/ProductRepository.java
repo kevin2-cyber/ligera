@@ -122,6 +122,25 @@ public class ProductRepository {
     }
 
     /**
+     * Get all favorite products.
+     *
+     * @return A LiveData list of all products marked as favorite.
+     */
+    public LiveData<List<Product>> getFavoriteProducts() {
+        return productDao.getFavoriteProducts();
+    }
+
+    /**
+     * Updates the favorite status of a product.
+     *
+     * @param productId The ID of the product to update.
+     * @param isFavorite The new favorite status.
+     */
+    public void setFavorite(long productId, boolean isFavorite) {
+        appExecutors.diskIO().execute(() -> productDao.updateFavoriteStatus(productId, isFavorite));
+    }
+
+    /**
      * Fetch products from network and save to database
      *
      * @param page Page number

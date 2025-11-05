@@ -4,7 +4,6 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -37,6 +36,7 @@ public class DetailActivity extends AppCompatActivity {
     public static final String PRODUCT_ID = "product_id";
 
     DetailActivityViewModel viewModel;
+    private Product currentProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,6 @@ public class DetailActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         viewModel = new ViewModelProvider(this).get(DetailActivityViewModel.class);
-        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail), (v, insets) -> {
@@ -65,7 +64,8 @@ public class DetailActivity extends AppCompatActivity {
         if (productId != -1) {
             viewModel.getProductById(productId).observe(this, resource -> {
                 if (resource != null && resource.data != null) {
-                    updateProductDetails(resource.data);
+                    currentProduct = resource.data;
+                    updateProductDetails(currentProduct);
                 } else if (resource != null && resource.status == Resource.Status.ERROR) {
                     Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show();
                 }
@@ -107,10 +107,9 @@ public class DetailActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.fav_icon) {
-            MenuItem menuItem = binding.toolbar.getMenu().findItem(R.id.fav_icon);
-            CheckBox checkBox = (CheckBox) menuItem.getActionView();
-            assert checkBox != null;
-            checkBox.setBackgroundResource(R.drawable.sl_favourite);
+            if (currentProduct != null) {
+                viewModel.setFavorite(currentProduct.getId(), !currentProduct.isFavorite());
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -118,6 +117,12 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail_app_bar_menu,menu);
+        MenuItem menuItem = menu.findItem(R.id.fav_icon);
+        CheckBox checkBox = (CheckBox) menuItem.getActionView();
+        if (currentProduct != null) {
+            assert checkBox != null;
+            checkBox.setChecked(currentProduct.isFavorite());
+        }
         return super.onCreateOptionsMenu(menu);
     }
 }

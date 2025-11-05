@@ -1,5 +1,7 @@
 package com.ligera.app.view;
 
+import static androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Window;
@@ -13,12 +15,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.transition.MaterialFadeThrough;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityHomeBinding;
 import com.ligera.app.view.fragments.CartFragment;
@@ -65,10 +65,9 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
     private void switchFragment(Fragment fragment) {
-        // This allows the fragments to use their own enter/exit transitions
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.flFragment, fragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .setTransition(TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
 
