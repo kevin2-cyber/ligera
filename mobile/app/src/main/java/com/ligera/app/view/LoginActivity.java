@@ -3,9 +3,6 @@ package com.ligera.app.view;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
@@ -16,8 +13,6 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.transition.Explode;
 import android.util.Patterns;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -91,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         // validate date from input
         public void validateData(View view) {
             // get data
-            email = binding.etEmail.getText().toString().trim();
+            email = Objects.requireNonNull(binding.etEmail.getText()).toString().trim();
             password = Objects.requireNonNull(binding.etPassword.getText()).toString().trim();
 
             // validate user
