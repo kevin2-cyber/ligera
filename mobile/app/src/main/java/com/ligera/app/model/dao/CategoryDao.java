@@ -120,7 +120,7 @@ public interface CategoryDao {
     /**
      * Get categories by path (hierarchical search)
      *
-     * @param path Category path (comma-separated category IDs)
+     * @param pathIds Category path (comma-separated category IDs)
      * @return LiveData of categories matching the path
      */
     @Query("SELECT * FROM categories WHERE id IN (:pathIds)")
@@ -145,13 +145,11 @@ public interface CategoryDao {
     LiveData<List<Category>> searchCategories(String query);
     
     /**
-     * Get full category tree (recursive query)
-     * This method recursively gets a category and all its descendants
+     * Gets root categories or the direct children of a given category.
      *
-     * @param rootId Root category ID (or null for all roots)
-     * @return LiveData of categories in the tree
+     * @param rootId The parent category ID. If null, returns root categories.
+     * @return LiveData of categories.
      */
-    @Transaction
     default LiveData<List<Category>> getCategoryTree(Long rootId) {
         if (rootId == null) {
             return getRootCategories();

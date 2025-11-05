@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
+import com.ligera.app.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -40,6 +40,7 @@ import java.util.Objects;
         @Index("brand"),
         @Index("featured"),
         @Index("popular"),
+        @Index("is_favorite"),
         @Index("discount_percent"),
         @Index("rating")
     }
@@ -76,9 +77,12 @@ public class Product extends BaseObservable {
     
     @ColumnInfo(name = "featured")
     private boolean featured = false;
-    
+
     @ColumnInfo(name = "popular")
     private boolean popular = false;
+
+    @ColumnInfo(name = "is_favorite")
+    private boolean isFavorite = false;
     
     @ColumnInfo(name = "discount_percent")
     private int discountPercent = 0;
@@ -239,6 +243,16 @@ public class Product extends BaseObservable {
     }
 
     @Bindable
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean isFavorite) {
+        this.isFavorite = isFavorite;
+        notifyPropertyChanged(BR.favorite);
+    }
+
+    @Bindable
     public int getDiscountPercent() {
         return discountPercent;
     }
@@ -359,6 +373,7 @@ public class Product extends BaseObservable {
                 ", size='" + size + '\'' +
                 ", featured=" + featured +
                 ", popular=" + popular +
+                ", isFavorite=" + isFavorite +
                 ", discountPercent=" + discountPercent +
                 ", rating=" + rating +
                 ", ratingCount=" + ratingCount +
@@ -372,6 +387,7 @@ public class Product extends BaseObservable {
         Product product = (Product) obj;
         return id == product.id &&
                 quantity == product.quantity &&
+                isFavorite == product.isFavorite &&
                 Objects.equals(categoryId, product.categoryId) &&
                 Objects.equals(name, product.name) &&
                 Objects.equals(description, product.description) &&
@@ -382,6 +398,6 @@ public class Product extends BaseObservable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, quantity, categoryId, brand, size);
+        return Objects.hash(id, name, description, price, quantity, categoryId, brand, size, isFavorite);
     }
 }

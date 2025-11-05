@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
 import com.ligera.app.network.model.ApiResponse;
+import com.ligera.app.util.Resource;
 
 import java.util.List;
 import java.util.Objects;
@@ -205,8 +206,11 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                 fetchInProgress.set(false);
                 
                 // Use data from DB and report error
-                result.addSource(dbSource, newData -> 
-                        setValue(Resource.error(response.errorMessage, newData)));
+                result.addSource(dbSource, newData ->
+                {
+                    assert response.errorMessage != null;
+                    setValue(Resource.error(response.errorMessage, newData));
+                });
             }
         });
     }

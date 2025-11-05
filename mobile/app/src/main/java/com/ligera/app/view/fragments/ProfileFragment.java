@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
         MaterialContainerTransform containerTransform = new MaterialContainerTransform();
         containerTransform.setDuration(400); // Match HomeActivity container transform duration
         containerTransform.setFadeMode(MaterialContainerTransform.FADE_MODE_THROUGH);
-        containerTransform.setScrimColor(getResources().getColor(R.color.transparent, null));
+        containerTransform.setScrimColor(getResources().getColor(android.R.color.transparent, null));
         setSharedElementEnterTransition(containerTransform);
         setSharedElementReturnTransition(containerTransform);
     }

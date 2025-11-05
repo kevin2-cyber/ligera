@@ -1,9 +1,17 @@
 package com.ligera.app.network;
 
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.ligera.app.network.model.ApiResponse;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
+import retrofit2.CallAdapter;
+import retrofit2.Retrofit;
 
 
 /**

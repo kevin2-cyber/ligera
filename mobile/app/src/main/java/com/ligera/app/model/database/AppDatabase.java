@@ -1,6 +1,7 @@
 package com.ligera.app.model.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -15,13 +16,10 @@ import com.ligera.app.model.dao.CategoryDao;
 import com.ligera.app.model.dao.ProductDao;
 import com.ligera.app.model.entity.Category;
 import com.ligera.app.model.entity.Product;
+import com.ligera.app.util.AppExecutors;
 import com.ligera.app.view.util.Constants;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import timber.log.Timber;
+import java.util.concurrent.Executor;
 
 /**
  * Main database class for the application
@@ -40,17 +38,13 @@ import timber.log.Timber;
 })
 public abstract class AppDatabase extends RoomDatabase {
     
+    private static final String TAG = "AppDatabase";
     private static final String DATABASE_NAME = "ligera_db";
     
     private static volatile AppDatabase INSTANCE;
     
-    private static final int NUMBER_OF_THREADS = 4;
-    
-    /**
-     * Database write executor for background operations
-     */
-    public static final ExecutorService databaseWriteExecutor =
-            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    public abstract ProductDao productDao();
+    public abstract CategoryDao categoryDao();
     
     /**
      * Get database instance using singleton pattern
@@ -76,20 +70,6 @@ public abstract class AppDatabase extends RoomDatabase {
     }
     
     /**
-     * Abstract method for Product DAO
-     *
-     * @return ProductDao
-     */
-    public abstract ProductDao productDao();
-    
-    /**
-     * Abstract method for Category DAO
-     *
-     * @return CategoryDao
-     */
-    public abstract CategoryDao categoryDao();
-    
-    /**
      * Room database callback for initialization
      */
     private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
@@ -104,7 +84,7 @@ public abstract class AppDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             // Operations to perform every time the database is opened
-            Timber.d("Database opened");
+            Log.d(TAG, "Database opened");
         }
     };
     
@@ -112,7 +92,7 @@ public abstract class AppDatabase extends RoomDatabase {
      * Initialize database with sample data
      */
     private static void initializeData() {
-        // Execute on background thread to avoid blocking the UI
+        Executor databaseWriteExecutor = new AppExecutors().diskIO();
         databaseWriteExecutor.execute(() -> {
             try {
                 // Get DAOs
@@ -120,84 +100,29 @@ public abstract class AppDatabase extends RoomDatabase {
                 CategoryDao categoryDao = INSTANCE.categoryDao();
                 
                 // Only populate if database is empty
-                if (categoryDao.countCategories() == 0) {
-                    Timber.d("Initializing database with sample data");
+                if (productDao.countProducts() == 0 && categoryDao.countCategories() == 0) {
+                    Log.d(TAG, "Initializing database with sample data");
                     
-                    // Create sample categories
+                    // Create sample categories and insert them
                     Category categoryOne = new Category();
                     categoryOne.setName("Ligera Collection");
                     categoryOne.setDescription("Our flagship collection");
-                    
+                    categoryDao.insert(categoryOne);
+
                     Category categoryTwo = new Category();
                     categoryTwo.setName("Amor Collection");
                     categoryTwo.setDescription("Romantic styles for all occasions");
-                    
-                    // Insert categories
-                    long categoryOneId = categoryDao.insert(categoryOne);
-                    long categoryTwoId = categoryDao.insert(categoryTwo);
-                    
-                    // Load sample products
-                    List<Product> products = Constants.getProductData();
-                    
-                    // If sample products are available, insert them
-                    if (products != null && !products.isEmpty()) {
-                        productDao.insertAll(products);
-                    }
-                    
-                    // Update category product counts
-                    int categoryOneCount = productDao.countProductsByCategory(categoryOneId);
-                    int categoryTwoCount = productDao.countProductsByCategory(categoryTwoId);
-                    
-                    categoryDao.updateProductCount(categoryOneId, categoryOneCount);
-                    categoryDao.updateProductCount(categoryTwoId, categoryTwoCount);
-                    
-                    Timber.d("Database initialized with %d categories and %d products", 
-                            categoryDao.countCategories(), productDao.countProducts());
+                    categoryDao.insert(categoryTwo);
+
+                    Log.d(TAG, "Database initialized with categories");
+
+                    // Insert sample products
+                    productDao.insertAll(Constants.getProductData());
+                    Log.d(TAG, "Database initialized with sample products");
                 }
             } catch (Exception e) {
-                Timber.e(e, "Error initializing database");
+                Log.e(TAG, "Error initializing database", e);
             }
         });
-    }
-    
-    /**
-     * Clear all data from the database
-     */
-    public void clearAllData() {
-        databaseWriteExecutor.execute(() -> {
-            try {
-                // Delete all data in specific order to handle foreign key constraints
-                productDao().deleteAll();
-                categoryDao().deleteAll();
-                Timber.d("All database data cleared");
-            } catch (Exception e) {
-                Timber.e(e, "Error clearing database");
-            }
-        });
-    }
-    
-    /**
-     * Reset the singleton instance (for testing purposes)
-     */
-    public static void destroyInstance() {
-        INSTANCE = null;
-    }
-    
-    /**
-     * Run database operations asynchronously
-     *
-     * @param runnable The runnable to execute
-     */
-    public static void runAsync(Runnable runnable) {
-        databaseWriteExecutor.execute(runnable);
-    }
-    
-    /**
-     * Get database version
-     *
-     * @return database version
-     */
-    public static int getVersion() {
-        return 1;
     }
 }

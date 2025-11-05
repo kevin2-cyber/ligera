@@ -2,6 +2,7 @@ package com.ligera.app.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -12,8 +13,6 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import timber.log.Timber;
 
 /**
  * Implementation of ErrorHandler for network-related errors.
@@ -63,8 +62,8 @@ public class NetworkErrorHandler implements ErrorHandler {
         
         // If the error is recoverable and we haven't exceeded max retries
         if (isErrorRecoverable(error) && retryCounter.get() < maxRetries) {
-            Timber.d("Attempting to recover from %s for operation %s (attempt %d/%d)",
-                    errorType, operationName, retryCounter.incrementAndGet(), maxRetries);
+            Log.d(TAG, String.format("Attempting to recover from %s for operation %s (attempt %d/%d)",
+                    errorType, operationName, retryCounter.incrementAndGet(), maxRetries));
             
             Runnable recoveryAction = getRecoveryAction(error);
             if (recoveryAction != null) {
@@ -168,19 +167,19 @@ public class NetworkErrorHandler implements ErrorHandler {
         
         switch (errorType) {
             case NETWORK:
-                Timber.w("Network error during %s: %s", operationName, error.getMessage());
+                Log.w(TAG, "Network error during " + operationName + ": " + error.getMessage());
                 break;
                 
             case TIMEOUT:
-                Timber.w("Timeout during %s: %s", operationName, error.getMessage());
+                Log.w(TAG, "Timeout during " + operationName + ": " + error.getMessage());
                 break;
                 
             case RATE_LIMIT:
-                Timber.w("Rate limit exceeded during %s", operationName);
+                Log.w(TAG, "Rate limit exceeded during " + operationName);
                 break;
                 
             default:
-                Timber.e(error, "Error during %s: %s", operationName, error.getMessage());
+                Log.e(TAG, "Error during " + operationName + ": " + error.getMessage(), error);
                 break;
         }
     }
@@ -205,13 +204,13 @@ public class NetworkErrorHandler implements ErrorHandler {
             int attempt = retryCounter.get();
             long delayMs = (long) (retryDelayMs * Math.pow(backoffFactor, attempt - 1));
             
-            Timber.d("Waiting %d ms before retry attempt %d", delayMs, attempt);
+            Log.d(TAG, "Waiting " + delayMs + " ms before retry attempt " + attempt);
             
             try {
                 Thread.sleep(delayMs);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                Timber.w("Retry delay interrupted");
+                Log.w(TAG, "Retry delay interrupted");
             }
         };
     }
@@ -224,13 +223,13 @@ public class NetworkErrorHandler implements ErrorHandler {
     private Runnable createRateLimitRecoveryAction() {
         return () -> {
             // Wait longer for rate limit (at least 5 seconds)
-            Timber.d("Waiting for rate limit window");
+            Log.d(TAG, "Waiting for rate limit window");
             
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                Timber.w("Rate limit wait interrupted");
+                Log.w(TAG, "Rate limit wait interrupted");
             }
         };
     }
@@ -260,4 +259,3 @@ public class NetworkErrorHandler implements ErrorHandler {
         return maxRetries;
     }
 }
-
