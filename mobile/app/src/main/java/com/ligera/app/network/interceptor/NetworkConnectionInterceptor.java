@@ -105,7 +105,7 @@ public class NetworkConnectionInterceptor implements Interceptor {
                 errorMessage = ApiConfig.ErrorMessages.NETWORK_ERROR;
             }
             
-            Log.e(TAG, "Network error: %s " + errorMessage);
+            Log.e(TAG, "Network error: " + errorMessage, e);
             throw new NetworkException(errorMessage, e);
         }
     }
@@ -155,7 +155,7 @@ public class NetworkConnectionInterceptor implements Interceptor {
                 }
             } catch (SecurityException e) {
                 // Fallback for permission issues
-                Log.e(TAG, "Security exception checking network state");
+                Log.e(TAG, "Security exception checking network state", e);
                 return fallbackConnectionCheck();
             }
         } else {
@@ -190,7 +190,7 @@ public class NetworkConnectionInterceptor implements Interceptor {
                 return ConnectionType.OTHER;
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error in fallback connection check");
+            Log.e(TAG, "Error in fallback connection check", e);
             return ConnectionType.NONE;
         }
     }
@@ -203,11 +203,10 @@ public class NetworkConnectionInterceptor implements Interceptor {
     private boolean isMobileDataSavingEnabled() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                ConnectivityManager.RestrictBackgroundStatus status = 
-                        connectivityManager.getRestrictBackgroundStatus();
-                return status == ConnectivityManager.RestrictBackgroundStatus.ENABLED;
+                int status = connectivityManager.getRestrictBackgroundStatus();
+                return status == ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED;
             } catch (Exception e) {
-                Log.e(TAG, "Error checking data saver status");
+                Log.e(TAG, "Error checking data saver status", e);
                 return false;
             }
         }

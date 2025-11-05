@@ -39,6 +39,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.ligera.app.R;
 
+import java.util.Objects;
+
 /**
  * Utility class for animations throughout the app.
  * Provides reusable animations for activities, RecyclerView items, loading states,
@@ -394,7 +396,7 @@ public class AnimationUtils {
         });
         
         dialog.show();
-        dialog.getWindow().setWindowAnimations(R.anim.bottom_sheet_slide_in);
+        Objects.requireNonNull(dialog.getWindow()).setWindowAnimations(R.anim.bottom_sheet_slide_in);
     }
     
     /**

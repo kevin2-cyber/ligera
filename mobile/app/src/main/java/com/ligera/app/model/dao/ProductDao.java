@@ -1,7 +1,7 @@
 package com.ligera.app.model.dao;
 
 import androidx.lifecycle.LiveData;
-import androidx.paging.DataSource;
+import androidx.paging.PagingSource;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -12,7 +12,6 @@ import androidx.room.Update;
 
 import com.ligera.app.model.entity.Product;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -54,20 +53,12 @@ public interface ProductDao {
     void delete(Product product);
 
     /**
-     * Get all products
-     *
-     * @return LiveData of all products
-     */
-    @Query("SELECT * FROM products ORDER BY name ASC")
-    LiveData<List<Product>> getAllProducts();
-
-    /**
      * Get all products with paging support
      *
-     * @return DataSource.Factory for paging
+     * @return PagingSource for Paging 3
      */
     @Query("SELECT * FROM products ORDER BY name ASC")
-    DataSource.Factory<Integer, Product> getAllProductsPaged();
+    PagingSource<Integer, Product> getAllProducts();
 
     /**
      * Get a product by ID
@@ -79,22 +70,13 @@ public interface ProductDao {
     LiveData<Product> getProductById(long id);
 
     /**
-     * Get products by category ID
-     *
-     * @param categoryId category ID
-     * @return LiveData of products
-     */
-    @Query("SELECT * FROM products WHERE category_id = :categoryId ORDER BY name ASC")
-    LiveData<List<Product>> getProductsByCategory(long categoryId);
-
-    /**
      * Get products by category ID with paging support
      *
      * @param categoryId category ID
-     * @return DataSource.Factory for paging
+     * @return PagingSource for Paging 3
      */
     @Query("SELECT * FROM products WHERE category_id = :categoryId ORDER BY name ASC")
-    DataSource.Factory<Integer, Product> getProductsByCategoryPaged(long categoryId);
+    PagingSource<Integer, Product> getProductsByCategory(long categoryId);
 
     /**
      * Get featured products
@@ -115,22 +97,30 @@ public interface ProductDao {
     LiveData<List<Product>> getPopularProducts(int limit);
 
     /**
-     * Search products by name or description
+     * Get all favorite products.
      *
-     * @param query search query
-     * @return LiveData of matching products
+     * @return A LiveData list of all products marked as favorite.
      */
-    @Query("SELECT * FROM products WHERE name LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%' ORDER BY name ASC")
-    LiveData<List<Product>> searchProducts(String query);
+    @Query("SELECT * FROM products WHERE is_favorite = 1")
+    LiveData<List<Product>> getFavoriteProducts();
+
+    /**
+     * Updates the favorite status of a product.
+     *
+     * @param productId The ID of the product to update.
+     * @param isFavorite The new favorite status.
+     */
+    @Query("UPDATE products SET is_favorite = :isFavorite WHERE id = :productId")
+    void updateFavoriteStatus(long productId, boolean isFavorite);
 
     /**
      * Search products by name or description with paging support
      *
      * @param query search query
-     * @return DataSource.Factory for paging
+     * @return PagingSource for Paging 3
      */
     @Query("SELECT * FROM products WHERE name LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%' ORDER BY name ASC")
-    DataSource.Factory<Integer, Product> searchProductsPaged(String query);
+    PagingSource<Integer, Product> searchProducts(String query);
 
     /**
      * Get products by brand
@@ -245,8 +235,8 @@ public interface ProductDao {
            "(:inStockOnly = 0 OR quantity > 0) " +
            "ORDER BY name ASC")
     LiveData<List<Product>> getFilteredProducts(long categoryId, 
-                                               BigDecimal minPrice,
-                                               BigDecimal maxPrice, 
+                                               String minPrice,
+                                               String maxPrice, 
                                                boolean inStockOnly);
     
     /**

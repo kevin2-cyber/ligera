@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
+    <item
+        android:id="@+id/share_icon"
+        android:icon="@drawable/share"
+        android:title="@string/share"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/fav_icon"
-        android:title="Like"
-        android:icon="@drawable/sl_favourite"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.widget.CheckBox"/>
-
+        android:title="Favorite"
+        app:actionViewClass="android.widget.CheckBox"
+        app:showAsAction="ifRoom" />
 </menu>

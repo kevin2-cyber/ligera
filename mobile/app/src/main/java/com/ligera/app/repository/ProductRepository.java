@@ -5,11 +5,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.paging.DataSource;
-import androidx.paging.LivePagedListBuilder;
-import androidx.paging.PagedList;
+import androidx.paging.Pager;
+import androidx.paging.PagingConfig;
+import androidx.paging.PagingData;
+import androidx.paging.rxjava3.PagingRx;
 
 import com.ligera.app.model.database.AppDatabase;
 import com.ligera.app.model.dao.CategoryDao;
@@ -25,11 +25,13 @@ import com.ligera.app.network.service.ProductApiService;
 import com.ligera.app.repository.mapper.CategoryMapper;
 import com.ligera.app.repository.mapper.ProductMapper;
 import com.ligera.app.repository.util.NetworkBoundResource;
-import com.ligera.app.repository.util.Resource;
 import com.ligera.app.util.AppExecutors;
+import com.ligera.app.util.Resource;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.core.Flowable;
 
 /**
  * Repository for product-related operations
@@ -103,36 +105,39 @@ public class ProductRepository {
     /**
      * Get all products with pagination
      *
-     * @return LiveData of PagedList of ProductEntity
+     * @return Flowable of PagingData of Product
      */
-    public LiveData<Resource<PagedList<Product>>> getProducts() {
-        // Configure paging
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setPageSize(PAGE_SIZE)
-                .setInitialLoadSizeHint(PAGE_SIZE * 2)
-                .setEnablePlaceholders(true)
-                .build();
+    public Flowable<PagingData<Product>> getProducts() {
+        return PagingRx.getFlowable(new Pager<>(
+                new PagingConfig(PAGE_SIZE, PAGE_SIZE * 2, true),
+                productDao::getAllProducts
+        ));
+    }
 
-        // Create data source factory
-        DataSource.Factory<Integer, Product> factory = productDao.getAllProducts();
+    public Flowable<PagingData<Product>> getProductsByCategory(long categoryId) {
+        return PagingRx.getFlowable(new Pager<>(
+                new PagingConfig(PAGE_SIZE, PAGE_SIZE * 2, true),
+                () -> productDao.getProductsByCategory(categoryId)
+        ));
+    }
 
-        // Build paged list
-        LiveData<PagedList<Product>> pagedList = new LivePagedListBuilder<>(factory, config).build();
+    /**
+     * Get all favorite products.
+     *
+     * @return A LiveData list of all products marked as favorite.
+     */
+    public LiveData<List<Product>> getFavoriteProducts() {
+        return productDao.getFavoriteProducts();
+    }
 
-        // Trigger network load
-        fetchProducts(0, PAGE_SIZE * 2);
-
-        // Create resource with paged list
-        MediatorLiveData<Resource<PagedList<Product>>> result = new MediatorLiveData<>();
-        result.addSource(pagedList, data -> {
-            if (data != null && !data.isEmpty()) {
-                result.setValue(Resource.success(data));
-            } else {
-                result.setValue(Resource.loading(data));
-            }
-        });
-
-        return result;
+    /**
+     * Updates the favorite status of a product.
+     *
+     * @param productId The ID of the product to update.
+     * @param isFavorite The new favorite status.
+     */
+    public void setFavorite(long productId, boolean isFavorite) {
+        appExecutors.diskIO().execute(() -> productDao.updateFavoriteStatus(productId, isFavorite));
     }
 
     /**
@@ -231,36 +236,13 @@ public class ProductRepository {
      * Search products
      *
      * @param query Search query
-     * @return LiveData of Resource of PagedList of ProductEntity
+     * @return Flowable of PagingData of Product
      */
-    public LiveData<Resource<PagedList<Product>>> searchProducts(final String query) {
-        // Configure paging
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setPageSize(PAGE_SIZE)
-                .setInitialLoadSizeHint(PAGE_SIZE * 2)
-                .setEnablePlaceholders(true)
-                .build();
-
-        // Create data source factory
-        DataSource.Factory<Integer, Product> factory = productDao.searchProducts(query);
-
-        // Build paged list
-        LiveData<PagedList<Product>> pagedList = new LivePagedListBuilder<>(factory, config).build();
-
-        // Trigger network search
-        searchProductsFromNetwork(query, 0, PAGE_SIZE * 2);
-
-        // Create resource with paged list
-        MediatorLiveData<Resource<PagedList<Product>>> result = new MediatorLiveData<>();
-        result.addSource(pagedList, data -> {
-            if (data != null) {
-                result.setValue(Resource.success(data));
-            } else {
-                result.setValue(Resource.loading(null));
-            }
-        });
-
-        return result;
+    public Flowable<PagingData<Product>> searchProducts(final String query) {
+        return PagingRx.getFlowable(new Pager<>(
+                new PagingConfig(PAGE_SIZE, PAGE_SIZE * 2, true),
+                () -> productDao.searchProducts(query)
+        ));
     }
 
     /**
@@ -347,5 +329,17 @@ public class ProductRepository {
                 Log.e(TAG, "Failed to fetch categories", error);
             }
         }.asLiveData();
+    }
+
+    public void insertProduct(Product product) {
+        appExecutors.diskIO().execute(() -> productDao.insert(product));
+    }
+
+    public void updateProduct(Product product) {
+        appExecutors.diskIO().execute(() -> productDao.update(product));
+    }
+
+    public void deleteProduct(Product product) {
+        appExecutors.diskIO().execute(() -> productDao.delete(product));
     }
 }

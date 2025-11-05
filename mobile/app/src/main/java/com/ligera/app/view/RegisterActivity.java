@@ -16,7 +16,6 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.transition.Explode;
 import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -61,21 +60,6 @@ public class RegisterActivity extends AppCompatActivity {
         clickHandler = new RegisterActivityClickHandler(this);
         binding.setRegisterClickHandler(clickHandler);
 
-        binding.etEmail.setOnTouchListener((v, event) -> {
-            binding.upperSection.setVisibility(View.INVISIBLE);
-            binding.lowerSection.setTranslationY(-530f);
-            return false;
-        });
-
-        binding.etEmail.setOnEditorActionListener((v, actionId, event) -> {
-            if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(binding.etEmail.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-            // when it is done put the LinearLayout back
-            binding.lowerSection.setTranslationY(0f);
-            return false;
-        });
 
         clickHandler = new RegisterActivityClickHandler(this);
         binding.setRegisterClickHandler(clickHandler);
@@ -107,7 +91,6 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         // go back to previous activity, when back button of actionbar clicked
-        onBackPressed();
         getOnBackPressedDispatcher();
         return super.onSupportNavigateUp();
     }
@@ -120,8 +103,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         public void validateData(View view) {
-            name = binding.etName.getText().toString();
-            email = binding.etEmail.getText().toString();
+            name = Objects.requireNonNull(binding.etName.getText()).toString().trim();
+            email = Objects.requireNonNull(binding.etEmail.getText()).toString().trim();
             password = Objects.requireNonNull(binding.etPassword.getText()).toString();
 
             // validate the data

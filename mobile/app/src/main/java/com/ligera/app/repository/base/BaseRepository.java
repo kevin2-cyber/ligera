@@ -3,9 +3,7 @@ package com.ligera.app.repository.base;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.ligera.app.repository.util.Resource;
-
-import java.util.concurrent.TimeUnit;
+import com.ligera.app.util.Resource;
 
 /**
  * Base interface for repository operations.

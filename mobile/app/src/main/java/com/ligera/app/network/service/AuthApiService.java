@@ -6,6 +6,7 @@ import com.ligera.app.network.ApiConfig;
 import com.ligera.app.network.model.ApiResponse;
 import com.ligera.app.network.model.request.LoginRequest;
 import com.ligera.app.network.model.request.PasswordChangeRequest;
+import com.ligera.app.network.model.request.RefreshTokenRequest;
 import com.ligera.app.network.model.request.RegisterRequest;
 import com.ligera.app.network.model.response.AuthResponse;
 
@@ -70,4 +71,3 @@ public interface AuthApiService {
     @POST(ApiConfig.Endpoints.CHANGE_PASSWORD)
     LiveData<ApiResponse<AuthResponse>> changePassword(@Body PasswordChangeRequest request);
 }
-

@@ -18,6 +18,8 @@
     <!-- Empty state messages -->
     <string name="empty_products">No Products Found</string>
     <string name="empty_products_message">We couldn\'t find any products at the moment. Please try again later.</string>
+    <string name="empty_favorites">No Favorites Yet</string>
+    <string name="empty_favorites_message">Tap the heart on a product to save it here.</string>
 
     <!-- Product screens -->
     <string name="products">Products</string>
@@ -56,7 +58,7 @@
     <string name="login_welcome_content">Yay! You\'re back! Thanks for shopping with us.\nWe have excited deals and promotions going on, grab your pick now! </string>
     <string name="title_home">Home</string>
     <string name="title_cart">Cart</string>
-    <string name="title_liked">Favourites</string>
+    <string name="title_liked">Favorites</string>
     <string name="title_profile">Profile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

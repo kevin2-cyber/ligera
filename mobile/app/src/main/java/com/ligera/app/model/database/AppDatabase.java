@@ -43,10 +43,8 @@ public abstract class AppDatabase extends RoomDatabase {
     
     private static volatile AppDatabase INSTANCE;
     
-    /**
-     * Database write executor for background operations
-     */
-    public static final Executor databaseWriteExecutor = new AppExecutors().diskIO();
+    public abstract ProductDao productDao();
+    public abstract CategoryDao categoryDao();
     
     /**
      * Get database instance using singleton pattern
@@ -72,20 +70,6 @@ public abstract class AppDatabase extends RoomDatabase {
     }
     
     /**
-     * Abstract method for Product DAO
-     *
-     * @return ProductDao
-     */
-    public abstract ProductDao productDao();
-    
-    /**
-     * Abstract method for Category DAO
-     *
-     * @return CategoryDao
-     */
-    public abstract CategoryDao categoryDao();
-    
-    /**
      * Room database callback for initialization
      */
     private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
@@ -108,7 +92,7 @@ public abstract class AppDatabase extends RoomDatabase {
      * Initialize database with sample data
      */
     private static void initializeData() {
-        // Execute on background thread to avoid blocking the UI
+        Executor databaseWriteExecutor = new AppExecutors().diskIO();
         databaseWriteExecutor.execute(() -> {
             try {
                 // Get DAOs
@@ -116,7 +100,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 CategoryDao categoryDao = INSTANCE.categoryDao();
                 
                 // Only populate if database is empty
-                if (categoryDao.countCategories() == 0) {
+                if (productDao.countProducts() == 0 && categoryDao.countCategories() == 0) {
                     Log.d(TAG, "Initializing database with sample data");
                     
                     // Create sample categories and insert them
@@ -140,46 +124,5 @@ public abstract class AppDatabase extends RoomDatabase {
                 Log.e(TAG, "Error initializing database", e);
             }
         });
-    }
-    
-    /**
-     * Clear all data from the database
-     */
-    public void clearAllData() {
-        databaseWriteExecutor.execute(() -> {
-            try {
-                // Delete all data in specific order to handle foreign key constraints
-                productDao().deleteAll();
-                categoryDao().deleteAll();
-                Log.d(TAG, "All database data cleared");
-            } catch (Exception e) {
-                Log.e(TAG, "Error clearing database", e);
-            }
-        });
-    }
-    
-    /**
-     * Reset the singleton instance (for testing purposes)
-     */
-    public static void destroyInstance() {
-        INSTANCE = null;
-    }
-    
-    /**
-     * Run database operations asynchronously
-     *
-     * @param runnable The runnable to execute
-     */
-    public static void runAsync(Runnable runnable) {
-        databaseWriteExecutor.execute(runnable);
-    }
-    
-    /**
-     * Get database version
-     *
-     * @return database version
-     */
-    public int getVersion() {
-        return getOpenHelper().getReadableDatabase().getVersion();
     }
 }

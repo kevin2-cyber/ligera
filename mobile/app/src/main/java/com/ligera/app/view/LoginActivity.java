@@ -3,9 +3,6 @@ package com.ligera.app.view;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
@@ -16,8 +13,6 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.transition.Explode;
 import android.util.Patterns;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -48,46 +43,21 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setExitTransition(new Explode());
         setContentView(R.layout.activity_login);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         clickHandler = new LoginClickHandler(this);
-        binding.setLoginClickHandler(clickHandler);
+        binding.setHandler(clickHandler);
 
         // configure progressbar
         bar = new ProgressBar(this);
         bar.setVisibility(View.GONE);
 
-
-        binding.tvCreateAccount.setOnClickListener(view -> {
-            Intent intent = new Intent(this, RegisterActivity.class);
-            startActivity(intent);
-        });
-
-        // shift the LinearLayout up when any of the EditText is selected
-        binding.etEmail.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                binding.upperSection.setVisibility(View.INVISIBLE);
-                binding.lowerSection.setTranslationY(-620f);
-                return false;
-            }
-        });
-
-        binding.etEmail.setOnEditorActionListener((v, actionId, event) -> {
-            if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(binding.etEmail.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-            // when it is done put the LinearLayout back
-            binding.lowerSection.setTranslationY(0f);
-            return false;
-        });
 
     }
 
@@ -116,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         // validate date from input
         public void validateData(View view) {
             // get data
-            email = binding.etEmail.getText().toString().trim();
+            email = Objects.requireNonNull(binding.etEmail.getText()).toString().trim();
             password = Objects.requireNonNull(binding.etPassword.getText()).toString().trim();
 
             // validate user
