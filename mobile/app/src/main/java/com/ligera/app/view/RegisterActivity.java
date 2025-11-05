@@ -61,21 +61,21 @@ public class RegisterActivity extends AppCompatActivity {
         clickHandler = new RegisterActivityClickHandler(this);
         binding.setRegisterClickHandler(clickHandler);
 
-        binding.etEmail.setOnTouchListener((v, event) -> {
-            binding.upperSection.setVisibility(View.INVISIBLE);
-            binding.lowerSection.setTranslationY(-530f);
-            return false;
-        });
+//        binding.etEmail.setOnTouchListener((v, event) -> {
+//            binding.upperSection.setVisibility(View.INVISIBLE);
+//            binding.lowerSection.setTranslationY(-530f);
+//            return false;
+//        });
 
-        binding.etEmail.setOnEditorActionListener((v, actionId, event) -> {
-            if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(binding.etEmail.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-            // when it is done put the LinearLayout back
-            binding.lowerSection.setTranslationY(0f);
-            return false;
-        });
+//        binding.etEmail.setOnEditorActionListener((v, actionId, event) -> {
+//            if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+//                inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+//                inputMethodManager.hideSoftInputFromWindow(binding.etEmail.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//            }
+//            // when it is done put the LinearLayout back
+//            binding.lowerSection.setTranslationY(0f);
+//            return false;
+//        });
 
         clickHandler = new RegisterActivityClickHandler(this);
         binding.setRegisterClickHandler(clickHandler);

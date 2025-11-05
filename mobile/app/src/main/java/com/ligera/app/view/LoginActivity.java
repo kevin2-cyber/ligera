@@ -48,46 +48,21 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setExitTransition(new Explode());
         setContentView(R.layout.activity_login);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         clickHandler = new LoginClickHandler(this);
-        binding.setLoginClickHandler(clickHandler);
+        binding.setHandler(clickHandler);
 
         // configure progressbar
         bar = new ProgressBar(this);
         bar.setVisibility(View.GONE);
 
-
-        binding.tvCreateAccount.setOnClickListener(view -> {
-            Intent intent = new Intent(this, RegisterActivity.class);
-            startActivity(intent);
-        });
-
-        // shift the LinearLayout up when any of the EditText is selected
-        binding.etEmail.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                binding.upperSection.setVisibility(View.INVISIBLE);
-                binding.lowerSection.setTranslationY(-620f);
-                return false;
-            }
-        });
-
-        binding.etEmail.setOnEditorActionListener((v, actionId, event) -> {
-            if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(binding.etEmail.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-            // when it is done put the LinearLayout back
-            binding.lowerSection.setTranslationY(0f);
-            return false;
-        });
 
     }
 
