@@ -102,10 +102,13 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
 
     private void setupCategoryTabs() {
         viewModel.getAllCategories().observe(getViewLifecycleOwner(), resource -> {
-            if (resource != null && resource.data != null) {
+            if (resource != null && resource.data != null && !resource.data.isEmpty()) {
                 binding.tabLayout.removeAllTabs();
+                boolean isFirstTab = true;
                 for (Category category : resource.data) {
-                    binding.tabLayout.addTab(binding.tabLayout.newTab().setText(category.getName()).setTag(category.getId()));
+                    TabLayout.Tab tab = binding.tabLayout.newTab().setText(category.getName()).setTag(category.getId());
+                    binding.tabLayout.addTab(tab, isFirstTab);
+                    isFirstTab = false;
                 }
             }
         });
@@ -113,9 +116,11 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                long categoryId = (long) tab.getTag();
-                viewModel.getProductsOfSelectedCategory(categoryId).observe(getViewLifecycleOwner(), pagingData -> 
-                    adapter.submitData(getLifecycle(), pagingData));
+                if (tab != null && tab.getTag() != null) {
+                    long categoryId = (long) tab.getTag();
+                    viewModel.getProductsOfSelectedCategory(categoryId).observe(getViewLifecycleOwner(), pagingData ->
+                            adapter.submitData(getLifecycle(), pagingData));
+                }
             }
 
             @Override
