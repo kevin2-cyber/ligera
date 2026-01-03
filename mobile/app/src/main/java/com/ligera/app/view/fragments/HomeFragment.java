@@ -21,6 +21,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagingData;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +37,10 @@ import com.ligera.app.model.entity.Product;
 import com.ligera.app.view.DetailActivity;
 import com.ligera.app.view.adapter.HomeProductAdapter;
 import com.ligera.app.viewmodel.HomeFragmentViewModel;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment implements MenuProvider, HomeProductAdapter.OnProductItemClickListener {
@@ -79,7 +84,7 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
 
         // get the list of products
         setupRecyclerView();
-        setupCategoryTabs();
+        displayDummyData();
     }
 
     private void setupRecyclerView() {
@@ -98,6 +103,28 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         adapter.setListener(this);
+    }
+
+    private void displayDummyData() {
+        List<Product> dummyProducts = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            Product product = new Product();
+            product.setId(i);
+            product.setName("Dummy Product " + i);
+            product.setDescription("This is a dummy product description for product " + i);
+            product.setPrice(BigDecimal.valueOf(i * 15.50));
+            product.setBrand("Dummy Brand");
+            product.setImageUrl("https://fastly.picsum.photos/id/11/200/300.jpg?hmac=ad93_325d_GW4E5O_C2Dbl3Q-t2d_i-5iS_us2y8-I");
+            product.setRating(4.5f);
+            product.setFeatured(i % 2 == 0);
+            product.setPopular(i % 3 == 0);
+            product.setQuantity(100);
+            product.setCategoryId(1L);
+            dummyProducts.add(product);
+        }
+
+        adapter.submitData(getLifecycle(), PagingData.from(dummyProducts));
+        binding.tabLayout.setVisibility(View.GONE);
     }
 
     private void setupCategoryTabs() {
