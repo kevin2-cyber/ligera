@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
             product.setDescription("This is a dummy product description for product " + i);
             product.setPrice(BigDecimal.valueOf(i * 15.50));
             product.setBrand("Dummy Brand");
-            product.setImageUrl("https://fastly.picsum.photos/id/11/200/300.jpg?hmac=ad93_325d_GW4E5O_C2Dbl3Q-t2d_i-5iS_us2y8-I");
+            product.setImageUrl("https://picsum.photos/200/300?random=" + i);
             product.setRating(4.5f);
             product.setFeatured(i % 2 == 0);
             product.setPopular(i % 3 == 0);
