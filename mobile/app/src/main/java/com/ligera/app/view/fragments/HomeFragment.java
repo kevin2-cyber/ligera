@@ -84,6 +84,7 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
 
         // get the list of products
         setupRecyclerView();
+        setupCategoryTabs();
         displayDummyData();
     }
 
@@ -124,18 +125,16 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
         }
 
         adapter.submitData(getLifecycle(), PagingData.from(dummyProducts));
-        binding.tabLayout.setVisibility(View.GONE);
     }
 
     private void setupCategoryTabs() {
+        binding.tabLayout.setVisibility(View.VISIBLE);
         viewModel.getAllCategories().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null && resource.data != null && !resource.data.isEmpty()) {
                 binding.tabLayout.removeAllTabs();
-                boolean isFirstTab = true;
                 for (Category category : resource.data) {
                     TabLayout.Tab tab = binding.tabLayout.newTab().setText(category.getName()).setTag(category.getId());
-                    binding.tabLayout.addTab(tab, isFirstTab);
-                    isFirstTab = false;
+                    binding.tabLayout.addTab(tab, false);
                 }
             }
         });
