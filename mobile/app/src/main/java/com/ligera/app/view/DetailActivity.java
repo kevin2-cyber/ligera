@@ -100,6 +100,7 @@ public class DetailActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(false)
                 .into(binding.ivProduct);
+        invalidateOptionsMenu();
     }
 
     @Override
