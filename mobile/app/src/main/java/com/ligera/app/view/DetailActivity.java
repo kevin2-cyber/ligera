@@ -107,10 +107,6 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
-        } else if (item.getItemId() == R.id.fav_icon) {
-            if (currentProduct != null) {
-                viewModel.setFavorite(currentProduct.getId(), !currentProduct.isFavorite());
-            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -123,6 +119,7 @@ public class DetailActivity extends AppCompatActivity {
         if (currentProduct != null) {
             assert checkBox != null;
             checkBox.setChecked(currentProduct.isFavorite());
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.setFavorite(currentProduct.getId(), isChecked));
         }
         return super.onCreateOptionsMenu(menu);
     }
