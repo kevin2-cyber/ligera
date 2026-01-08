@@ -47,6 +47,7 @@ public class DetailActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         viewModel = new ViewModelProvider(this).get(DetailActivityViewModel.class);
         binding.setLifecycleOwner(this);
+        binding.setViewmodel(viewModel);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
