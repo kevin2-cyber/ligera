@@ -81,6 +81,14 @@ public class HomeFragmentViewModel extends AndroidViewModel {
         return LiveDataReactiveStreams.fromPublisher(productsFlowable);
     }
 
+    public LiveData<Integer> getProductCount() {
+        return repository.getProductCount();
+    }
+
+    public void insertProducts(List<Product> products) {
+        repository.insertProducts(products);
+    }
+
 
     public void addProduct(Product product) {
         repository.insertProduct(product);

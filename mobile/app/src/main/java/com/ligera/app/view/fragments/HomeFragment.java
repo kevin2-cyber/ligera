@@ -21,7 +21,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.paging.PagingData;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -82,9 +81,38 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // get the list of products
+        // Setup RecyclerView first
         setupRecyclerView();
-        setupCategoryTabs();
+
+        // Check if database is empty and seed with dummy data if needed
+        viewModel.getProductCount().observe(getViewLifecycleOwner(), count -> {
+            if (count == null || count == 0) {
+                // Database is empty, seed with dummy products
+                seedDummyProducts();
+            }
+            // Setup category tabs (this will trigger loading data)
+            setupCategoryTabs();
+        });
+    }
+
+    private void seedDummyProducts() {
+        List<Product> dummyProducts = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            Product product = new Product();
+            product.setId(i);
+            product.setName("Dummy Product " + i);
+            product.setDescription("This is a dummy product description for product " + i);
+            product.setPrice(BigDecimal.valueOf(i * 15.50));
+            product.setBrand("Dummy Brand");
+            product.setImageUrl("https://picsum.photos/200/300?random=" + i);
+            product.setRating(4.5f);
+            product.setFeatured(i % 2 == 0);
+            product.setPopular(i % 3 == 0);
+            product.setQuantity(100);
+            product.setCategoryId(1L);
+            dummyProducts.add(product);
+        }
+        viewModel.insertProducts(dummyProducts);
     }
 
     private void setupRecyclerView() {
@@ -105,33 +133,32 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
         adapter.setListener(this);
     }
 
-    private void displayDummyData() {
-        List<Product> dummyProducts = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            Product product = new Product();
-            product.setId(i);
-            product.setName("Dummy Product " + i);
-            product.setDescription("This is a dummy product description for product " + i);
-            product.setPrice(BigDecimal.valueOf(i * 15.50));
-            product.setBrand("Dummy Brand");
-            product.setImageUrl("https://picsum.photos/200/300?random=" + i);
-            product.setRating(4.5f);
-            product.setFeatured(i % 2 == 0);
-            product.setPopular(i % 3 == 0);
-            product.setQuantity(100);
-            product.setCategoryId(1L);
-            dummyProducts.add(product);
-        }
-
-        adapter.submitData(getLifecycle(), PagingData.from(dummyProducts));
-    }
 
     private void setupCategoryTabs() {
         binding.tabLayout.setVisibility(View.VISIBLE);
 
-        // Add "All" tab first
+        // Attach listener FIRST before adding any tabs
+        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab != null && tab.getTag() != null) {
+                    long categoryId = (long) tab.getTag();
+                    loadProductsByCategory(categoryId);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        // Add "All" tab first (will trigger onTabSelected because listener is already attached)
         TabLayout.Tab allTab = binding.tabLayout.newTab().setText("All").setTag(-1L);
-        binding.tabLayout.addTab(allTab, true); // Select by default
+        binding.tabLayout.addTab(allTab, true); // Select by default - triggers listener
 
         viewModel.getAllCategories().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null && resource.data != null && !resource.data.isEmpty()) {
@@ -145,42 +172,18 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
                 }
             }
         });
-
-        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab != null && tab.getTag() != null) {
-                    long categoryId = (long) tab.getTag();
-                    if (categoryId == -1L) {
-                        // "All" tab selected - show all products
-                        viewModel.getAllProducts().observe(getViewLifecycleOwner(), pagingData ->
-                                adapter.submitData(getLifecycle(), pagingData));
-                    } else {
-                        // Specific category selected
-                        viewModel.getProductsOfSelectedCategory(categoryId).observe(getViewLifecycleOwner(), pagingData ->
-                                adapter.submitData(getLifecycle(), pagingData));
-                    }
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        // Load all products initially
-        loadAllProducts();
     }
 
-    private void loadAllProducts() {
-        viewModel.getAllProducts().observe(getViewLifecycleOwner(), pagingData ->
-                adapter.submitData(getLifecycle(), pagingData));
+    private void loadProductsByCategory(long categoryId) {
+        if (categoryId == -1L) {
+            // "All" tab selected - show all products
+            viewModel.getAllProducts().observe(getViewLifecycleOwner(), pagingData ->
+                    adapter.submitData(getLifecycle(), pagingData));
+        } else {
+            // Specific category selected
+            viewModel.getProductsOfSelectedCategory(categoryId).observe(getViewLifecycleOwner(), pagingData ->
+                    adapter.submitData(getLifecycle(), pagingData));
+        }
     }
 
     @Override
