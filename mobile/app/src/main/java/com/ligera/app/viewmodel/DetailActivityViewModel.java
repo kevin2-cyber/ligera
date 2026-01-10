@@ -1,7 +1,6 @@
 package com.ligera.app.viewmodel;
 
 import android.app.Application;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -38,7 +37,7 @@ public class DetailActivityViewModel extends AndroidViewModel {
         repository.setFavorite(id, isFavourite);
     }
 
-    public void increaseCounter(View view) {
+    public void increaseCounter() {
         // retrieve the current value from LiveData
         int currentValue = counter.getValue() != null ? counter.getValue() : 0;
 
@@ -46,7 +45,7 @@ public class DetailActivityViewModel extends AndroidViewModel {
         counter.setValue(currentValue + 1);
     }
 
-    public void decreaseCounter(View view) {
+    public void decreaseCounter() {
         // retrieve the current value from LiveData
         int currentValue = counter.getValue() != null ? counter.getValue() : 0;
 
@@ -56,7 +55,7 @@ public class DetailActivityViewModel extends AndroidViewModel {
         }
     }
 
-    public void onSubmitOrder(View view) {}
+    public void onSubmitOrder() {}
 
     public LiveData<Integer> getCounter() {
         return counter;

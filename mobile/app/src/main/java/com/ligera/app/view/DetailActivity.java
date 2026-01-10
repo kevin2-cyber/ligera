@@ -25,7 +25,6 @@ import com.google.android.material.chip.Chip;
 import com.ligera.app.R;
 import com.ligera.app.databinding.ActivityDetailBinding;
 import com.ligera.app.model.entity.Product;
-import com.ligera.app.util.Resource;
 import com.ligera.app.viewmodel.DetailActivityViewModel;
 
 import java.util.Objects;
@@ -33,7 +32,7 @@ import java.util.Objects;
 public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding binding;
 
-    public static final String PRODUCT_ID = "product_id";
+    public static final String PRODUCT_EXTRA = "product_extra";
 
     DetailActivityViewModel viewModel;
     private Product currentProduct;
@@ -62,18 +61,13 @@ public class DetailActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        long productId = getIntent().getLongExtra(PRODUCT_ID, -1);
-        if (productId != -1) {
-            viewModel.getProductById(productId).observe(this, resource -> {
-                if (resource != null && resource.data != null) {
-                    currentProduct = resource.data;
-                    updateProductDetails(currentProduct);
-                } else if (resource != null && resource.status == Resource.Status.ERROR) {
-                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show();
-                }
-            });
+        // Get product from Intent
+        currentProduct = getIntent().getParcelableExtra(PRODUCT_EXTRA);
+        if (currentProduct != null) {
+            binding.setProduct(currentProduct);
+            updateProductDetails(currentProduct);
         } else {
-            Toast.makeText(this, "No product ID found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No product data found", Toast.LENGTH_LONG).show();
         }
 
         viewModel.getCounter().observe(this, counter -> binding.numberText.setText(String.valueOf(counter)));
