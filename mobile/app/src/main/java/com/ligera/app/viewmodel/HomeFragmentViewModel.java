@@ -72,6 +72,15 @@ public class HomeFragmentViewModel extends AndroidViewModel {
         return LiveDataReactiveStreams.fromPublisher(productsFlowable);
     }
 
+    public LiveData<PagingData<Product>> getAllProducts() {
+        CoroutineScope viewModelScope = ViewModelKt.getViewModelScope(this);
+        Flowable<PagingData<Product>> productsFlowable =
+                PagingRx.cachedIn(repository.getProducts(), viewModelScope);
+
+        // Convert Flowable → LiveData
+        return LiveDataReactiveStreams.fromPublisher(productsFlowable);
+    }
+
 
     public void addProduct(Product product) {
         repository.insertProduct(product);

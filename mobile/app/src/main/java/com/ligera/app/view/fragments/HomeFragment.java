@@ -85,7 +85,6 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
         // get the list of products
         setupRecyclerView();
         setupCategoryTabs();
-        displayDummyData();
     }
 
     private void setupRecyclerView() {
@@ -129,9 +128,17 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
 
     private void setupCategoryTabs() {
         binding.tabLayout.setVisibility(View.VISIBLE);
+
+        // Add "All" tab first
+        TabLayout.Tab allTab = binding.tabLayout.newTab().setText("All").setTag(-1L);
+        binding.tabLayout.addTab(allTab, true); // Select by default
+
         viewModel.getAllCategories().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null && resource.data != null && !resource.data.isEmpty()) {
-                binding.tabLayout.removeAllTabs();
+                // Remove all tabs except "All"
+                while (binding.tabLayout.getTabCount() > 1) {
+                    binding.tabLayout.removeTabAt(1);
+                }
                 for (Category category : resource.data) {
                     TabLayout.Tab tab = binding.tabLayout.newTab().setText(category.getName()).setTag(category.getId());
                     binding.tabLayout.addTab(tab, false);
@@ -144,8 +151,15 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab != null && tab.getTag() != null) {
                     long categoryId = (long) tab.getTag();
-                    viewModel.getProductsOfSelectedCategory(categoryId).observe(getViewLifecycleOwner(), pagingData ->
-                            adapter.submitData(getLifecycle(), pagingData));
+                    if (categoryId == -1L) {
+                        // "All" tab selected - show all products
+                        viewModel.getAllProducts().observe(getViewLifecycleOwner(), pagingData ->
+                                adapter.submitData(getLifecycle(), pagingData));
+                    } else {
+                        // Specific category selected
+                        viewModel.getProductsOfSelectedCategory(categoryId).observe(getViewLifecycleOwner(), pagingData ->
+                                adapter.submitData(getLifecycle(), pagingData));
+                    }
                 }
             }
 
@@ -159,6 +173,14 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
 
             }
         });
+
+        // Load all products initially
+        loadAllProducts();
+    }
+
+    private void loadAllProducts() {
+        viewModel.getAllProducts().observe(getViewLifecycleOwner(), pagingData ->
+                adapter.submitData(getLifecycle(), pagingData));
     }
 
     @Override
