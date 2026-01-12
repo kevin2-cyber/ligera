@@ -53,6 +53,14 @@ public interface ProductDao {
     void delete(Product product);
 
     /**
+     * Get the count of all products
+     *
+     * @return LiveData of product count
+     */
+    @Query("SELECT COUNT(*) FROM products")
+    LiveData<Integer> getProductCount();
+
+    /**
      * Get all products with paging support
      *
      * @return PagingSource for Paging 3

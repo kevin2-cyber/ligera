@@ -335,6 +335,18 @@ public class ProductRepository {
         appExecutors.diskIO().execute(() -> productDao.insert(product));
     }
 
+    public void insertProducts(List<Product> products) {
+        appExecutors.diskIO().execute(() -> {
+            for (Product product : products) {
+                productDao.insert(product);
+            }
+        });
+    }
+
+    public LiveData<Integer> getProductCount() {
+        return productDao.getProductCount();
+    }
+
     public void updateProduct(Product product) {
         appExecutors.diskIO().execute(() -> productDao.update(product));
     }
