@@ -1,6 +1,6 @@
 package com.ligera.app.view.fragments;
 
-import static com.ligera.app.view.DetailActivity.PRODUCT_ID;
+import static com.ligera.app.view.DetailActivity.PRODUCT_EXTRA;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -80,7 +80,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.OnPr
     public void onProductItemClick(Product product) {
         View transitionView = requireView().findViewById(R.id.imageView);
         Intent intent = new Intent(requireActivity(), DetailActivity.class);
-        intent.putExtra(PRODUCT_ID, product.getId());
+        intent.putExtra(PRODUCT_EXTRA, product);
 
         // Apply MaterialContainerTransform for shared element transition
         transitionView.setTransitionName("product_image_" + product.getId());

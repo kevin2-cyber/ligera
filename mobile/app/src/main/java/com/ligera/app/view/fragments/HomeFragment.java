@@ -1,6 +1,6 @@
 package com.ligera.app.view.fragments;
 
-import static com.ligera.app.view.DetailActivity.PRODUCT_ID;
+import static com.ligera.app.view.DetailActivity.PRODUCT_EXTRA;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -36,6 +36,10 @@ import com.ligera.app.model.entity.Product;
 import com.ligera.app.view.DetailActivity;
 import com.ligera.app.view.adapter.HomeProductAdapter;
 import com.ligera.app.viewmodel.HomeFragmentViewModel;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment implements MenuProvider, HomeProductAdapter.OnProductItemClickListener {
@@ -77,9 +81,38 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // get the list of products
+        // Setup RecyclerView first
         setupRecyclerView();
-        setupCategoryTabs();
+
+        // Check if database is empty and seed with dummy data if needed
+        viewModel.getProductCount().observe(getViewLifecycleOwner(), count -> {
+            if (count == null || count == 0) {
+                // Database is empty, seed with dummy products
+                seedDummyProducts();
+            }
+            // Setup category tabs (this will trigger loading data)
+            setupCategoryTabs();
+        });
+    }
+
+    private void seedDummyProducts() {
+        List<Product> dummyProducts = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            Product product = new Product();
+            product.setId(i);
+            product.setName("Dummy Product " + i);
+            product.setDescription("This is a dummy product description for product " + i);
+            product.setPrice(BigDecimal.valueOf(i * 15.50));
+            product.setBrand("Dummy Brand");
+            product.setImageUrl("https://picsum.photos/200/300?random=" + i);
+            product.setRating(4.5f);
+            product.setFeatured(i % 2 == 0);
+            product.setPopular(i % 3 == 0);
+            product.setQuantity(100);
+            product.setCategoryId(1L);
+            dummyProducts.add(product);
+        }
+        viewModel.insertProducts(dummyProducts);
     }
 
     private void setupRecyclerView() {
@@ -100,34 +133,57 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
         adapter.setListener(this);
     }
 
-    private void setupCategoryTabs() {
-        viewModel.getAllCategories().observe(getViewLifecycleOwner(), resource -> {
-            if (resource != null && resource.data != null) {
-                binding.tabLayout.removeAllTabs();
-                for (Category category : resource.data) {
-                    binding.tabLayout.addTab(binding.tabLayout.newTab().setText(category.getName()).setTag(category.getId()));
-                }
-            }
-        });
 
+    private void setupCategoryTabs() {
+        binding.tabLayout.setVisibility(View.VISIBLE);
+
+        // Attach listener FIRST before adding any tabs
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                long categoryId = (long) tab.getTag();
-                viewModel.getProductsOfSelectedCategory(categoryId).observe(getViewLifecycleOwner(), pagingData -> 
-                    adapter.submitData(getLifecycle(), pagingData));
+                if (tab != null && tab.getTag() != null) {
+                    long categoryId = (long) tab.getTag();
+                    loadProductsByCategory(categoryId);
+                }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
+
+        // Add "All" tab first (will trigger onTabSelected because listener is already attached)
+        TabLayout.Tab allTab = binding.tabLayout.newTab().setText("All").setTag(-1L);
+        binding.tabLayout.addTab(allTab, true); // Select by default - triggers listener
+
+        viewModel.getAllCategories().observe(getViewLifecycleOwner(), resource -> {
+            if (resource != null && resource.data != null && !resource.data.isEmpty()) {
+                // Remove all tabs except "All"
+                while (binding.tabLayout.getTabCount() > 1) {
+                    binding.tabLayout.removeTabAt(1);
+                }
+                for (Category category : resource.data) {
+                    TabLayout.Tab tab = binding.tabLayout.newTab().setText(category.getName()).setTag(category.getId());
+                    binding.tabLayout.addTab(tab, false);
+                }
+            }
+        });
+    }
+
+    private void loadProductsByCategory(long categoryId) {
+        if (categoryId == -1L) {
+            // "All" tab selected - show all products
+            viewModel.getAllProducts().observe(getViewLifecycleOwner(), pagingData ->
+                    adapter.submitData(getLifecycle(), pagingData));
+        } else {
+            // Specific category selected
+            viewModel.getProductsOfSelectedCategory(categoryId).observe(getViewLifecycleOwner(), pagingData ->
+                    adapter.submitData(getLifecycle(), pagingData));
+        }
     }
 
     @Override
@@ -161,7 +217,7 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
     public void onProductItemClick(Product product) {
         View transitionView = requireView().findViewById(R.id.imageView);
         Intent intent = new Intent(requireActivity(), DetailActivity.class);
-        intent.putExtra(PRODUCT_ID, product.getId());
+        intent.putExtra(PRODUCT_EXTRA, product);
 
         // Apply MaterialContainerTransform for shared element transition
         transitionView.setTransitionName("product_image_" + product.getId());

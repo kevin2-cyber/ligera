@@ -1,5 +1,8 @@
 package com.ligera.app.model.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
@@ -46,7 +49,7 @@ import java.util.Objects;
     }
 )
 @TypeConverters({StringListConverter.class, BigDecimalConverter.class})
-public class Product extends BaseObservable {
+public class Product extends BaseObservable implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private long id;
     
@@ -400,4 +403,79 @@ public class Product extends BaseObservable {
     public int hashCode() {
         return Objects.hash(id, name, description, price, quantity, categoryId, brand, size, isFavorite);
     }
+
+    // Parcelable implementation
+    @Ignore
+    protected Product(Parcel in) {
+        id = in.readLong();
+        String nameStr = in.readString();
+        name = nameStr != null ? nameStr : "";
+        description = in.readString();
+        String priceStr = in.readString();
+        price = priceStr != null ? new BigDecimal(priceStr) : BigDecimal.ZERO;
+        imageUrl = in.readString();
+        quantity = in.readInt();
+        categoryId = in.readByte() == 0 ? null : in.readLong();
+        brand = in.readString();
+        size = in.readString();
+        featured = in.readByte() != 0;
+        popular = in.readByte() != 0;
+        isFavorite = in.readByte() != 0;
+        discountPercent = in.readInt();
+        rating = in.readFloat();
+        ratingCount = in.readInt();
+        createdAt = in.readLong();
+        lastUpdated = in.readLong();
+        lastRefreshed = in.readLong();
+        popularityScore = in.readInt();
+        imageUrls = in.createStringArrayList();
+        tags = in.createStringArrayList();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(price != null ? price.toString() : null);
+        dest.writeString(imageUrl);
+        dest.writeInt(quantity);
+        if (categoryId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(categoryId);
+        }
+        dest.writeString(brand);
+        dest.writeString(size);
+        dest.writeByte((byte) (featured ? 1 : 0));
+        dest.writeByte((byte) (popular ? 1 : 0));
+        dest.writeByte((byte) (isFavorite ? 1 : 0));
+        dest.writeInt(discountPercent);
+        dest.writeFloat(rating);
+        dest.writeInt(ratingCount);
+        dest.writeLong(createdAt);
+        dest.writeLong(lastUpdated);
+        dest.writeLong(lastRefreshed);
+        dest.writeInt(popularityScore);
+        dest.writeStringList(imageUrls);
+        dest.writeStringList(tags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }
