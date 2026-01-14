@@ -61,6 +61,23 @@ public interface ProductDao {
     LiveData<Integer> getProductCount();
 
     /**
+     * Get all products as LiveData (simple, no paging)
+     *
+     * @return LiveData list of all products
+     */
+    @Query("SELECT * FROM products ORDER BY name ASC")
+    LiveData<List<Product>> getAllProductsLiveData();
+
+    /**
+     * Get products by category as LiveData (simple, no paging)
+     *
+     * @param categoryId category ID
+     * @return LiveData list of products in category
+     */
+    @Query("SELECT * FROM products WHERE category_id = :categoryId ORDER BY name ASC")
+    LiveData<List<Product>> getProductsByCategoryLiveData(long categoryId);
+
+    /**
      * Get all products with paging support
      *
      * @return PagingSource for Paging 3
@@ -129,6 +146,15 @@ public interface ProductDao {
      */
     @Query("SELECT * FROM products WHERE name LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%' ORDER BY name ASC")
     PagingSource<Integer, Product> searchProducts(String query);
+
+    /**
+     * Search products by name or description as LiveData (no paging)
+     *
+     * @param query search query
+     * @return LiveData list of matching products
+     */
+    @Query("SELECT * FROM products WHERE name LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%' ORDER BY name ASC")
+    LiveData<List<Product>> searchProductsLiveData(String query);
 
     /**
      * Get products by brand

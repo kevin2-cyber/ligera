@@ -46,6 +46,8 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
     private FragmentHomeBinding binding;
     HomeProductAdapter adapter;
     private HomeFragmentViewModel viewModel;
+    private boolean isTabsSetup = false;
+    private boolean isObserverSetup = false;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -90,8 +92,11 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
                 // Database is empty, seed with dummy products
                 seedDummyProducts();
             }
-            // Setup category tabs (this will trigger loading data)
-            setupCategoryTabs();
+            // Setup category tabs only once (this will trigger loading data)
+            if (!isTabsSetup) {
+                isTabsSetup = true;
+                setupCategoryTabs();
+            }
         });
     }
 
@@ -137,13 +142,23 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
     private void setupCategoryTabs() {
         binding.tabLayout.setVisibility(View.VISIBLE);
 
+        // Setup observer for products only once
+        if (!isObserverSetup) {
+            isObserverSetup = true;
+            viewModel.getProducts().observe(getViewLifecycleOwner(), products -> {
+                if (products != null) {
+                    adapter.submitList(products);
+                }
+            });
+        }
+
         // Attach listener FIRST before adding any tabs
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab != null && tab.getTag() != null) {
                     long categoryId = (long) tab.getTag();
-                    loadProductsByCategory(categoryId);
+                    viewModel.loadProductsByCategory(categoryId);
                 }
             }
 
@@ -174,17 +189,6 @@ public class HomeFragment extends Fragment implements MenuProvider, HomeProductA
         });
     }
 
-    private void loadProductsByCategory(long categoryId) {
-        if (categoryId == -1L) {
-            // "All" tab selected - show all products
-            viewModel.getAllProducts().observe(getViewLifecycleOwner(), pagingData ->
-                    adapter.submitData(getLifecycle(), pagingData));
-        } else {
-            // Specific category selected
-            viewModel.getProductsOfSelectedCategory(categoryId).observe(getViewLifecycleOwner(), pagingData ->
-                    adapter.submitData(getLifecycle(), pagingData));
-        }
-    }
 
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {

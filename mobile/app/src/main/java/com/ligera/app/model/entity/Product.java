@@ -17,11 +17,8 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.ligera.app.model.converter.BigDecimalConverter;
-import com.ligera.app.model.converter.StringListConverter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -48,7 +45,7 @@ import java.util.Objects;
         @Index("rating")
     }
 )
-@TypeConverters({StringListConverter.class, BigDecimalConverter.class})
+@TypeConverters({BigDecimalConverter.class})
 public class Product extends BaseObservable implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -107,14 +104,6 @@ public class Product extends BaseObservable implements Parcelable {
     
     @ColumnInfo(name = "popularity_score")
     private int popularityScore = 0;
-    
-    @TypeConverters(StringListConverter.class)
-    @ColumnInfo(name = "image_urls")
-    private List<String> imageUrls = new ArrayList<>();
-    
-    @TypeConverters(StringListConverter.class)
-    @ColumnInfo(name = "tags")
-    private List<String> tags = new ArrayList<>();
     
     @Ignore
     public Product() {}
@@ -325,26 +314,6 @@ public class Product extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.popularityScore);
     }
 
-    @Bindable
-    public List<String> getImageUrls() {
-        return imageUrls;
-    }
-
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
-        notifyPropertyChanged(BR.imageUrls);
-    }
-
-    @Bindable
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-        notifyPropertyChanged(BR.tags);
-    }
-
     /**
      * Calculate the discounted price
      * 
@@ -428,8 +397,6 @@ public class Product extends BaseObservable implements Parcelable {
         lastUpdated = in.readLong();
         lastRefreshed = in.readLong();
         popularityScore = in.readInt();
-        imageUrls = in.createStringArrayList();
-        tags = in.createStringArrayList();
     }
 
     @Override
@@ -458,8 +425,6 @@ public class Product extends BaseObservable implements Parcelable {
         dest.writeLong(lastUpdated);
         dest.writeLong(lastRefreshed);
         dest.writeInt(popularityScore);
-        dest.writeStringList(imageUrls);
-        dest.writeStringList(tags);
     }
 
     @Override

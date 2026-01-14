@@ -11,7 +11,6 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.ligera.app.model.converter.BigDecimalConverter;
-import com.ligera.app.model.converter.StringListConverter;
 import com.ligera.app.model.dao.CategoryDao;
 import com.ligera.app.model.dao.ProductDao;
 import com.ligera.app.model.entity.Category;
@@ -29,13 +28,10 @@ import java.util.concurrent.Executor;
         Product.class,
         Category.class
     },
-    version = 1,
+    version = 3,
     exportSchema = false
 )
-@TypeConverters({
-    StringListConverter.class,
-    BigDecimalConverter.class
-})
+@TypeConverters({BigDecimalConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     
     private static final String TAG = "AppDatabase";

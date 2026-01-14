@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'com.ligera.app'
-    compileSdk 36
+    compileSdkVersion 36
     defaultConfig {
         applicationId "com.ligera.app"
         minSdk 26
@@ -13,31 +13,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        
-        // Default API configuration - will be overridden in specific build types
-        buildConfigField "String", "API_BASE_URL", "\"https://api.ligera.com/\""
     }
 
     buildTypes {
         debug {
             minifyEnabled false
-            buildConfigField "String", "API_BASE_URL", "\"https://dev-api.ligera.com/\""
             buildConfigField "boolean", "DEBUG_MODE", "true"
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        
-        staging {
-            initWith debug
-            minifyEnabled true
-            buildConfigField "String", "API_BASE_URL", "\"https://staging-api.ligera.com/\""
-            buildConfigField "boolean", "DEBUG_MODE", "true"
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        
-        release {
-            minifyEnabled true
-            buildConfigField "String", "API_BASE_URL", "\"https://api.ligera.com/\""
-            buildConfigField "boolean", "DEBUG_MODE", "false"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -83,29 +64,9 @@ dependencies {
     
     // Lifecycle Components
     implementation libs.lifecycle.viewmodel.ktx
-    implementation libs.lifecycle.reactivestreams
-    
-    // Retrofit for network requests
-    implementation libs.retrofit
-    implementation libs.converter.gson
-
-    // define a BOM and its version
-    implementation(platform(libs.okhttp.bom))
-
-    // define any required OkHttp artifacts without version
-    implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
-    implementation libs.paging.runtime
-    implementation libs.paging.rxjava3
-
-    // Javax Inject
-    implementation libs.javax.inject
 
     // Swipe to refresh
     implementation libs.swiperefreshlayout
-    
-    // Security
-    implementation libs.security.crypto
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

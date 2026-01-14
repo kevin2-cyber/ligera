@@ -43,15 +43,19 @@ public class DetailActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
 
+        // Make status bar transparent
+        getWindow().setStatusBarColor(android.graphics.Color.TRANSPARENT);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         viewModel = new ViewModelProvider(this).get(DetailActivityViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setViewmodel(viewModel);
         binding.setProduct(currentProduct);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail), (v, insets) -> {
+        // Only apply padding to the toolbar, not the whole layout
+        ViewCompat.setOnApplyWindowInsetsListener(binding.toolbar, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(v.getPaddingLeft(), systemBars.top, v.getPaddingRight(), v.getPaddingBottom());
             return insets;
         });
 

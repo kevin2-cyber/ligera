@@ -5,99 +5,101 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.LiveDataReactiveStreams;
-import androidx.lifecycle.ViewModelKt;
-import androidx.paging.Pager;
-import androidx.paging.PagingConfig;
-import androidx.paging.PagingData;
-import androidx.paging.rxjava3.PagingRx;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.ligera.app.model.database.AppDatabase;
 import com.ligera.app.model.entity.Category;
 import com.ligera.app.model.entity.Product;
-import com.ligera.app.network.RetrofitClient;
-import com.ligera.app.network.TokenManager;
-import com.ligera.app.network.interceptor.NetworkConnectionInterceptor;
-import com.ligera.app.network.service.ProductApiService;
 import com.ligera.app.repository.ProductRepository;
 import com.ligera.app.util.Resource;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.core.Flowable;
-import kotlinx.coroutines.CoroutineScope;
-
+/**
+ * Simple ViewModel for HomeFragment - uses LiveData only, no RxJava or Paging
+ * This avoids CancellationException issues
+ */
 public class HomeFragmentViewModel extends AndroidViewModel {
     private final ProductRepository repository;
+
+    // Selected category ID (-1 means "All")
+    private final MutableLiveData<Long> selectedCategoryId = new MutableLiveData<>(-1L);
+
+    // Products LiveData that changes based on selected category
+    private final LiveData<List<Product>> products;
 
     public HomeFragmentViewModel(@NonNull Application application) {
         super(application);
         AppDatabase database = AppDatabase.getInstance(application);
-        TokenManager tokenManager = TokenManager.getInstance(application);
-        ProductApiService apiService = RetrofitClient.getInstance(tokenManager, new NetworkConnectionInterceptor(application)).getClientV1().create(ProductApiService.class);
-        repository = new ProductRepository(database, apiService);
+        repository = new ProductRepository(database);
+
+        // Use Transformations.switchMap to automatically switch data source
+        // when selectedCategoryId changes
+        products = Transformations.switchMap(selectedCategoryId, categoryId -> {
+            if (categoryId == null || categoryId == -1L) {
+                // "All" tab - get all products
+                return repository.getAllProductsSimple();
+            } else {
+                // Specific category - get products in that category
+                return repository.getProductsByCategorySimple(categoryId);
+            }
+        });
     }
 
+    /**
+     * Get all categories
+     */
     public LiveData<Resource<List<Category>>> getAllCategories() {
         return repository.getCategories();
     }
 
-//    public LiveData<PagingData<Product>> getProductsOfSelectedCategory(long categoryId) {
-//        CoroutineScope viewModelScope = ViewModelKt.getViewModelScope(this);
-//        Flowable<PagingData<Product>> productsFlowable = repository.getProductsByCategory(categoryId);
-//        return PagingRx.getLiveData(PagingRx.cachedIn(productsFlowable, viewModelScope));
-//    }
-
-//    public LiveData<PagingData<Product>> getProductsOfSelectedCategory(long categoryId) {
-//        CoroutineScope viewModelScope = ViewModelKt.getViewModelScope(this);
-//
-//        // Create the Pager here instead of getting Flowable from repository
-//        Pager<Integer, Product> pager = new Pager<>(
-//                new PagingConfig(20, 40, false),
-//                () -> repository.getProductDao().getProductsByCategory(categoryId)
-//        );
-//
-//        // Get LiveData directly from Pager using PagingRx
-//        return PagingRx.getLiveData(
-//                PagingRx.cachedIn(PagingRx.getFlowable(pager), viewModelScope)
-//        );
-//    }
-
-    public LiveData<PagingData<Product>> getProductsOfSelectedCategory(long categoryId) {
-        CoroutineScope viewModelScope = ViewModelKt.getViewModelScope(this);
-        Flowable<PagingData<Product>> productsFlowable =
-                PagingRx.cachedIn(repository.getProductsByCategory(categoryId), viewModelScope);
-
-        // Convert Flowable → LiveData
-        return LiveDataReactiveStreams.fromPublisher(productsFlowable);
+    /**
+     * Get products (automatically updates when category changes)
+     */
+    public LiveData<List<Product>> getProducts() {
+        return products;
     }
 
-    public LiveData<PagingData<Product>> getAllProducts() {
-        CoroutineScope viewModelScope = ViewModelKt.getViewModelScope(this);
-        Flowable<PagingData<Product>> productsFlowable =
-                PagingRx.cachedIn(repository.getProducts(), viewModelScope);
-
-        // Convert Flowable → LiveData
-        return LiveDataReactiveStreams.fromPublisher(productsFlowable);
+    /**
+     * Load products by category
+     * @param categoryId Category ID (-1 for all products)
+     */
+    public void loadProductsByCategory(long categoryId) {
+        selectedCategoryId.setValue(categoryId);
     }
 
+    /**
+     * Get product count
+     */
     public LiveData<Integer> getProductCount() {
         return repository.getProductCount();
     }
 
+    /**
+     * Insert multiple products
+     */
     public void insertProducts(List<Product> products) {
         repository.insertProducts(products);
     }
 
-
+    /**
+     * Insert single product
+     */
     public void addProduct(Product product) {
         repository.insertProduct(product);
     }
 
+    /**
+     * Update product
+     */
     public void updateProduct(Product product) {
         repository.updateProduct(product);
     }
 
+    /**
+     * Delete product
+     */
     public void deleteProduct(Product product) {
         repository.deleteProduct(product);
     }
