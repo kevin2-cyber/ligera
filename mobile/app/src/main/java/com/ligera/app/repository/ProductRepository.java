@@ -2,124 +2,77 @@ package com.ligera.app.repository;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.paging.Pager;
-import androidx.paging.PagingConfig;
-import androidx.paging.PagingData;
-import androidx.paging.rxjava3.PagingRx;
+import androidx.lifecycle.Transformations;
 
 import com.ligera.app.model.database.AppDatabase;
 import com.ligera.app.model.dao.CategoryDao;
 import com.ligera.app.model.dao.ProductDao;
 import com.ligera.app.model.entity.Category;
 import com.ligera.app.model.entity.Product;
-import com.ligera.app.network.model.ApiResponse;
-import com.ligera.app.network.model.request.ProductFilterRequest;
-import com.ligera.app.network.model.response.CategoryResponse;
-import com.ligera.app.network.model.response.ProductListResponse;
-import com.ligera.app.network.model.response.ProductResponse;
-import com.ligera.app.network.service.ProductApiService;
-import com.ligera.app.repository.mapper.CategoryMapper;
-import com.ligera.app.repository.mapper.ProductMapper;
-import com.ligera.app.repository.util.NetworkBoundResource;
 import com.ligera.app.util.AppExecutors;
 import com.ligera.app.util.Resource;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.rxjava3.core.Flowable;
 
 /**
- * Repository for product-related operations
+ * Repository for product-related operations (Local database only, no RxJava)
  */
 public class ProductRepository {
     private static final String TAG = "ProductRepository";
 
-    // Cache timeout in milliseconds (24 hours)
-    private static final long CACHE_TIMEOUT = TimeUnit.HOURS.toMillis(24);
-
-    // Page size for pagination
-    private static final int PAGE_SIZE = 20;
 
     // Dependencies
     private final ProductDao productDao;
     private final CategoryDao categoryDao;
-    private final ProductApiService productApiService;
     private final AppExecutors appExecutors;
 
     /**
-     * Constructor
+     * Constructor - Local database only
      *
      * @param database Room database
-     * @param productApiService Product API service
      */
-    public ProductRepository(AppDatabase database, ProductApiService productApiService) {
+    public ProductRepository(AppDatabase database) {
         this.productDao = database.productDao();
         this.categoryDao = database.categoryDao();
-        this.productApiService = productApiService;
         this.appExecutors = new AppExecutors();
     }
 
     /**
-     * Get a product by ID
+     * Get a product by ID from local database
      *
      * @param productId Product ID
      * @return LiveData of Resource of Product
      */
     public LiveData<Resource<Product>> getProductById(final long productId) {
-        return new NetworkBoundResource<Product, ProductResponse>() {
-            @Override
-            protected boolean shouldFetch(@Nullable Product data) {
-                return data == null || isDataStale(data.getLastRefreshed());
+        return Transformations.map(productDao.getProductById(productId), product -> {
+            if (product != null) {
+                return Resource.success(product);
+            } else {
+                return Resource.error("Product not found", null);
             }
-
-            @Override
-            protected void saveCallResult(@NonNull ProductResponse item) {
-                Product entity = ProductMapper.mapResponseToEntity(item);
-                appExecutors.diskIO().execute(() -> productDao.insert(entity));
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<Product> loadFromDb() {
-                return productDao.getProductById(productId);
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<ApiResponse<ProductResponse>> createCall() {
-                return productApiService.getProductById(productId);
-            }
-
-            @Override
-            protected void onFetchFailed(Exception error) {
-                Log.e(TAG, "Failed to fetch product with ID: " + productId, error);
-            }
-        }.asLiveData();
+        });
     }
 
     /**
-     * Get all products with pagination
+     * Get all products as simple LiveData (no paging, no RxJava)
      *
-     * @return Flowable of PagingData of Product
+     * @return LiveData list of all products
      */
-    public Flowable<PagingData<Product>> getProducts() {
-        return PagingRx.getFlowable(new Pager<>(
-                new PagingConfig(PAGE_SIZE, PAGE_SIZE * 2, true),
-                productDao::getAllProducts
-        ));
+    public LiveData<List<Product>> getAllProductsSimple() {
+        return productDao.getAllProductsLiveData();
     }
 
-    public Flowable<PagingData<Product>> getProductsByCategory(long categoryId) {
-        return PagingRx.getFlowable(new Pager<>(
-                new PagingConfig(PAGE_SIZE, PAGE_SIZE * 2, true),
-                () -> productDao.getProductsByCategory(categoryId)
-        ));
+    /**
+     * Get products by category as simple LiveData (no paging, no RxJava)
+     *
+     * @param categoryId Category ID
+     * @return LiveData list of products in category
+     */
+    public LiveData<List<Product>> getProductsByCategorySimple(long categoryId) {
+        return productDao.getProductsByCategoryLiveData(categoryId);
     }
+
 
     /**
      * Get all favorite products.
@@ -141,200 +94,76 @@ public class ProductRepository {
     }
 
     /**
-     * Fetch products from network and save to database
-     *
-     * @param page Page number
-     * @param size Page size
-     */
-    private void fetchProducts(int page, int size) {
-        LiveData<ApiResponse<ProductListResponse>> apiResponse = productApiService.getProducts(page, size, null, null, null, null);
-        apiResponse.observeForever(response -> {
-            if (response != null && response.isSuccessful() && response.body != null) {
-                List<Product> entities = ProductMapper.mapResponseToEntity(response.body.getProducts());
-                appExecutors.diskIO().execute(() -> productDao.insertAll(entities));
-            }
-        });
-    }
-
-    /**
-     * Get featured products
+     * Get featured products from local database
      *
      * @param limit Maximum number of products to return
-     * @return LiveData of Resource of List of ProductEntity
+     * @return LiveData of Resource of List of Product
      */
     public LiveData<Resource<List<Product>>> getFeaturedProducts(final int limit) {
-        return new NetworkBoundResource<List<Product>, List<ProductResponse>>() {
-            @Override
-            protected boolean shouldFetch(@Nullable List<Product> data) {
-                return data == null || data.isEmpty() || isDataStale(getLastRefreshTime(data));
+        return Transformations.map(productDao.getFeaturedProducts(limit), products -> {
+            if (products != null && !products.isEmpty()) {
+                return Resource.success(products);
+            } else {
+                return Resource.success(products); // Return empty list, not error
             }
-
-            @Override
-            protected void saveCallResult(@NonNull List<ProductResponse> items) {
-                List<Product> entities = ProductMapper.mapResponseToEntity(items);
-                appExecutors.diskIO().execute(() -> productDao.insertAll(entities));
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<List<Product>> loadFromDb() {
-                return productDao.getFeaturedProducts(limit);
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<ApiResponse<List<ProductResponse>>> createCall() {
-                return productApiService.getFeaturedProducts(limit);
-            }
-
-            @Override
-            protected void onFetchFailed(Exception error) {
-                Log.e(TAG, "Failed to fetch featured products", error);
-            }
-        }.asLiveData();
+        });
     }
 
     /**
-     * Get popular products
+     * Get popular products from local database
      *
      * @param limit Maximum number of products to return
-     * @return LiveData of Resource of List of ProductEntity
+     * @return LiveData of Resource of List of Product
      */
     public LiveData<Resource<List<Product>>> getPopularProducts(final int limit) {
-        return new NetworkBoundResource<List<Product>, List<ProductResponse>>() {
-            @Override
-            protected boolean shouldFetch(@Nullable List<Product> data) {
-                return data == null || data.isEmpty() || isDataStale(getLastRefreshTime(data));
-            }
-
-            @Override
-            protected void saveCallResult(@NonNull List<ProductResponse> items) {
-                List<Product> entities = ProductMapper.mapResponseToEntity(items);
-                appExecutors.diskIO().execute(() -> productDao.insertAll(entities));
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<List<Product>> loadFromDb() {
-                return productDao.getPopularProducts(limit);
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<ApiResponse<List<ProductResponse>>> createCall() {
-                return productApiService.getPopularProducts(limit);
-            }
-
-            @Override
-            protected void onFetchFailed(Exception error) {
-                Log.e(TAG, "Failed to fetch popular products", error);
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * Search products
-     *
-     * @param query Search query
-     * @return Flowable of PagingData of Product
-     */
-    public Flowable<PagingData<Product>> searchProducts(final String query) {
-        return PagingRx.getFlowable(new Pager<>(
-                new PagingConfig(PAGE_SIZE, PAGE_SIZE * 2, true),
-                () -> productDao.searchProducts(query)
-        ));
-    }
-
-    /**
-     * Search products from network and save to database
-     *
-     * @param query Search query
-     * @param page Page number
-     * @param size Page size
-     */
-    private void searchProductsFromNetwork(String query, int page, int size) {
-        LiveData<ApiResponse<ProductListResponse>> apiResponse = productApiService.searchProducts(query, page, size);
-        apiResponse.observeForever(response -> {
-            if (response != null && response.isSuccessful() && response.body != null) {
-                List<Product> entities = ProductMapper.mapResponseToEntity(response.body.getProducts());
-                appExecutors.diskIO().execute(() -> productDao.insertAll(entities));
+        return Transformations.map(productDao.getPopularProducts(limit), products -> {
+            if (products != null && !products.isEmpty()) {
+                return Resource.success(products);
+            } else {
+                return Resource.success(products); // Return empty list, not error
             }
         });
     }
 
     /**
-     * Filter products with advanced criteria
+     * Search products in local database
      *
-     * @param request Filter criteria
-     * @param page Page number
-     * @param size Page size
-     * @return LiveData of Resource of ProductListResponse
+     * @param query Search query
+     * @return LiveData list of matching products
      */
-    public LiveData<Resource<ProductListResponse>> filterProducts(
-            final ProductFilterRequest request, final int page, final int size) {
-        // For filtered products, we directly return the API response since the filtering is complex
-        // and would require complex SQL queries to replicate in the local database
-        MutableLiveData<Resource<ProductListResponse>> result = new MutableLiveData<>();
-        result.setValue(Resource.loading(null));
-
-        LiveData<ApiResponse<ProductListResponse>> apiResponse = productApiService.filterProducts(page, size, request);
-        apiResponse.observeForever(response -> {
-            if (response != null) {
-                if (response.isSuccessful() && response.body != null) {
-                    // Save products to database for future reference
-                    List<Product> entities = ProductMapper.mapResponseToEntity(response.body.getProducts());
-                    appExecutors.diskIO().execute(() -> productDao.insertAll(entities));
-                    result.setValue(Resource.success(response.body));
-                } else {
-                    result.setValue(Resource.error(response.errorMessage, null));
-                }
-            }
-        });
-
-        return result;
+    public LiveData<List<Product>> searchProducts(final String query) {
+        return productDao.searchProductsLiveData(query);
     }
 
     /**
-     * Get all categories
+     * Get all categories from local database
      *
      * @return LiveData of Resource of List of Category
      */
     public LiveData<Resource<List<Category>>> getCategories() {
-        return new NetworkBoundResource<List<Category>, List<CategoryResponse>>() {
-            @Override
-            protected boolean shouldFetch(@Nullable List<Category> data) {
-                return data == null || data.isEmpty() || isDataStale(getLastRefreshTime(data));
+        return Transformations.map(categoryDao.getAllCategories(), categories -> {
+            if (categories != null) {
+                return Resource.success(categories);
+            } else {
+                return Resource.error("No categories found", null);
             }
-
-            @Override
-            protected void saveCallResult(@NonNull List<CategoryResponse> items) {
-                List<Category> entities = CategoryMapper.mapResponseToEntity(items);
-                appExecutors.diskIO().execute(() -> categoryDao.insertAll(entities));
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<List<Category>> loadFromDb() {
-                return categoryDao.getAllCategories();
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<ApiResponse<List<CategoryResponse>>> createCall() {
-                return productApiService.getCategories();
-            }
-
-            @Override
-            protected void onFetchFailed(Exception error) {
-                Log.e(TAG, "Failed to fetch categories", error);
-            }
-        }.asLiveData();
+        });
     }
 
+    /**
+     * Insert a single product
+     *
+     * @param product Product to insert
+     */
     public void insertProduct(Product product) {
         appExecutors.diskIO().execute(() -> productDao.insert(product));
     }
 
+    /**
+     * Insert multiple products
+     *
+     * @param products List of products to insert
+     */
     public void insertProducts(List<Product> products) {
         appExecutors.diskIO().execute(() -> {
             for (Product product : products) {
@@ -343,15 +172,48 @@ public class ProductRepository {
         });
     }
 
+    /**
+     * Get total product count
+     *
+     * @return LiveData of product count
+     */
     public LiveData<Integer> getProductCount() {
         return productDao.getProductCount();
     }
 
+    /**
+     * Update a product
+     *
+     * @param product Product to update
+     */
     public void updateProduct(Product product) {
         appExecutors.diskIO().execute(() -> productDao.update(product));
     }
 
+    /**
+     * Delete a product
+     *
+     * @param product Product to delete
+     */
     public void deleteProduct(Product product) {
         appExecutors.diskIO().execute(() -> productDao.delete(product));
+    }
+
+    /**
+     * Insert a category
+     *
+     * @param category Category to insert
+     */
+    public void insertCategory(Category category) {
+        appExecutors.diskIO().execute(() -> categoryDao.insert(category));
+    }
+
+    /**
+     * Insert multiple categories
+     *
+     * @param categories List of categories to insert
+     */
+    public void insertCategories(List<Category> categories) {
+        appExecutors.diskIO().execute(() -> categoryDao.insertAll(categories));
     }
 }

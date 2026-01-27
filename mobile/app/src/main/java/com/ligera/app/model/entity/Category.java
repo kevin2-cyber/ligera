@@ -10,8 +10,6 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.ligera.app.repository.util.NetworkBoundResource;
-
 import java.util.Objects;
 
 /**
@@ -30,7 +28,7 @@ import java.util.Objects;
         @Index("created_at")
     }
 )
-public class Category extends BaseObservable implements NetworkBoundResource.HasLastRefreshed {
+public class Category extends BaseObservable {
     @PrimaryKey(autoGenerate = true)
     private long id;
     
@@ -194,7 +192,6 @@ public class Category extends BaseObservable implements NetworkBoundResource.Has
     }
 
     @Bindable
-    @Override
     public long getLastRefreshed() {
         return lastRefreshed;
     }

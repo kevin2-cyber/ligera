@@ -36,12 +36,14 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // requestFeature must be called before adding content
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
 
         getWindow().setExitTransition(new Explode());
-        setContentView(R.layout.activity_login);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login), (v, insets) -> {
 //            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -49,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
 //            return insets;
 //        });
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         clickHandler = new LoginClickHandler(this);
         binding.setHandler(clickHandler);

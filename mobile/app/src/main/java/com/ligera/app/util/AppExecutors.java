@@ -13,11 +13,7 @@ import java.util.concurrent.Executors;
  * Grouping tasks like this avoids the effects of task starvation (e.g., disk reads don't wait
  * behind webservice requests).
  */
-public class AppExecutors {
-
-    private final Executor diskIO;
-    private final Executor networkIO;
-    private final Executor mainThread;
+public record AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) {
 
     /**
      * Create AppExecutors with default thread configuration
@@ -30,15 +26,13 @@ public class AppExecutors {
     /**
      * Create AppExecutors with custom thread configuration
      */
-    public AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) {
-        this.diskIO = diskIO;
-        this.networkIO = networkIO;
-        this.mainThread = mainThread;
+    public AppExecutors {
     }
 
     /**
      * Get executor for disk I/O operations
      */
+    @Override
     public Executor diskIO() {
         return diskIO;
     }
@@ -46,6 +40,7 @@ public class AppExecutors {
     /**
      * Get executor for network operations
      */
+    @Override
     public Executor networkIO() {
         return networkIO;
     }
@@ -53,6 +48,7 @@ public class AppExecutors {
     /**
      * Get executor for main thread operations
      */
+    @Override
     public Executor mainThread() {
         return mainThread;
     }

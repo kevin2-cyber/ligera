@@ -22,47 +22,45 @@
         android:id="@+id/detail"
         tools:context=".view.DetailActivity">
 
+        <!-- Image FIRST - fills upper section behind AppBar -->
+        <ImageView
+            android:id="@+id/iv_product"
+            android:layout_width="0dp"
+            android:layout_height="320dp"
+            android:contentDescription="@string/image"
+            android:scaleType="fitXY"
+            app:imageUrl="@{product.imageUrl}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- AppBar AFTER - overlays image with transparency -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="98dp"
-            android:layout_marginTop="30dp"
             android:background="@android:color/transparent"
+            app:elevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
 
             <androidx.appcompat.widget.Toolbar
                 style="@style/Widget.App.Toolbar"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </androidx.appcompat.widget.Toolbar>
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                app:navigationIconTint="@android:color/white" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <ImageView
-            android:id="@+id/iv_product"
-            android:layout_width="142dp"
-            android:layout_height="210dp"
-            android:layout_marginTop="80dp"
-            android:contentDescription="@string/image"
-            android:scaleType="fitXY"
-            app:imageUrl="@{product.imageUrl}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+        <!-- Content section with rounded top corners overlapping image -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/include"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="-24dp"
             android:background="@drawable/cl_shape"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,11 +1,9 @@
 package com.ligera.app.viewmodel.state;
 
 import androidx.annotation.Nullable;
-import androidx.paging.PagingData;
 
 import com.ligera.app.model.entity.Category;
 import com.ligera.app.model.entity.Product;
-import com.ligera.app.network.model.response.ProductListResponse;
 
 import java.util.List;
 
@@ -14,12 +12,11 @@ public class ProductState {
     private final boolean refreshing;
     private final boolean offline;
     private final String error;
-    private final PagingData<Product> products;
+    private final List<Product> products;
     private final List<Product> featuredProducts;
     private final List<Product> popularProducts;
     private final Product productDetails;
     private final List<Category> categories;
-    private final ProductListResponse filterResults;
     private final String searchQuery;
 
     private ProductState(Builder builder) {
@@ -32,7 +29,6 @@ public class ProductState {
         this.popularProducts = builder.popularProducts;
         this.productDetails = builder.productDetails;
         this.categories = builder.categories;
-        this.filterResults = builder.filterResults;
         this.searchQuery = builder.searchQuery;
     }
 
@@ -45,12 +41,11 @@ public class ProductState {
         private boolean refreshing;
         private boolean offline;
         private String error;
-        private PagingData<Product> products;
+        private List<Product> products;
         private List<Product> featuredProducts;
         private List<Product> popularProducts;
         private Product productDetails;
         private List<Category> categories;
-        private ProductListResponse filterResults;
         private String searchQuery;
 
         public Builder loading(boolean loading) {
@@ -73,7 +68,7 @@ public class ProductState {
             return this;
         }
 
-        public Builder products(PagingData<Product> products) {
+        public Builder products(List<Product> products) {
             this.products = products;
             return this;
         }
@@ -95,11 +90,6 @@ public class ProductState {
 
         public Builder categories(List<Category> categories) {
             this.categories = categories;
-            return this;
-        }
-
-        public Builder filterResults(ProductListResponse filterResults) {
-            this.filterResults = filterResults;
             return this;
         }
 
@@ -131,7 +121,7 @@ public class ProductState {
     }
 
     @Nullable
-    public PagingData<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
@@ -155,10 +145,6 @@ public class ProductState {
         return categories;
     }
 
-    @Nullable
-    public ProductListResponse getFilterResults() {
-        return filterResults;
-    }
 
     @Nullable
     public String getSearchQuery() {
